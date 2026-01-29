@@ -1,22 +1,42 @@
 @import "tailwindcss";
 
-/* Global polish */
+/* ================
+   Proposal-style theme (LIGHT)
+   ================ */
+:root {
+  --bg: #f6f2ea;       /* creamy paper */
+  --surface: #ffffff;  /* cards */
+  --ink: #1f2937;      /* text */
+  --muted: #6b7280;    /* secondary text */
+  --line: rgba(31, 41, 55, 0.12);
+  --accent: #e0652f;   /* proposal orange */
+  --accent-2: #f59e0b; /* warm */
+}
+
 html {
   scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
-  background: #070a12;
-  color: white;
+  background: var(--bg);
+  color: var(--ink);
 }
 
-/* nicer selection */
+/* selection */
 ::selection {
-  background: rgba(249, 115, 22, 0.25);
+  background: rgba(224, 101, 47, 0.22);
 }
 
-/* make default links nicer (still overrideable with Tailwind) */
 a {
+  color: inherit;
   text-underline-offset: 3px;
+}
+
+/* helper background pattern (subtle) */
+.proposal-bg {
+  background:
+    radial-gradient(1200px 600px at 10% 0%, rgba(224, 101, 47, 0.10), transparent 55%),
+    radial-gradient(900px 600px at 90% 10%, rgba(245, 158, 11, 0.10), transparent 60%),
+    linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.0));
 }
