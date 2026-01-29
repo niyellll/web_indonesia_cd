@@ -6,106 +6,71 @@ const EVENT = {
   time: "11AM – 4PM",
   location: "Carroll Creek Park • Downtown Frederick • Maryland, USA",
   hosts: "Hosted by AACF & IDECN • Part of the annual Creek Festival",
-  proposalHref: "/indonesia-on-the-creek-proposal.pdf", // taruh PDF di /public/docs/
+  proposalHref: "/docs/indonesia-on-the-creek-proposal.pdf",
 };
 
-const PILLARS = [
-  {
-    title: "Education & Scholarships",
-    desc: "Scholarships guidance, exchange pathways, language learning, and internship connections.",
-  },
-  {
-    title: "Cultural Exchange",
-    desc: "Festivals, arts, food, traditions, and cross-cultural dialogues through workshops and seminars.",
-  },
-  {
-    title: "Professional Networking",
-    desc: "Mentorship, career workshops, and networks connecting students, alumni, and employers.",
-  },
-  {
-    title: "Community Support",
-    desc: "Volunteer and partner programs that strengthen inclusive local communities.",
-  },
-];
-
-const HIGHLIGHTS = [
-  { title: "Food Bazaar", desc: "Curated Indonesian dishes and culinary storytelling." },
-  { title: "Marketplace", desc: "Snacks, spices, crafts, jewelry, and diaspora products." },
-  { title: "Exhibition", desc: "Batik, fashion, home décor, and Indonesian-owned business showcases." },
-  { title: "Cultural Performances", desc: "Traditional and contemporary music & dance, interactive experiences." },
-  { title: "Interactive Art & Craft", desc: "Batik painting, puppet-making, kids crafts, and live demos." },
-];
-
-const VENDORS = [
-  { title: "Exhibitors & Marketplace Vendors", price: "$200", note: "Standard space 10’×10’" },
-  { title: "Food Vendors", price: "$300", note: "Standard space 10’×10’" },
-  { title: "Food Vendors (Premium)", price: "$500", note: "Premium 10’×10’ (near stage)" },
-  { title: "Art & Craft", price: "—", note: "Hands-on crafts & demos (contact committee)" },
-  { title: "Performers", price: "—", note: "Traditional & contemporary performers welcome" },
-];
-
-const SPONSOR = [
-  {
-    name: "Gold",
-    price: "$8,000",
-    perks: [
-      "Stage presentation (5 minutes)",
-      "Featured in press release",
-      "Featured social media story (≈30s)",
-      "Top sponsor listing + hyperlink",
-      "VIP networking access",
-      "Premium booth space",
-      "Prominent logo placement",
-      "Large banner placement",
-      "Program book: Double full-page ad",
-    ],
-  },
-  {
-    name: "Silver",
-    price: "$5,000",
-    perks: [
-      "Brief greeting on stage (1 minute)",
-      "Mentioned in press release",
-      "Featured social media story (≈15s)",
-      "Top sponsor listing + hyperlink",
-      "VIP networking access",
-      "Standard booth space",
-      "Secondary logo placement",
-      "Medium banner placement",
-      "Program book: Full-page ad",
-    ],
-  },
-  {
-    name: "Bronze",
-    price: "$3,000",
-    perks: [
-      "Listed under sponsor",
-      "Shared table (as available)",
-      "Logo listed under sponsor materials",
-      "MC mention",
-      "Name-only banner placement",
-      "Program book: Half-page ad",
-    ],
-  },
-];
-
 const CONTACTS = [
-  { name: "Wati Soetojo", phone: "+1 240 483 6113", href: "tel:+12404836113" },
-  { name: "Haris Koentjoro", phone: "+1 443 570 9509", href: "tel:+14435709509" },
+  { name: "Wati Soetojo", role: "Committee", phone: "+1 240 483 6113", href: "tel:+12404836113" },
+  { name: "Haris Koentjoro", role: "Committee", phone: "+1 443 570 9509", href: "tel:+14435709509" },
 ];
 
-function Card({ children }: { children: React.ReactNode }) {
+// ganti email resmi kalau sudah ada
+const OFFICIAL_EMAIL = "hello@idecn.org";
+
+function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className="rounded-2xl border border-[var(--line)] bg-white/80 backdrop-blur p-6 shadow-[0_18px_60px_rgba(0,0,0,0.07)]">
+    <div
+      className={[
+        "rounded-2xl border border-[var(--line)] bg-white/80 backdrop-blur",
+        "shadow-[0_18px_60px_rgba(0,0,0,0.07)]",
+        "p-6",
+        className,
+      ].join(" ")}
+    >
       {children}
     </div>
+  );
+}
+
+function SectionTitle({
+  no,
+  title,
+  subtitle,
+}: {
+  no: string;
+  title: string;
+  subtitle?: string;
+}) {
+  return (
+    <div className="mb-6">
+      <div className="flex items-center gap-3">
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[rgba(224,101,47,0.12)] text-[color:var(--accent)] font-semibold">
+          {no}
+        </div>
+        <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h2>
+      </div>
+      {subtitle && (
+        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-[var(--muted)]">{subtitle}</p>
+      )}
+    </div>
+  );
+}
+
+function TocLink({ href, label }: { href: string; label: string }) {
+  return (
+    <a
+      href={href}
+      className="rounded-xl px-3 py-2 text-sm text-[var(--muted)] hover:bg-black/5 hover:text-[var(--ink)]"
+    >
+      {label}
+    </a>
   );
 }
 
 export default function Home() {
   return (
     <div className="proposal-bg min-h-screen">
-      {/* NAV */}
+      {/* HEADER */}
       <header className="sticky top-0 z-40 border-b border-[var(--line)] bg-white/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
           <Link href="/" className="flex items-center gap-3">
@@ -116,12 +81,14 @@ export default function Home() {
             </div>
           </Link>
 
+          {/* desktop nav */}
           <nav className="hidden items-center gap-2 md:flex">
             {[
-              ["About", "#about"],
-              ["Programs", "#programs"],
-              ["Event", "#event"],
-              ["Sponsor/Vendor", "#sponsor"],
+              ["Who We Are", "#who-we-are"],
+              ["What We Do", "#what-we-do"],
+              ["Goals", "#goals"],
+              ["Why", "#why"],
+              ["Get Involved", "#get-involved"],
               ["Contact", "#contact"],
             ].map(([label, href]) => (
               <a
@@ -133,366 +100,517 @@ export default function Home() {
               </a>
             ))}
             <a
-              href="#sponsor"
+              href="#contact"
               className="ml-2 inline-flex items-center justify-center rounded-xl bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-white hover:opacity-90"
             >
-              Get involved
+              Contact
             </a>
           </nav>
 
+          {/* mobile */}
           <details className="md:hidden">
             <summary className="list-none rounded-xl border border-[var(--line)] bg-white/80 px-3 py-2 text-sm">
               Menu
             </summary>
             <div className="mt-2 grid gap-2 rounded-2xl border border-[var(--line)] bg-white/95 p-3">
               {[
-                ["About", "#about"],
-                ["Programs", "#programs"],
-                ["Event", "#event"],
-                ["Sponsor/Vendor", "#sponsor"],
+                ["Who We Are", "#who-we-are"],
+                ["What We Do", "#what-we-do"],
+                ["Goals", "#goals"],
+                ["Why", "#why"],
+                ["Get Involved", "#get-involved"],
                 ["Contact", "#contact"],
               ].map(([label, href]) => (
                 <a key={href} href={href} className="rounded-xl px-3 py-2 text-sm hover:bg-black/5">
                   {label}
                 </a>
               ))}
-              <a
-                href="#sponsor"
-                className="mt-1 inline-flex items-center justify-center rounded-xl bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-white hover:opacity-90"
-              >
-                Get involved
-              </a>
             </div>
           </details>
         </div>
       </header>
 
-      {/* HERO */}
+      {/* HERO (lebih “editorial”, nggak template) */}
       <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
-        <div className="grid gap-10 lg:grid-cols-12 lg:items-center">
+        <div className="grid gap-10 lg:grid-cols-12 lg:items-start">
           <div className="lg:col-span-7">
             <div className="inline-flex items-center gap-2 rounded-full border border-[var(--line)] bg-white/70 px-3 py-1 text-xs text-[var(--muted)]">
-              AACF & IDECN proudly present
+              Nonprofit (U.S.-based) • Established 2024
               <span className="rounded-full bg-[rgba(224,101,47,0.14)] px-2 py-0.5 text-[color:var(--accent)]">
-                2025
+                IDECN
               </span>
             </div>
 
             <h1 className="mt-4 text-3xl font-semibold tracking-tight sm:text-5xl">
-              Indonesia Education & Cultural Network (IDECN)
+              Indonesia Education & Cultural Network
             </h1>
 
             <p className="mt-4 text-[var(--muted)] sm:text-lg leading-relaxed">
-              A nonprofit organization based in the United States dedicated to fostering cross-cultural understanding,
-              educational opportunities, and community connections between Indonesia and the U.S.
+              A nonprofit organization based in the United States dedicated to fostering cross-cultural
+              understanding, educational opportunities, and community connections between Indonesia and the U.S.
             </p>
 
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-7 grid gap-3 sm:grid-cols-3">
+              <Card className="p-4">
+                <p className="text-xs text-[var(--muted)]">Focus areas</p>
+                <p className="mt-1 text-lg font-semibold">4 pillars</p>
+              </Card>
+              <Card className="p-4">
+                <p className="text-xs text-[var(--muted)]">Community</p>
+                <p className="mt-1 text-lg font-semibold">Indonesia ↔ U.S.</p>
+              </Card>
+              <Card className="p-4">
+                <p className="text-xs text-[var(--muted)]">Model</p>
+                <p className="mt-1 text-lg font-semibold">Programs + Events</p>
+              </Card>
+            </div>
+
+            <div className="mt-7 flex flex-wrap gap-3">
               <a
-                href="#sponsor"
+                href="#get-involved"
                 className="inline-flex items-center justify-center rounded-xl bg-[var(--accent)] px-5 py-2.5 text-sm font-semibold text-white hover:opacity-90"
               >
-                Sponsor / Vendor
+                Get involved
               </a>
-
-              <a
-                href="#event"
-                className="inline-flex items-center justify-center rounded-xl border border-[var(--line)] bg-white/70 px-5 py-2.5 text-sm font-semibold hover:bg-white"
-              >
-                View event
-              </a>
-
               <a
                 href={EVENT.proposalHref}
                 className="inline-flex items-center justify-center rounded-xl border border-[var(--line)] bg-white/70 px-5 py-2.5 text-sm font-semibold hover:bg-white"
               >
                 Download proposal (PDF)
               </a>
-            </div>
-
-            <div className="mt-8 flex flex-wrap gap-2 text-xs text-[var(--muted)]">
-              {["Education", "Cultural Exchange", "Networking", "Community Support"].map((t) => (
-                <span key={t} className="rounded-lg border border-[var(--line)] bg-white/70 px-2 py-1">
-                  {t}
-                </span>
-              ))}
+              <a
+                href="#event"
+                className="inline-flex items-center justify-center rounded-xl border border-[var(--line)] bg-white/70 px-5 py-2.5 text-sm font-semibold hover:bg-white"
+              >
+                View featured event
+              </a>
             </div>
           </div>
 
           <div className="lg:col-span-5">
-            <Card>
+            <Card className="p-6">
               <p className="text-xs uppercase tracking-wider text-[var(--muted)]">Featured Event</p>
               <h2 className="mt-2 text-xl font-semibold">{EVENT.title}</h2>
               <p className="mt-2 text-sm text-[var(--muted)]">{EVENT.hosts}</p>
 
-              <div className="mt-5 space-y-3 text-sm">
-                <div className="flex gap-3">
-                  <span className="mt-2 h-2 w-2 rounded-full bg-[var(--accent)]" />
-                  <div>
-                    <p className="font-semibold">{EVENT.date}</p>
-                    <p className="text-[var(--muted)]">{EVENT.time}</p>
-                  </div>
-                </div>
-                <div className="flex gap-3">
-                  <span className="mt-2 h-2 w-2 rounded-full bg-[var(--accent)]" />
-                  <p className="text-[var(--muted)]">{EVENT.location}</p>
-                </div>
-              </div>
-
-              {/* proposal-style orange bar */}
-              <div className="mt-6 rounded-2xl bg-[var(--accent)] px-5 py-4 text-white">
-                <p className="text-sm font-semibold">
-                  Food Bazaar • Marketplace • Exhibition • Performances • Art & Craft
+              <div className="mt-5 space-y-2 text-sm">
+                <p>
+                  <span className="font-semibold">Date:</span>{" "}
+                  <span className="text-[var(--muted)]">{EVENT.date}</span>
                 </p>
-                <p className="mt-1 text-xs opacity-90">Open to the public • Free to attend</p>
+                <p>
+                  <span className="font-semibold">Time:</span>{" "}
+                  <span className="text-[var(--muted)]">{EVENT.time}</span>
+                </p>
+                <p>
+                  <span className="font-semibold">Venue:</span>{" "}
+                  <span className="text-[var(--muted)]">{EVENT.location}</span>
+                </p>
+              </div>
+
+              {/* orange band ala proposal */}
+              <div className="mt-6 rounded-2xl bg-[var(--accent)] px-5 py-4 text-white">
+                <p className="text-sm font-semibold">Open to the public • Free to attend</p>
+                <p className="mt-1 text-xs opacity-90">
+                  Sponsor / Vendor / Performer opportunities available
+                </p>
               </div>
             </Card>
           </div>
         </div>
       </section>
 
-      {/* ABOUT */}
-      <section id="about" className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-        <div className="grid gap-6 lg:grid-cols-12 lg:items-start">
-          <div className="lg:col-span-5">
-            <p className="text-xs uppercase tracking-wider text-[var(--muted)]">About</p>
-            <h2 className="mt-2 text-2xl font-semibold sm:text-3xl">
-              Building long-term Indonesia–U.S. connections
-            </h2>
-            <p className="mt-4 text-sm text-[var(--muted)] leading-relaxed">
-              Established in 2024, IDECN serves as a platform for collaboration between Indonesian and American communities.
-            </p>
-            <div className="mt-6 rounded-2xl border border-[var(--line)] bg-white/70 p-5">
-              <p className="text-sm leading-relaxed">
-                <span className="font-semibold">Mission:</span>{" "}
-                Enhance mutual understanding between Indonesia and the United States by providing resources, support,
-                and opportunities for students, educators, professionals, and cultural enthusiasts.
-              </p>
-            </div>
-          </div>
-
-          <div className="lg:col-span-7">
-            <div className="grid gap-6 md:grid-cols-2">
-              {PILLARS.map((p) => (
-                <Card key={p.title}>
-                  <h3 className="text-lg font-semibold">{p.title}</h3>
-                  <p className="mt-2 text-sm text-[var(--muted)] leading-relaxed">{p.desc}</p>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* PROGRAMS */}
-      <section id="programs" className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-        <p className="text-xs uppercase tracking-wider text-[var(--muted)]">Programs</p>
-        <h2 className="mt-2 text-2xl font-semibold sm:text-3xl">
-          Programs that create real connections
-        </h2>
-        <p className="mt-4 max-w-3xl text-sm text-[var(--muted)] leading-relaxed">
-          We focus on education, cultural exchange, career growth, and community support through inclusive programs and events.
-        </p>
-
-        <div className="mt-8 grid gap-6 lg:grid-cols-3">
-          {[
-            {
-              title: "Educational Programs & Scholarships",
-              bullets: [
-                "Scholarships guidance for Indonesian students studying in the U.S.",
-                "Exchange programs and study tours for students and educators.",
-                "Language learning programs (English & Indonesian).",
-                "Internship connections to build professional experience.",
-              ],
-            },
-            {
-              title: "Cultural Exchange & Awareness",
-              bullets: [
-                "Cultural events and festivals (arts, music, dance, food, traditions).",
-                "Cross-cultural dialogues: seminars, workshops, and discussions.",
-              ],
-            },
-            {
-              title: "Professional Development & Networking",
-              bullets: [
-                "Mentorship and networking with professionals, alumni, and employers.",
-                "Workshops on cross-cultural communication and international business.",
-              ],
-            },
-          ].map((c) => (
-            <Card key={c.title}>
-              <h3 className="text-lg font-semibold">{c.title}</h3>
-              <ul className="mt-4 space-y-2 text-sm text-[var(--muted)]">
-                {c.bullets.map((b) => (
-                  <li key={b} className="flex gap-2">
-                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)]" />
-                    <span>{b}</span>
-                  </li>
-                ))}
-              </ul>
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      {/* EVENT */}
-      <section id="event" className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-        <p className="text-xs uppercase tracking-wider text-[var(--muted)]">2025 Event</p>
-        <h2 className="mt-2 text-2xl font-semibold sm:text-3xl">{EVENT.title}</h2>
-        <p className="mt-4 max-w-3xl text-sm text-[var(--muted)] leading-relaxed">
-          A public celebration of Indonesian culture through food, products, art, performances, and community engagement—open to the public and free to attend.
-        </p>
-
-        <div className="mt-8 grid gap-6 lg:grid-cols-3">
-          <Card>
-            <h3 className="text-lg font-semibold">When & where</h3>
-            <div className="mt-4 space-y-2 text-sm text-[var(--muted)]">
-              <p><span className="font-semibold text-[var(--ink)]">Date:</span> {EVENT.date}</p>
-              <p><span className="font-semibold text-[var(--ink)]">Time:</span> {EVENT.time}</p>
-              <p><span className="font-semibold text-[var(--ink)]">Venue:</span> {EVENT.location}</p>
-            </div>
-
-            <a
-              href={EVENT.proposalHref}
-              className="mt-6 inline-flex w-full items-center justify-center rounded-xl border border-[var(--line)] bg-white/70 px-4 py-2.5 text-sm font-semibold hover:bg-white"
-            >
-              Download proposal (PDF)
-            </a>
-
-            <div className="mt-5 rounded-2xl bg-[rgba(224,101,47,0.10)] p-4">
-              <p className="text-sm font-semibold text-[color:var(--accent)]">Open to the public</p>
-              <p className="text-xs text-[var(--muted)]">Free to attend • Family-friendly</p>
-            </div>
-          </Card>
-
-          <div className="grid gap-6 lg:col-span-2 md:grid-cols-2">
-            {HIGHLIGHTS.map((h) => (
-              <Card key={h.title}>
-                <h3 className="text-lg font-semibold">{h.title}</h3>
-                <p className="mt-2 text-sm text-[var(--muted)] leading-relaxed">{h.desc}</p>
+      {/* MAIN CONTENT LAYOUT (TOC kiri, isi kanan) */}
+      <section className="mx-auto max-w-6xl px-4 pb-14 sm:px-6">
+        <div className="grid gap-8 lg:grid-cols-12">
+          {/* TOC */}
+          <aside className="hidden lg:col-span-3 lg:block">
+            <div className="sticky top-24">
+              <Card className="p-4">
+                <p className="text-xs font-semibold text-[var(--muted)] uppercase tracking-wider">
+                  On this page
+                </p>
+                <div className="mt-3 grid gap-1">
+                  <TocLink href="#who-we-are" label="1. Who We Are" />
+                  <TocLink href="#what-we-do" label="2. What We Do" />
+                  <TocLink href="#goals" label="3. Our Goals" />
+                  <TocLink href="#why" label="4. Why We Do It" />
+                  <TocLink href="#get-involved" label="5. Get Involved" />
+                  <TocLink href="#contact" label="6. Contact Us" />
+                </div>
               </Card>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* SPONSOR */}
-      <section id="sponsor" className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-        <p className="text-xs uppercase tracking-wider text-[var(--muted)]">Participatory Opportunities</p>
-        <h2 className="mt-2 text-2xl font-semibold sm:text-3xl">
-          Sponsor, vendor, perform, or support
-        </h2>
-        <p className="mt-4 max-w-3xl text-sm text-[var(--muted)] leading-relaxed">
-          Sponsoring offers a unique opportunity to enhance brand visibility, connect with community leaders, and support cultural exchange.
-        </p>
-
-        <div className="mt-8 grid gap-6 lg:grid-cols-3">
-          {SPONSOR.map((t) => (
-            <Card key={t.name}>
-              <div className="flex items-baseline justify-between">
-                <h3 className="text-lg font-semibold">{t.name}</h3>
-                <p className="text-2xl font-semibold text-[color:var(--accent)]">{t.price}</p>
+              <div className="mt-4 rounded-2xl border border-[var(--line)] bg-white/60 p-4">
+                <p className="text-xs text-[var(--muted)]">
+                  Tip: biar tombol PDF jalan, upload file ke{" "}
+                  <span className="font-semibold">/public/docs/</span>.
+                </p>
               </div>
-              <ul className="mt-4 space-y-2 text-sm text-[var(--muted)]">
-                {t.perks.map((p) => (
-                  <li key={p} className="flex gap-2">
-                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)]" />
-                    <span>{p}</span>
-                  </li>
-                ))}
-              </ul>
-            </Card>
-          ))}
-        </div>
+            </div>
+          </aside>
 
-        <div className="mt-10 grid gap-6 lg:grid-cols-2">
-          <Card>
-            <h3 className="text-lg font-semibold">Vendor options</h3>
-            <p className="mt-2 text-sm text-[var(--muted)]">
-              Standard vendors may need to bring tent/tables/chairs. Premium spaces are under a tent near stage & audience.
-            </p>
+          {/* CONTENT */}
+          <div className="lg:col-span-9 space-y-10">
+            {/* 1 Who We Are */}
+            <div id="who-we-are">
+              <SectionTitle
+                no="1"
+                title="Who We Are"
+                subtitle="IDECN is a nonprofit platform for collaboration between Indonesian and American communities—strengthening education, culture, and professional connections."
+              />
+              <div className="grid gap-6 md:grid-cols-2">
+                <Card>
+                  <h3 className="text-lg font-semibold">Overview</h3>
+                  <p className="mt-2 text-sm text-[var(--muted)] leading-relaxed">
+                    The Indonesia Education and Cultural Network (IDECN) is a nonprofit organization
+                    based in the United States dedicated to fostering cross-cultural understanding,
+                    educational opportunities, and community connections between Indonesia and the U.S.
+                  </p>
+                </Card>
+                <Card>
+                  <h3 className="text-lg font-semibold">Mission</h3>
+                  <p className="mt-2 text-sm text-[var(--muted)] leading-relaxed">
+                    Enhance mutual understanding between Indonesia and the United States by providing
+                    resources, support, and opportunities for students, educators, professionals, and cultural enthusiasts.
+                  </p>
+                </Card>
+              </div>
 
-            <div className="mt-5 grid gap-4">
-              {VENDORS.map((v) => (
-                <div key={v.title} className="rounded-2xl border border-[var(--line)] bg-white/70 p-5">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <p className="font-semibold">{v.title}</p>
-                      <p className="mt-1 text-sm text-[var(--muted)]">{v.note}</p>
+              <div className="mt-6 rounded-2xl border border-[var(--line)] bg-white/70 p-6">
+                <p className="text-sm leading-relaxed">
+                  <span className="font-semibold">Commitment:</span>{" "}
+                  IDECN is committed to building a vibrant, inclusive, informed, and engaged community that bridges both nations
+                  through shared experiences and values.
+                </p>
+              </div>
+            </div>
+
+            {/* 2 What We Do */}
+            <div id="what-we-do">
+              <SectionTitle
+                no="2"
+                title="What We Do"
+                subtitle="We focus on four key areas: education, cultural exchange, professional development, and community support."
+              />
+
+              <div className="grid gap-6 md:grid-cols-2">
+                <Card>
+                  <h3 className="text-lg font-semibold">Educational Programs & Scholarships</h3>
+                  <ul className="mt-3 space-y-2 text-sm text-[var(--muted)]">
+                    {[
+                      "Scholarships: help Indonesian students access financial support and guidance for studying in the U.S.",
+                      "Exchange Programs: study tours and exchange programs for students and educators.",
+                      "Language Learning: improve English and Indonesian language skills.",
+                      "Internship Opportunities: connect students with U.S. internships to build experience.",
+                    ].map((t) => (
+                      <li key={t} className="flex gap-2">
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)]" />
+                        <span>{t}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </Card>
+
+                <Card>
+                  <h3 className="text-lg font-semibold">Cultural Exchange & Awareness</h3>
+                  <ul className="mt-3 space-y-2 text-sm text-[var(--muted)]">
+                    {[
+                      "Cultural Events & Festivals: showcase arts, music, dance, food, and traditions for U.S. audiences.",
+                      "Cross-Cultural Dialogues: seminars, workshops, and discussions to promote collaboration.",
+                    ].map((t) => (
+                      <li key={t} className="flex gap-2">
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)]" />
+                        <span>{t}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </Card>
+
+                <Card>
+                  <h3 className="text-lg font-semibold">Professional Development & Networking</h3>
+                  <ul className="mt-3 space-y-2 text-sm text-[var(--muted)]">
+                    {[
+                      "Networking Opportunities: connect students, professionals, and alumni with mentors and employers.",
+                      "Workshops & Seminars: skills on cross-cultural communication and international business.",
+                    ].map((t) => (
+                      <li key={t} className="flex gap-2">
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)]" />
+                        <span>{t}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </Card>
+
+                <Card>
+                  <h3 className="text-lg font-semibold">Community Support</h3>
+                  <p className="mt-2 text-sm text-[var(--muted)] leading-relaxed">
+                    Volunteer, donate, and community-led initiatives that strengthen mutual understanding and shared growth.
+                  </p>
+
+                  <div className="mt-4 rounded-xl bg-[rgba(224,101,47,0.10)] p-4">
+                    <p className="text-sm font-semibold text-[color:var(--accent)]">Signature event</p>
+                    <p className="text-xs text-[var(--muted)]">Indonesia Culinary Day on the Creek (annual)</p>
+                  </div>
+                </Card>
+              </div>
+            </div>
+
+            {/* Featured Event (dipisah biar nggak template) */}
+            <div id="event">
+              <SectionTitle
+                no="★"
+                title="Featured Event"
+                subtitle="Indonesia Culinary Day on the Creek — a public celebration of Indonesian culture."
+              />
+              <Card>
+                <div className="grid gap-6 lg:grid-cols-12 lg:items-start">
+                  <div className="lg:col-span-7">
+                    <h3 className="text-xl font-semibold">{EVENT.title}</h3>
+                    <p className="mt-2 text-sm text-[var(--muted)]">{EVENT.hosts}</p>
+
+                    <div className="mt-4 grid gap-2 text-sm">
+                      <p>
+                        <span className="font-semibold">Date:</span>{" "}
+                        <span className="text-[var(--muted)]">{EVENT.date}</span>
+                      </p>
+                      <p>
+                        <span className="font-semibold">Time:</span>{" "}
+                        <span className="text-[var(--muted)]">{EVENT.time}</span>
+                      </p>
+                      <p>
+                        <span className="font-semibold">Venue:</span>{" "}
+                        <span className="text-[var(--muted)]">{EVENT.location}</span>
+                      </p>
                     </div>
-                    <p className="text-xl font-semibold text-[color:var(--accent)]">{v.price}</p>
+
+                    <div className="mt-5 flex flex-wrap gap-2 text-xs text-[var(--muted)]">
+                      {["Food Bazaar", "Marketplace", "Exhibition", "Performances", "Art & Craft"].map((t) => (
+                        <span
+                          key={t}
+                          className="rounded-lg border border-[var(--line)] bg-white/70 px-2 py-1"
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="lg:col-span-5">
+                    <div className="rounded-2xl bg-[var(--accent)] p-5 text-white">
+                      <p className="text-sm font-semibold">Want to participate?</p>
+                      <p className="mt-1 text-xs opacity-90">
+                        Sponsor / Vendor / Performer opportunities available.
+                      </p>
+                      <a
+                        href={EVENT.proposalHref}
+                        className="mt-4 inline-flex w-full items-center justify-center rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-[color:var(--accent)] hover:opacity-95"
+                      >
+                        Download proposal (PDF)
+                      </a>
+                    </div>
                   </div>
                 </div>
-              ))}
+              </Card>
             </div>
-          </Card>
 
-          <Card>
-            <h3 className="text-lg font-semibold">Ready to participate?</h3>
-            <p className="mt-2 text-sm text-[var(--muted)]">
-              Contact the committee for availability, questions, and sponsorship/vendor confirmation.
-            </p>
+            {/* 3 Goals */}
+            <div id="goals">
+              <SectionTitle
+                no="3"
+                title="Our Goals"
+                subtitle="Clear goals that translate into practical programs and measurable impact."
+              />
+              <div className="grid gap-6 md:grid-cols-3">
+                <Card>
+                  <h3 className="text-lg font-semibold">Enhance Educational Opportunities</h3>
+                  <ul className="mt-3 space-y-2 text-sm text-[var(--muted)]">
+                    {[
+                      "Provide access and resources to scholarships and guidance for Indonesian students in the U.S.",
+                      "Promote educational exchanges between Indonesian and American institutions.",
+                    ].map((t) => (
+                      <li key={t} className="flex gap-2">
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)]" />
+                        <span>{t}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </Card>
 
-            <a
-              href="#contact"
-              className="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-[var(--accent)] px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90"
-            >
-              Contact committee
-            </a>
+                <Card>
+                  <h3 className="text-lg font-semibold">Promote Cultural Understanding & Exchange</h3>
+                  <ul className="mt-3 space-y-2 text-sm text-[var(--muted)]">
+                    {[
+                      "Celebrate Indonesian culture through events and festivals.",
+                      "Encourage open dialogue between Indonesians and Americans.",
+                    ].map((t) => (
+                      <li key={t} className="flex gap-2">
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)]" />
+                        <span>{t}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </Card>
 
-            <div className="mt-6 rounded-2xl bg-[rgba(224,101,47,0.10)] p-4">
-              <p className="text-sm font-semibold text-[color:var(--accent)]">Tip</p>
-              <p className="text-xs text-[var(--muted)]">
-                Pastikan PDF proposal ada di <span className="font-semibold">/public/docs/</span> biar tombol download jalan.
-              </p>
+                <Card>
+                  <h3 className="text-lg font-semibold">Strengthen Professional Networks</h3>
+                  <ul className="mt-3 space-y-2 text-sm text-[var(--muted)]">
+                    {[
+                      "Build networks to help Indonesian professionals and students succeed.",
+                      "Provide resources and career support to expand professional opportunities.",
+                    ].map((t) => (
+                      <li key={t} className="flex gap-2">
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)]" />
+                        <span>{t}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </Card>
+              </div>
             </div>
-          </Card>
-        </div>
-      </section>
 
-      {/* CONTACT */}
-      <section id="contact" className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-        <p className="text-xs uppercase tracking-wider text-[var(--muted)]">Contact</p>
-        <h2 className="mt-2 text-2xl font-semibold sm:text-3xl">Let’s collaborate</h2>
-
-        <div className="mt-8 grid gap-6 lg:grid-cols-2">
-          <Card>
-            <h3 className="text-lg font-semibold">Committee contacts</h3>
-            <div className="mt-4 space-y-3">
-              {CONTACTS.map((c) => (
-                <a
-                  key={c.phone}
-                  href={c.href}
-                  className="flex items-center justify-between rounded-xl border border-[var(--line)] bg-white/70 px-4 py-3 hover:bg-white"
-                >
-                  <div>
-                    <p className="text-sm font-semibold">{c.name}</p>
-                    <p className="text-sm text-[var(--muted)]">{c.phone}</p>
+            {/* 4 Why */}
+            <div id="why">
+              <SectionTitle
+                no="4"
+                title="Why We Do It"
+                subtitle="Education and culture break barriers—and create lasting connections."
+              />
+              <Card>
+                <div className="grid gap-6 lg:grid-cols-12 lg:items-start">
+                  <div className="lg:col-span-8">
+                    <p className="text-sm text-[var(--muted)] leading-relaxed">
+                      We believe in the power of education and culture to break down barriers and create lasting
+                      connections between people. Indonesia and the United States are both dynamic, diverse nations with
+                      much to learn from each other.
+                    </p>
+                    <p className="mt-4 text-sm text-[var(--muted)] leading-relaxed">
+                      By supporting Indonesian students, fostering cultural exchange, and providing resources for
+                      professional growth, IDECN aims to create a more inclusive and interconnected world where both
+                      nations thrive.
+                    </p>
                   </div>
-                  <span className="rounded-lg bg-[rgba(224,101,47,0.12)] px-2 py-1 text-xs text-[color:var(--accent)]">
-                    Call
-                  </span>
-                </a>
-              ))}
+                  <div className="lg:col-span-4">
+                    <div className="rounded-2xl border border-[var(--line)] bg-white/70 p-5">
+                      <p className="text-xs uppercase tracking-wider text-[var(--muted)]">Statement</p>
+                      <p className="mt-2 text-sm font-semibold leading-relaxed">
+                        “Bridge both nations through shared experiences and values.”
+                      </p>
+                      <div className="mt-4 h-1 w-full rounded-full bg-[rgba(224,101,47,0.25)]">
+                        <div className="h-1 w-1/2 rounded-full bg-[var(--accent)]" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Card>
             </div>
-          </Card>
 
-          <Card>
-            <h3 className="text-lg font-semibold">Downloads</h3>
-            <p className="mt-2 text-sm text-[var(--muted)]">
-              Proposal link:
-            </p>
-            <a
-              href={EVENT.proposalHref}
-              className="mt-4 inline-flex w-full items-center justify-center rounded-xl border border-[var(--line)] bg-white/70 px-4 py-2.5 text-sm font-semibold hover:bg-white"
-            >
-              {EVENT.proposalHref}
-            </a>
+            {/* 5 Get involved */}
+            <div id="get-involved">
+              <SectionTitle
+                no="5"
+                title="Get Involved"
+                subtitle="There is a place for students, professionals, cultural enthusiasts, and community supporters."
+              />
 
-            <div className="mt-6 border-t border-[var(--line)] pt-5 text-xs text-[var(--muted)]">
-              © {new Date().getFullYear()} IDECN. All rights reserved.
+              <div className="grid gap-6 md:grid-cols-2">
+                {[
+                  {
+                    title: "Students & Scholars",
+                    desc: "Scholarships guidance, networking, and exchange programs tailored to your needs.",
+                  },
+                  {
+                    title: "Cultural Enthusiasts",
+                    desc: "Join cultural events and celebrations to explore Indonesian traditions and connect with the community.",
+                  },
+                  {
+                    title: "Professionals & Alumni",
+                    desc: "Advance your career through mentorship, networking, and collaboration opportunities.",
+                  },
+                  {
+                    title: "Community Supporters",
+                    desc: "Volunteer, donate, or help spread the word to foster cross-cultural understanding.",
+                  },
+                ].map((c) => (
+                  <Card key={c.title}>
+                    <h3 className="text-lg font-semibold">{c.title}</h3>
+                    <p className="mt-2 text-sm text-[var(--muted)] leading-relaxed">{c.desc}</p>
+                    <a
+                      href="#contact"
+                      className="mt-4 inline-flex w-fit items-center justify-center rounded-xl bg-[rgba(224,101,47,0.12)] px-4 py-2 text-sm font-semibold text-[color:var(--accent)] hover:opacity-90"
+                    >
+                      Contact to join
+                    </a>
+                  </Card>
+                ))}
+              </div>
             </div>
-          </Card>
+
+            {/* 6 Contact */}
+            <div id="contact">
+              <SectionTitle
+                no="6"
+                title="Contact Us"
+                subtitle="For sponsorship, vendor slots, partnerships, volunteering, or general inquiries."
+              />
+
+              <div className="grid gap-6 lg:grid-cols-2">
+                <Card>
+                  <h3 className="text-lg font-semibold">Committee</h3>
+                  <div className="mt-4 space-y-3">
+                    {CONTACTS.map((c) => (
+                      <a
+                        key={c.phone}
+                        href={c.href}
+                        className="flex items-center justify-between gap-4 rounded-xl border border-[var(--line)] bg-white/70 px-4 py-3 hover:bg-white"
+                      >
+                        <div>
+                          <p className="text-sm font-semibold">
+                            {c.name} <span className="text-[var(--muted)] font-normal">• {c.role}</span>
+                          </p>
+                          <p className="text-sm text-[var(--muted)]">{c.phone}</p>
+                        </div>
+                        <span className="rounded-lg bg-[rgba(224,101,47,0.12)] px-2 py-1 text-xs text-[color:var(--accent)]">
+                          Call
+                        </span>
+                      </a>
+                    ))}
+                  </div>
+                </Card>
+
+                <Card>
+                  <h3 className="text-lg font-semibold">Email & Downloads</h3>
+                  <p className="mt-2 text-sm text-[var(--muted)]">
+                    Update with your official IDECN email when ready.
+                  </p>
+
+                  <a
+                    className="mt-4 inline-flex w-full items-center justify-center rounded-xl bg-[var(--accent)] px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90"
+                    href={`mailto:${OFFICIAL_EMAIL}`}
+                  >
+                    {OFFICIAL_EMAIL}
+                  </a>
+
+                  <a
+                    className="mt-3 inline-flex w-full items-center justify-center rounded-xl border border-[var(--line)] bg-white/70 px-4 py-2.5 text-sm font-semibold hover:bg-white"
+                    href={EVENT.proposalHref}
+                  >
+                    Download proposal (PDF)
+                  </a>
+
+                  <p className="mt-4 text-xs text-[var(--muted)]">
+                    Proposal path: <span className="font-semibold">{EVENT.proposalHref}</span> (upload ke <span className="font-semibold">/public/docs/</span>)
+                  </p>
+                </Card>
+              </div>
+            </div>
+
+            {/* FOOTER */}
+            <div className="pt-4">
+              <div className="border-t border-[var(--line)] pt-6 text-xs text-[var(--muted)]">
+                © {new Date().getFullYear()} IDECN. All rights reserved.
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </div>
