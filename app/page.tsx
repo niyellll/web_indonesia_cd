@@ -6,7 +6,7 @@ const EVENT = {
   time: "11AM – 4PM",
   location: "Carroll Creek Park • Downtown Frederick • Maryland, USA",
   hosts: "Hosted by AACF & IDECN • Part of the annual Creek Festival",
-  proposalHref: "/docs/indonesia-on-the-creek-proposal.pdf", // taruh PDF di /public/docs/
+  proposalHref: "/indonesia-on-the-creek-proposal.pdf", // taruh PDF di /public/docs/
 };
 
 const PILLARS = [
