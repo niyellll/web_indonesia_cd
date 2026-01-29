@@ -429,7 +429,7 @@ export default function Home() {
 
           <Card>
             <h3 className="text-lg font-semibold">Ready to participate?</h3>
-            <p <p className="mt-2 text-sm text-[var(--muted)]">
+            <p className="mt-2 text-sm text-[var(--muted)]">
               Contact the committee for availability, questions, and sponsorship/vendor confirmation.
             </p>
 
