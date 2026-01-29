@@ -241,10 +241,7 @@ export default function Home() {
               </Card>
 
               <div className="mt-4 rounded-2xl border border-[var(--line)] bg-white/60 p-4">
-                <p className="text-xs text-[var(--muted)]">
-                  Tip: biar tombol PDF jalan, upload file ke{" "}
-                  <span className="font-semibold">/public/docs/</span>.
-                </p>
+              
               </div>
             </div>
           </aside>
