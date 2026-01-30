@@ -195,3 +195,16 @@ body{
 .anchor-pad{
   scroll-margin-top: 120px;
 }
+
+:root{
+  --id-red: #D91F26;
+  --us-blue: #1E4BD1;
+  --ink: #0B1020;
+}
+
+/* smooth jump untuk anchor link */
+html { scroll-behavior: smooth; }
+
+/* supaya pas klik nav, judul section gak ketutup navbar sticky */
+[id] { scroll-margin-top: 110px; }
+

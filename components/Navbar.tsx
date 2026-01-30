@@ -1,189 +1,173 @@
 "use client";
 
-import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
-function cn(...xs: Array<string | false | null | undefined>) {
-  return xs.filter(Boolean).join(" ");
+type NavItem = { id: string; label: string; href: string };
+
+function clamp(n: number, min: number, max: number) {
+  return Math.max(min, Math.min(max, n));
 }
 
-type NavItem = { label: string; href: string; id: string };
-
 export default function Navbar() {
-  const items: NavItem[] = useMemo(
+  const NAV: NavItem[] = useMemo(
     () => [
-      { label: "About", href: "#about", id: "about" },
-      { label: "Programs", href: "#programs", id: "programs" },
-      { label: "Portfolio Event", href: "#portfolio", id: "portfolio" },
-      { label: "Partners", href: "#partners", id: "partners" },
-      { label: "Get Involved", href: "#get-involved", id: "get-involved" },
+      { id: "about", label: "About", href: "#about" },
+      { id: "programs", label: "Programs", href: "#programs" },
+      { id: "portfolio", label: "Portfolio Event", href: "#portfolio" },
+      { id: "partners", label: "Partners", href: "#partners" },
+      { id: "get-involved", label: "Get Involved", href: "#get-involved" },
     ],
     []
   );
 
   const [scrolled, setScrolled] = useState(false);
-  const [active, setActive] = useState<string>("about");
-  const [openMobile, setOpenMobile] = useState(false);
+  const [progress, setProgress] = useState(0); // 0..1
+  const [activeId, setActiveId] = useState<string>("");
 
-  // shrink + blur on scroll
+  // Scroll → (1) navbar style (2) gradient shift progress
   useEffect(() => {
-    let raf = 0;
     const onScroll = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => setScrolled(window.scrollY > 10));
+      const y = window.scrollY || 0;
+      setScrolled(y > 8);
+
+      const doc = document.documentElement;
+      const max = Math.max(1, doc.scrollHeight - window.innerHeight);
+      const p = clamp(y / max, 0, 1);
+      setProgress(p);
     };
+
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", onScroll);
-    };
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // active section
+  // Active section highlight (IntersectionObserver)
   useEffect(() => {
-    const ids = items.map((x) => x.id);
-    const els = ids.map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+    const ids = NAV.map((n) => n.id).concat(["contact"]);
+    const els = ids
+      .map((id) => document.getElementById(id))
+      .filter(Boolean) as HTMLElement[];
+
     if (!els.length) return;
 
     const io = new IntersectionObserver(
       (entries) => {
+        // pick most visible
         const visible = entries
           .filter((e) => e.isIntersecting)
-          .sort((a, b) => (b.intersectionRatio ?? 0) - (a.intersectionRatio ?? 0))[0];
-        if (visible?.target?.id) setActive(visible.target.id);
+          .sort((a, b) => (b.intersectionRatio ?? 0) - (a.intersectionRatio ?? 0));
+        if (visible[0]?.target?.id) setActiveId(visible[0].target.id);
       },
       {
-        threshold: [0.2, 0.35, 0.5],
-        rootMargin: "-90px 0px -55% 0px",
+        root: null,
+        threshold: [0.15, 0.25, 0.35, 0.5, 0.65],
+        rootMargin: "-20% 0px -65% 0px", // biar "aktif" pas section mulai masuk
       }
     );
 
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
-  }, [items]);
+  }, [NAV]);
 
-  // lock scroll for mobile menu
-  useEffect(() => {
-    document.body.style.overflow = openMobile ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [openMobile]);
+  const stripeStyle: React.CSSProperties = {
+    // merah → putih → biru (Indonesia + US), lalu digeser sesuai scroll
+    backgroundImage:
+      "linear-gradient(90deg, var(--id-red) 0%, var(--id-red) 38%, #ffffff 50%, var(--us-blue) 62%, var(--us-blue) 100%)",
+    backgroundSize: "220% 100%",
+    backgroundPosition: `${Math.round(progress * 100)}% 0%`,
+  };
+
+  const shell =
+    "relative mx-auto flex max-w-6xl items-center gap-4 px-4 md:px-6";
+  const navText =
+    "text-[14px] md:text-[16px] font-semibold tracking-[0.01em] text-[var(--ink)]/80 hover:text-[var(--ink)]";
 
   return (
-    <div className="fixed inset-x-0 top-0 z-50">
-      {/* red-blue stripe */}
-      <div className="h-[3px] w-full">
-        <div className="flex h-full">
-          <div className="h-full w-1/2 bg-[var(--id-red)]" />
-          <div className="h-full w-1/2 bg-[var(--id-blue)]" />
-        </div>
-      </div>
+    <header className="sticky top-0 z-50">
+      {/* top moving stripe */}
+      <div
+        className="h-[4px] w-full"
+        style={stripeStyle}
+        aria-hidden="true"
+      />
 
-      <header
-        className={cn(
-          "transition-all duration-300",
+      {/* main bar */}
+      <div
+        className={[
+          "w-full border-b border-black/5",
           scrolled
-            ? "bg-white/88 backdrop-blur-md border-b border-black/10 shadow-[0_10px_30px_rgba(0,0,0,0.06)]"
-            : "bg-white/70 backdrop-blur-sm border-b border-black/0"
-        )}
+            ? "bg-white/85 backdrop-blur-xl shadow-[0_10px_30px_rgba(2,6,23,0.06)]"
+            : "bg-white/70 backdrop-blur-md",
+        ].join(" ")}
       >
-        <div className={cn("nav-wrap", scrolled ? "h-[64px]" : "h-[76px]")}>
-          <Link href="/" className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full border border-black/10 bg-white" />
+        <div className={shell}>
+          {/* Brand */}
+          <a
+            href="#"
+            className="group flex items-center gap-3 py-4 md:py-5"
+            aria-label="Home"
+          >
+            <div className="h-10 w-10 rounded-full border border-black/10 bg-white shadow-[0_10px_25px_rgba(2,6,23,0.10)]" />
             <div className="leading-tight">
-              <div className="text-[15px] font-extrabold tracking-tight text-slate-900">
+              <div className="text-[15px] md:text-[17px] font-extrabold tracking-tight text-[var(--ink)]">
                 IDECN
               </div>
-              <div className="text-[12px] font-medium text-slate-500">
+              <div className="text-[12px] md:text-[13px] font-semibold text-[var(--ink)]/55">
                 Indonesia ↔ U.S.
               </div>
             </div>
-          </Link>
+          </a>
 
-          {/* desktop nav */}
-          <nav className="hidden items-center gap-1 md:flex">
-            {items.map((it) => {
-              const isActive = active === it.id;
+          {/* Center nav */}
+          <nav className="hidden flex-1 items-center justify-center gap-2 md:flex">
+            {NAV.map((item) => {
+              const isActive = activeId === item.id;
               return (
                 <a
-                  key={it.id}
-                  href={it.href}
-                  className={cn(
-                    "rounded-full px-4 py-2 text-[15px] font-semibold transition",
-                    "text-slate-700 hover:bg-slate-900/5 hover:text-slate-900",
-                    isActive && "bg-slate-900/5 text-slate-900"
-                  )}
+                  key={item.id}
+                  href={item.href}
+                  className={[
+                    "relative rounded-full px-4 py-2 transition",
+                    isActive
+                      ? "bg-black/[0.05] text-[var(--ink)]"
+                      : "hover:bg-black/[0.04]",
+                    navText,
+                  ].join(" ")}
                 >
-                  {it.label}
+                  {/* tiny indicator */}
+                  <span
+                    className={[
+                      "absolute left-1/2 top-full mt-1 h-[3px] w-10 -translate-x-1/2 rounded-full transition-opacity",
+                      isActive ? "opacity-100" : "opacity-0",
+                    ].join(" ")}
+                    style={{
+                      backgroundImage:
+                        "linear-gradient(90deg, var(--id-red), var(--us-blue))",
+                    }}
+                    aria-hidden="true"
+                  />
+                  {item.label}
                 </a>
               );
             })}
           </nav>
 
-          {/* right */}
-          <div className="flex items-center gap-2">
+          {/* Right CTA */}
+          <div className="ml-auto flex items-center gap-3">
             <a
               href="#contact"
-              className="hidden rounded-full bg-[var(--id-red)] px-5 py-2.5 text-[15px] font-bold text-white hover:bg-[#b91c1c] md:inline-block"
+              className={[
+                "rounded-full px-5 py-2.5 md:px-6 md:py-3",
+                "text-[14px] md:text-[16px] font-extrabold tracking-tight text-white",
+                "bg-[var(--id-red)] hover:opacity-95",
+                "shadow-[0_14px_30px_rgba(217,31,38,0.25)]",
+              ].join(" ")}
             >
               Contact
             </a>
-
-            {/* mobile button */}
-            <button
-              className="md:hidden rounded-full border border-black/10 bg-white px-4 py-2 text-[14px] font-bold text-slate-900"
-              onClick={() => setOpenMobile(true)}
-              aria-label="Open menu"
-            >
-              Menu
-            </button>
           </div>
         </div>
-
-        {/* mobile sheet */}
-        {openMobile && (
-          <div className="md:hidden">
-            <div
-              className="fixed inset-0 bg-black/30"
-              onClick={() => setOpenMobile(false)}
-            />
-            <div className="fixed left-0 right-0 top-[79px] bg-white border-b border-black/10 shadow-[0_18px_45px_rgba(0,0,0,0.15)]">
-              <div className="mx-auto w-full px-4 py-4" style={{ maxWidth: 1120 }}>
-                <div className="grid gap-2">
-                  {items.map((it) => (
-                    <a
-                      key={it.id}
-                      href={it.href}
-                      onClick={() => setOpenMobile(false)}
-                      className={cn(
-                        "rounded-xl px-4 py-3 text-[16px] font-bold",
-                        active === it.id ? "bg-slate-900/5 text-slate-900" : "text-slate-700 hover:bg-slate-900/5"
-                      )}
-                    >
-                      {it.label}
-                    </a>
-                  ))}
-                  <a
-                    href="#contact"
-                    onClick={() => setOpenMobile(false)}
-                    className="mt-2 rounded-xl bg-[var(--id-red)] px-4 py-3 text-center text-[16px] font-extrabold text-white"
-                  >
-                    Contact
-                  </a>
-                  <button
-                    className="rounded-xl border border-black/10 bg-white px-4 py-3 text-[14px] font-bold"
-                    onClick={() => setOpenMobile(false)}
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </header>
-    </div>
+      </div>
+    </header>
   );
 }
