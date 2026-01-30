@@ -159,7 +159,7 @@ export default function Home() {
       {/* Batik background (no gradient) */}
       <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
         <div className="absolute inset-0 bg-white" />
-        <div className="absolute inset-0 bg-[url('/images/batik-pattern.svg')] bg-repeat opacity-[0.08]" />
+        <div className="absolute inset-0 bg-[url('/batik-pattern.svg')] bg-repeat opacity-[0.08]" />
       </div>
 
       {/* NAVBAR (top only) */}
