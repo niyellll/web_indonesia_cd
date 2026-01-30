@@ -1,10 +1,7 @@
 // lib/cms.ts
 import { createClient, groq } from "next-sanity";
 
-export type Program = {
-  title: string;
-  bullets: string[];
-};
+export type Program = { title: string; bullets: string[] };
 
 export type EventItem = {
   title: string;
@@ -15,20 +12,11 @@ export type EventItem = {
   featured?: boolean;
 };
 
-export type Partner = {
-  name: string;
-  type: string;
-  website?: string;
-};
+export type Partner = { name: string; type: string; website?: string };
 
 export type SiteSettings = {
   orgName: string;
   tagline: string;
-
-  // ✅ ditambah biar app/page.tsx bisa pakai site.heroTitle
-  heroTitle?: string;
-  heroSubtitle?: string;
-
   purpose: string;
   audience: string[];
   email: string;
@@ -36,129 +24,107 @@ export type SiteSettings = {
   themeNote: string;
 };
 
-const FALLBACK: {
-  site: SiteSettings;
-  programs: Program[];
-  events: EventItem[];
-  partners: Partner[];
-} = {
+// ====== ENV (Sanity) ======
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET;
+const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION || "2025-01-01";
+
+const hasSanity = Boolean(projectId && dataset);
+
+// ✅ Jangan bikin client kalau ENV belum ada (biar build gak gagal)
+const client = hasSanity
+  ? createClient({
+      projectId: projectId!,
+      dataset: dataset!,
+      apiVersion,
+      useCdn: true,
+      perspective: "published",
+    })
+  : null;
+
+async function safeFetch<T>(
+  query: string,
+  params: Record<string, any> | undefined,
+  fallback: T
+): Promise<T> {
+  if (!client) return fallback;
+  try {
+    return await client.fetch<T>(query, params);
+  } catch {
+    return fallback;
+  }
+}
+
+// ====== FALLBACK CONTENT (dipakai kalau Sanity belum siap) ======
+const FALLBACK = {
   site: {
     orgName: "IDECN",
-    tagline: "Indonesia ↔ U.S.",
-    heroTitle: "Indonesia Education & Cultural Network",
-    heroSubtitle:
+    tagline:
       "A U.S.-based nonprofit dedicated to fostering cross-cultural understanding, educational opportunities, and community connections between Indonesia and the United States.",
     purpose:
-      "Strengthen education and cultural exchange between Indonesia and the U.S. through programs, partnerships, and community-driven events.",
-    audience: ["Students", "Educators", "Diaspora", "Partners", "Donors"],
+      "We connect people, schools, and communities through education, culture, and collaborative programs between Indonesia and the U.S.",
+    audience: ["Students", "Educators", "Communities", "Partners", "Donors"],
     email: "contact@idecn.org",
     proposalUrl: "/indonesia-on-the-creek-proposal.pdf",
-    themeNote: "Red • White • Blue — Indonesia ↔ U.S.",
-  },
+    themeNote: "Indonesia ↔ U.S.",
+  } as SiteSettings,
   programs: [
     {
-      title: "Scholarship & Study Guidance",
-      bullets: [
-        "Mentorship for U.S. admissions",
-        "Essay & CV clinics",
-        "Webinars with alumni",
-      ],
+      title: "Education Exchange",
+      bullets: ["Mentorship", "Workshops", "Campus visits", "Scholarship guidance"],
     },
     {
-      title: "Cultural Exchange Events",
-      bullets: ["Culinary Day", "Film & discussion nights", "Community showcases"],
+      title: "Cultural Programs",
+      bullets: ["Community events", "Culinary day", "Arts & performance", "Storytelling"],
     },
-    {
-      title: "Partnership Programs",
-      bullets: ["University collaborations", "NGO & embassy coordination", "Sponsors"],
-    },
-  ],
+  ] as Program[],
   events: [
     {
-      title: "Culinary Day (Portfolio Highlight)",
-      dateText: "2026",
-      location: "U.S. — Community Venue",
+      title: "Portfolio Event — Culinary Day",
+      dateText: "2024",
+      location: "U.S.",
       summary:
-        "A signature community event that demonstrates IDECN’s capability to execute impactful public programs.",
-      highlights: ["Repeatable format", "Multi-stakeholder execution", "Scalable annually"],
+        "A signature public event that demonstrates IDECN’s capability to execute cross-cultural programs with partners.",
+      highlights: ["Multi-stakeholder", "Repeatable format", "Scalable event playbook"],
       featured: true,
     },
-  ],
+  ] as EventItem[],
   partners: [
-    { name: "Universities", type: "Education" },
-    { name: "Diaspora Communities", type: "Community" },
-    { name: "Sponsors & Donors", type: "Funding" },
-  ],
+    { name: "Community Partner", type: "Nonprofit", website: "" },
+    { name: "Education Partner", type: "School/University", website: "" },
+  ] as Partner[],
 };
 
-const hasSanityEnv =
-  !!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID &&
-  !!process.env.NEXT_PUBLIC_SANITY_DATASET &&
-  !!process.env.NEXT_PUBLIC_SANITY_API_VERSION;
+// ====== GROQ QUERIES ======
+const qSite = groq`*[_type == "siteSettings"][0]{
+  orgName, tagline, purpose, audience, email, proposalUrl, themeNote
+}`;
 
-const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "",
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "",
-  apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || "2025-01-01",
-  useCdn: true,
-});
+const qPrograms = groq`*[_type == "program"]|order(_createdAt desc){
+  title, bullets
+}`;
 
-export async function getSite(): Promise<SiteSettings | null> {
-  if (!hasSanityEnv) return FALLBACK.site;
+const qEvents = groq`*[_type == "event"]|order(featured desc, _createdAt desc){
+  title, dateText, location, summary, highlights, featured
+}`;
 
-  const q = groq`*[_type=="siteSettings"][0]{
-    orgName,
-    tagline,
-    heroTitle,
-    heroSubtitle,
-    purpose,
-    audience,
-    email,
-    proposalUrl,
-    themeNote
-  }`;
+const qPartners = groq`*[_type == "partner"]|order(_createdAt desc){
+  name, type, website
+}`;
 
-  const data = await client.fetch<SiteSettings | null>(q);
-  return data || FALLBACK.site;
+// ====== PUBLIC API ======
+export async function getSite() {
+  return safeFetch<SiteSettings>(qSite, undefined, FALLBACK.site);
 }
 
-export async function getPrograms(): Promise<Program[]> {
-  if (!hasSanityEnv) return FALLBACK.programs;
-
-  const q = groq`*[_type=="program"]|order(orderRank asc, _createdAt asc){
-    title,
-    bullets
-  }`;
-
-  const data = await client.fetch<Program[]>(q);
-  return data?.length ? data : FALLBACK.programs;
+export async function getPrograms() {
+  return safeFetch<Program[]>(qPrograms, undefined, FALLBACK.programs);
 }
 
-export async function getEvents(): Promise<EventItem[]> {
-  if (!hasSanityEnv) return FALLBACK.events;
-
-  const q = groq`*[_type=="event"]|order(featured desc, _createdAt desc){
-    title,
-    dateText,
-    location,
-    summary,
-    highlights,
-    featured
-  }`;
-
-  const data = await client.fetch<EventItem[]>(q);
-  return data?.length ? data : FALLBACK.events;
+export async function getEvents() {
+  return safeFetch<EventItem[]>(qEvents, undefined, FALLBACK.events);
 }
 
-export async function getPartners(): Promise<Partner[]> {
-  if (!hasSanityEnv) return FALLBACK.partners;
-
-  const q = groq`*[_type=="partner"]|order(_createdAt asc){
-    name,
-    type,
-    website
-  }`;
-
-  const data = await client.fetch<Partner[]>(q);
-  return data?.length ? data : FALLBACK.partners;
+export async function getPartners() {
+  return safeFetch<Partner[]>(qPartners, undefined, FALLBACK.partners);
 }
