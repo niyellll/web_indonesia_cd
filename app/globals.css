@@ -1,31 +1,59 @@
-import type { ReactNode } from "react";
-import "./globals.css";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+@import "tailwindcss";
 
-export const metadata = {
-  title: "IDECN — Indonesia Education & Cultural Network",
-  description:
-    "A nonprofit organization fostering cross-cultural understanding, educational opportunities, and community connections between Indonesia and the U.S.",
-};
+/* Light "proposal" + red/white/blue + batik */
+:root{
+  --bg:#f6f2ea;
+  --paper:#ffffff;
+  --ink:#0f172a;
+  --muted:#475569;
+  --line:rgba(15,23,42,.12);
 
-export default function RootLayout({ children }: { children: ReactNode }) {
-  return (
-    <html lang="en">
-      <body>
-        <div className="relative min-h-screen">
-          {/* background layers */}
-          <div className="site-bg pointer-events-none absolute inset-0 -z-20" aria-hidden />
-          <div className="batik pointer-events-none absolute inset-0 -z-10 opacity-[0.08]" aria-hidden />
-
-          {/* top ribbon (red-white-blue) */}
-          <div className="h-1 w-full bg-[linear-gradient(90deg,#d32f2f_0%,#ffffff_50%,#0b2d5c_100%)]" />
-
-          <Navbar />
-          {children}
-          <Footer />
-        </div>
-      </body>
-    </html>
-  );
+  --red:#d32f2f;
+  --blue:#0b2d5c;
+  --accent:#d32f2f;
+  --accent2:#0b2d5c;
 }
+
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--bg);color:var(--ink);}
+
+::selection{background:rgba(211,47,47,.18);}
+a{text-underline-offset:3px;}
+
+.site-bg{
+  background:
+    radial-gradient(1100px 600px at 10% 0%, rgba(211,47,47,0.10), transparent 55%),
+    radial-gradient(900px 600px at 90% 10%, rgba(11,45,92,0.10), transparent 60%),
+    linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.0));
+}
+
+.batik{
+  background-image: url("/images/batik-pattern.svg");
+  background-size: 520px 520px;
+  background-repeat: repeat;
+}
+
+.card{
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.86);
+  box-shadow:0 18px 60px rgba(0,0,0,.07);
+  border-radius: 20px;
+}
+
+.btn-primary{
+  background: var(--accent);
+  color: white;
+  border-radius: 14px;
+  padding: 10px 16px;
+  font-weight: 700;
+}
+.btn-primary:hover{opacity:.92;}
+
+.btn-ghost{
+  background: rgba(255,255,255,.75);
+  border:1px solid var(--line);
+  border-radius: 14px;
+  padding: 10px 16px;
+  font-weight: 700;
+}
+.btn-ghost:hover{background:white;}
