@@ -1,54 +1,165 @@
 @import "tailwindcss";
 
-:root {
+/* =========================
+   Theme (solid red/white/blue)
+   ========================= */
+:root{
   --bg: #ffffff;
   --ink: #0b1220;
-  --muted: #51607a;
-  --line: rgba(11, 18, 32, 0.14);
+  --muted: rgba(11, 18, 32, .64);
+  --line: rgba(15, 23, 42, .14);
 
-  /* Theme */
-  --red: #d62828;
-  --blue: #1d4ed8;
+  --red: #d11f1f;     /* Indonesia */
+  --blue: #1d4ed8;    /* U.S. */
+
+  --radius: 24px;
+  --container: 1160px;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-body {
+/* Bigger default text on desktop */
+body{
   background: var(--bg);
+  color: var(--ink);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans";
+  font-size: 16px;
+  line-height: 1.55;
+}
+@media (min-width: 1024px){
+  body{ font-size: 18px; }
 }
 
-.batik {
+/* Background helpers */
+.proposal-bg{ min-height: 100vh; position: relative; }
+.site-bg{ background: #fff; } /* no gradient */
+.batik{
   background-image: url("/images/batik-pattern.svg");
   background-repeat: repeat;
   background-size: 520px;
+  opacity: .10;
 }
 
-@layer components {
-  .btn-primary {
-    @apply inline-flex items-center justify-center rounded-xl px-5 py-2.5 text-base font-semibold text-white;
-    background: var(--red);
-  }
-  .btn-primary:hover {
-    background: var(--blue);
-  }
+/* Flag bar - SOLID blocks (no gradient) */
+.flagbar{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  height: 4px;
+}
+.flagbar__red{ background: var(--red); }
+.flagbar__white{ background: #fff; border-left: 1px solid rgba(0,0,0,.06); border-right: 1px solid rgba(0,0,0,.06); }
+.flagbar__blue{ background: var(--blue); }
 
-  .btn-outline {
-    @apply inline-flex items-center justify-center rounded-xl border px-5 py-2.5 text-base font-semibold;
-    border-color: var(--line);
-    background: rgba(255,255,255,0.85);
-  }
-  .btn-outline:hover {
-    background: #ffffff;
-  }
+/* Links in navbar */
+.navlink{
+  padding: 10px 12px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--muted);
+  transition: background .15s ease, color .15s ease, transform .15s ease;
+}
+.navlink:hover{
+  background: rgba(0,0,0,.05);
+  color: var(--ink);
+}
 
-  .section-title {
-    @apply text-3xl sm:text-4xl font-extrabold tracking-tight;
-  }
+/* Buttons */
+.btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  border-radius: 999px;
+  padding: 12px 18px;
+  font-weight: 750;
+  letter-spacing: -.01em;
+  transition: transform .12s ease, opacity .12s ease, background .12s ease;
+}
+.btn:active{ transform: translateY(1px); }
 
-  .section-kicker {
-    @apply text-sm font-bold uppercase tracking-wider;
-    color: var(--muted);
-  }
+.btn-primary{
+  background: var(--red);
+  color: #fff;
+}
+.btn-primary:hover{ opacity: .92; }
+
+.btn-outline{
+  background: rgba(255,255,255,.85);
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+.btn-outline:hover{ background: #fff; }
+
+.btn-blue{
+  background: var(--blue);
+  color: #fff;
+}
+.btn-blue:hover{ opacity: .92; }
+
+/* Apple-like typography */
+.h-eyebrow{
+  font-size: 12px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: var(--muted);
+}
+.h1{
+  font-weight: 900;
+  letter-spacing: -.04em;
+  line-height: 1.02;
+  font-size: clamp(44px, 5vw, 76px);
+}
+.h2{
+  font-weight: 900;
+  letter-spacing: -.03em;
+  line-height: 1.08;
+  font-size: clamp(28px, 3vw, 46px);
+}
+.lead{
+  font-size: clamp(16px, 1.2vw, 20px);
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* Section spacing */
+.section{
+  padding: clamp(48px, 6vw, 96px) 0;
+}
+.section-divider{
+  border-top: 1px solid var(--line);
+}
+
+/* Big panel (less “crowded card”) */
+.panel{
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255,255,255,.86);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 18px 60px rgba(0,0,0,.06);
+}
+.panel-pad{
+  padding: clamp(18px, 2.2vw, 32px);
+}
+
+/* Pills */
+.pill{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.75);
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--muted);
+}
+.pill strong{ color: var(--ink); }
+
+/* Small accent underline (solid) */
+.accent-underline{
+  height: 4px;
+  width: 110px;
+  border-radius: 999px;
+  background: var(--red);
 }
