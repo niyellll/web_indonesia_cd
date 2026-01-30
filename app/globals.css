@@ -1,59 +1,55 @@
 @import "tailwindcss";
 
-/* Light "proposal" + red/white/blue + batik */
-:root{
-  --bg:#f6f2ea;
-  --paper:#ffffff;
-  --ink:#0f172a;
-  --muted:#475569;
-  --line:rgba(15,23,42,.12);
+:root {
+  --bg: #f8fafc;         /* putih kebiruan halus */
+  --ink: #0f172a;        /* slate-900 */
+  --muted: #475569;      /* slate-600 */
+  --line: rgba(15, 23, 42, 0.12);
 
-  --red:#d32f2f;
-  --blue:#0b2d5c;
-  --accent:#d32f2f;
-  --accent2:#0b2d5c;
+  --id-red: #dc2626;     /* merah Indonesia */
+  --us-blue: #2563eb;    /* biru Amerika */
 }
 
-html{scroll-behavior:smooth;}
-body{margin:0;background:var(--bg);color:var(--ink);}
-
-::selection{background:rgba(211,47,47,.18);}
-a{text-underline-offset:3px;}
-
-.site-bg{
-  background:
-    radial-gradient(1100px 600px at 10% 0%, rgba(211,47,47,0.10), transparent 55%),
-    radial-gradient(900px 600px at 90% 10%, rgba(11,45,92,0.10), transparent 60%),
-    linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.0));
+html {
+  scroll-behavior: smooth;
 }
 
-.batik{
-  background-image: url("/images/batik-pattern.svg");
-  background-size: 520px 520px;
+body {
+  color: var(--ink);
+  background: var(--bg);
+}
+
+/* Batik background (pola dari /public/batik-pattern.svg) */
+.batik-bg {
+  position: relative;
+  min-height: 100vh;
+  background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(248,250,252,0.96));
+}
+
+.batik-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/batik-pattern.svg");
   background-repeat: repeat;
+  background-size: 560px auto;
+  opacity: 0.085;           /* atur 0.05 - 0.12 */
+  pointer-events: none;
 }
 
-.card{
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.86);
-  box-shadow:0 18px 60px rgba(0,0,0,.07);
-  border-radius: 20px;
+.batik-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(1200px 600px at 50% 0%,
+      rgba(37,99,235,0.10),
+      transparent 60%),
+    radial-gradient(900px 500px at 20% 30%,
+      rgba(220,38,38,0.10),
+      transparent 55%);
+  pointer-events: none;
 }
 
-.btn-primary{
-  background: var(--accent);
-  color: white;
-  border-radius: 14px;
-  padding: 10px 16px;
-  font-weight: 700;
+.surface {
+  position: relative; /* supaya di atas ::before/::after */
 }
-.btn-primary:hover{opacity:.92;}
-
-.btn-ghost{
-  background: rgba(255,255,255,.75);
-  border:1px solid var(--line);
-  border-radius: 14px;
-  padding: 10px 16px;
-  font-weight: 700;
-}
-.btn-ghost:hover{background:white;}
