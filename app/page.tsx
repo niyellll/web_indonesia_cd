@@ -1,76 +1,44 @@
 import { getEvents, getPartners, getPrograms, getSite } from "../lib/cms";
 
-function Dot({ color }: { color: "red" | "blue" }) {
+function Chip({
+  left,
+  label,
+}: {
+  left?: "red" | "blue" | "neutral";
+  label: string;
+}) {
   return (
-    <span
-      className="dot"
-      style={{ background: color === "red" ? "var(--id-red)" : "var(--id-blue)" }}
-    />
+    <span className="pill">
+      <span className={`dot ${left === "red" ? "red" : left === "blue" ? "blue" : ""}`} />
+      {label}
+    </span>
   );
 }
 
-export default async function Home() {
+export default async function Page() {
   const site = await getSite();
   const programs = await getPrograms();
   const events = await getEvents();
   const partners = await getPartners();
 
-  const featured = events.find((e) => e.featured) || events[0];
+  const featured = events.find((e) => e.featured) ?? events[0];
 
   return (
-    <div>
+    <main id="top">
       {/* HERO */}
       <section className="section">
         <div className="wrap">
-          <div style={{ textAlign: "center" }}>
-            <div className="kicker">Nonprofit • U.S.-based • Established 2024</div>
-
-            <h1 className="h1" style={{ marginTop: 16 }}>
-              {site.heroTitle || "Indonesia Education & Cultural Network"}
-            </h1>
-
-            <p className="lead" style={{ marginTop: 18, maxWidth: 860, marginInline: "auto" }}>
-              {site.heroSubtitle ||
-                "A U.S.-based nonprofit dedicated to fostering cross-cultural understanding, educational opportunities, and community connections between Indonesia and the United States."}
-            </p>
-
-            {/* pills */}
-            <div
-              style={{
-                marginTop: 18,
-                display: "flex",
-                gap: 10,
-                justifyContent: "center",
-                flexWrap: "wrap",
-              }}
-            >
-              <span className="pill">
-                <Dot color="blue" />
-                U.S.-based nonprofit
-              </span>
-              <span className="pill">
-                <Dot color="red" />
-                Indonesia ↔ U.S.
-              </span>
-              <span className="pill">
-                <span
-                  className="dot"
-                  style={{ background: "rgba(15,23,42,0.45)" }}
-                />
-                Community-first
-              </span>
+          <div className="flex flex-col items-center text-center">
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              <Chip left="neutral" label="Nonprofit (U.S.-based)" />
+              <Chip left="neutral" label="Established 2024" />
+              <Chip left="red" label="Indonesia ↔ U.S." />
             </div>
 
-            {/* CTA */}
-            <div
-              style={{
-                marginTop: 26,
-                display: "flex",
-                gap: 12,
-                justifyContent: "center",
-                flexWrap: "wrap",
-              }}
-            >
+            <h1 className="h1 mt-8 max-w-5xl">{site.heroTitle}</h1>
+            <p className="lead mt-6 max-w-3xl">{site.heroSubtitle}</p>
+
+            <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
               <a className="btn btn-primary" href="#get-involved">
                 Get involved
               </a>
@@ -82,102 +50,78 @@ export default async function Home() {
               </a>
             </div>
 
-            {/* subtle underline */}
-            <div style={{ marginTop: 26, display: "flex", justifyContent: "center" }}>
-              <div style={{ width: 180, height: 4, borderRadius: 999, overflow: "hidden" }}>
-                <div style={{ display: "flex", height: "100%" }}>
-                  <div style={{ width: "50%", background: "var(--id-red)" }} />
-                  <div style={{ width: "50%", background: "var(--id-blue)" }} />
-                </div>
-              </div>
+            <div className="mt-10 flex items-center gap-2">
+              <span className="dot red" />
+              <span className="dot" />
+              <span className="dot blue" />
             </div>
           </div>
-
-          <div style={{ marginTop: 56 }} className="hr" />
         </div>
       </section>
 
-      {/* ABOUT */}
-      <section id="about" className="section anchor-pad">
-        <div className="wrap">
-          <div className="kicker">About</div>
-          <h2 className="h2" style={{ marginTop: 10 }}>
-            Who we are
-          </h2>
+      <div className="wrap">
+        <div className="hr" />
+      </div>
 
-          <div
-            style={{
-              marginTop: 26,
-              display: "grid",
-              gridTemplateColumns: "1.2fr 0.8fr",
-              gap: 22,
-            }}
-          >
+      {/* ABOUT */}
+      <section id="about" className="section">
+        <div className="wrap">
+          <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] items-start">
             <div>
-              <p className="lead">
-                <b style={{ color: "var(--ink)" }}>{site.orgName}</b> is a U.S.-based nonprofit
-                focused on building meaningful bridges between Indonesia and the United States—through
-                education pathways, cultural exchange, and community programs that people actually enjoy.
+              <div className="kicker">ABOUT</div>
+              <h2 className="h2 mt-3">Who we are</h2>
+              <p className="lead mt-6">
+                <b>IDECN</b> is a U.S.-based nonprofit focused on building meaningful bridges
+                between Indonesia and the United States—through education pathways, cultural
+                exchange, and community programs that people actually enjoy.
               </p>
 
-              <div style={{ marginTop: 18 }}>
-                <p className="small-muted" style={{ margin: 0 }}>
-                  <b style={{ color: "var(--ink)" }}>Purpose:</b> {site.purpose}
+              <div className="mt-7 grid gap-4">
+                <p className="p">
+                  <b>Purpose:</b> {site.purpose}
                 </p>
-                <p className="small-muted" style={{ marginTop: 10 }}>
-                  <b style={{ color: "var(--ink)" }}>Audience:</b> {site.audience.join(" • ")}
+                <p className="p">
+                  <b>Audience:</b> {site.audience.join(" • ")}
                 </p>
               </div>
 
-              <div style={{ marginTop: 18, display: "flex", gap: 10, flexWrap: "wrap" }}>
-                <span className="pill">
-                  <Dot color="red" />
-                  Indonesia perspectives
-                </span>
-                <span className="pill">
-                  <Dot color="blue" />
-                  U.S. opportunities
-                </span>
-                <span className="pill">
-                  <span className="dot" style={{ background: "rgba(15,23,42,0.45)" }} />
-                  Practical execution
-                </span>
+              <div className="mt-8 flex flex-wrap gap-2">
+                <Chip left="red" label="Indonesia perspectives" />
+                <Chip left="blue" label="U.S. opportunities" />
+                <Chip left="neutral" label="Practical execution" />
               </div>
             </div>
 
-            <div className="card">
-              <div className="kicker">At a glance</div>
-              <div style={{ marginTop: 14 }} />
+            <div className="card-solid p-7">
+              <div className="kicker">AT A GLANCE</div>
 
-              <div style={{ display: "grid", gap: 14 }}>
-                <div>
-                  <div className="small-muted" style={{ fontWeight: 800, marginBottom: 4 }}>
-                    Focus
+              <div className="mt-5 grid gap-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="text-sm font-extrabold text-[rgba(11,18,32,0.55)]">Focus</div>
+                  <div className="text-[17px] font-black text-[var(--ink)] text-right">
+                    Education • Culture • Community
                   </div>
-                  <div style={{ fontWeight: 900, fontSize: 18 }}>Education • Culture • Community</div>
                 </div>
 
                 <div className="hr" />
 
-                <div>
-                  <div className="small-muted" style={{ fontWeight: 800, marginBottom: 4 }}>
-                    Operating
-                  </div>
-                  <div style={{ fontWeight: 900, fontSize: 18 }}>U.S.-based</div>
+                <div className="flex items-start justify-between gap-4">
+                  <div className="text-sm font-extrabold text-[rgba(11,18,32,0.55)]">Operating</div>
+                  <div className="text-[17px] font-black text-[var(--ink)]">U.S.-based</div>
                 </div>
 
                 <div className="hr" />
 
-                <div>
-                  <div className="small-muted" style={{ fontWeight: 800, marginBottom: 4 }}>
-                    Contact
-                  </div>
-                  <div style={{ fontWeight: 900, fontSize: 18 }}>{site.email}</div>
+                <div className="flex items-start justify-between gap-4">
+                  <div className="text-sm font-extrabold text-[rgba(11,18,32,0.55)]">Contact</div>
+                  <div className="text-[17px] font-black text-[var(--ink)]">{site.email}</div>
                 </div>
 
-                <a className="btn btn-ghost" href="#contact" style={{ marginTop: 6 }}>
-                  Talk to us
-                </a>
+                <div className="mt-3">
+                  <a className="btn btn-ghost w-full" href="#contact">
+                    Talk to us
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -185,33 +129,30 @@ export default async function Home() {
       </section>
 
       {/* PROGRAMS */}
-      <section id="programs" className="section anchor-pad">
+      <section id="programs" className="section-tight">
         <div className="wrap">
-          <div className="kicker">Programs</div>
-          <h2 className="h2" style={{ marginTop: 10 }}>
-            What we deliver
-          </h2>
-          <p className="lead" style={{ marginTop: 12, maxWidth: 820 }}>
-            Simple, repeatable programs—built for clarity, credibility, and real partnership.
-          </p>
+          <div className="kicker">PROGRAMS</div>
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <h2 className="h2 mt-3">What we deliver</h2>
+            <p className="lead max-w-2xl">
+              Simple, repeatable programs—built for clarity, credibility, and real partnership.
+            </p>
+          </div>
 
-          <div style={{ marginTop: 26, display: "grid", gap: 16 }}>
+          <div className="mt-10 grid gap-6">
             {programs.map((p) => (
-              <div key={p.title} className="card">
-                <div style={{ display: "grid", gridTemplateColumns: "0.9fr 1.1fr", gap: 18 }}>
+              <div key={p.title} className="card p-7">
+                <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
                   <div>
-                    <div style={{ fontWeight: 950, fontSize: 22, letterSpacing: "-0.01em" }}>
-                      {p.title}
-                    </div>
-                    <p className="small-muted" style={{ marginTop: 8 }}>
-                      Designed to be practical, repeatable, and easy to partner with.
-                    </p>
+                    <div className="h3">{p.title}</div>
+                    <p className="p mt-3">{p.subtitle}</p>
                   </div>
 
-                  <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.9 }}>
-                    {p.bullets.map((b, idx) => (
-                      <li key={idx} className="small-muted" style={{ fontSize: 16 }}>
-                        {b}
+                  <ul className="grid gap-3">
+                    {p.bullets.map((b) => (
+                      <li key={b} className="flex gap-3 text-[17px] leading-7 text-[var(--muted)]">
+                        <span className="mt-[10px] h-2 w-2 rounded-full bg-[var(--red)]" />
+                        <span>{b}</span>
                       </li>
                     ))}
                   </ul>
@@ -223,109 +164,89 @@ export default async function Home() {
       </section>
 
       {/* PORTFOLIO */}
-      <section id="portfolio" className="section anchor-pad">
+      <section id="portfolio" className="section">
         <div className="wrap">
-          <div className="kicker">Portfolio</div>
-          <h2 className="h2" style={{ marginTop: 10 }}>
-            Proof of execution
-          </h2>
+          <div className="kicker">PORTFOLIO</div>
+          <h2 className="h2 mt-3">Proof of execution</h2>
 
-          {featured && (
-            <div style={{ marginTop: 26 }} className="card">
-              <div style={{ display: "grid", gridTemplateColumns: "1.1fr 0.9fr", gap: 22 }}>
-                <div>
-                  <div style={{ fontWeight: 950, fontSize: 30, letterSpacing: "-0.02em", lineHeight: 1.12 }}>
-                    {featured.title}
-                  </div>
-                  <p className="lead" style={{ marginTop: 12 }}>
-                    {featured.summary}
-                  </p>
+          <div className="mt-10 grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
+            <div className="card-solid p-8">
+              <div className="h3">{featured.title}</div>
+              <p className="lead mt-4">{featured.summary}</p>
 
-                  <div
-                    style={{
-                      marginTop: 18,
-                      display: "flex",
-                      gap: 10,
-                      flexWrap: "wrap",
-                    }}
-                  >
-                    <span className="pill">
-                      <span className="dot" style={{ background: "rgba(15,23,42,0.45)" }} />
-                      {featured.dateText}
-                    </span>
-                    <span className="pill">
-                      <span className="dot" style={{ background: "rgba(15,23,42,0.45)" }} />
-                      {featured.location}
-                    </span>
-                  </div>
+              <div className="mt-6 flex flex-wrap gap-2">
+                <span className="pill">
+                  <span className="dot" />
+                  {featured.dateText}
+                </span>
+                <span className="pill">
+                  <span className="dot" />
+                  {featured.location}
+                </span>
+              </div>
 
-                  <div style={{ marginTop: 18, display: "flex", gap: 12, flexWrap: "wrap" }}>
-                    <a className="btn btn-primary" href="#get-involved">
-                      Sponsor the next event
-                    </a>
-                    <a className="btn btn-ghost" href={site.proposalUrl}>
-                      Download proposal (PDF)
-                    </a>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="kicker">Highlights</div>
-                  <ul style={{ marginTop: 12, paddingLeft: 18, lineHeight: 1.9 }}>
-                    {featured.highlights.map((h, idx) => (
-                      <li key={idx} className="small-muted" style={{ fontSize: 16 }}>
-                        {h}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div style={{ marginTop: 14 }} className="hr" />
-                  <p className="small-muted" style={{ marginTop: 12 }}>
-                    Want the full event breakdown? Download the PDF proposal.
-                  </p>
-                </div>
+              <div className="mt-7 flex flex-wrap gap-3">
+                <a className="btn btn-primary" href="#get-involved">
+                  Sponsor the next event
+                </a>
+                <a className="btn btn-ghost" href={site.proposalUrl}>
+                  Download proposal (PDF)
+                </a>
               </div>
             </div>
-          )}
+
+            <div className="card p-8">
+              <div className="kicker">HIGHLIGHTS</div>
+              <ul className="mt-6 grid gap-3">
+                {featured.highlights.map((h) => (
+                  <li key={h} className="flex items-center gap-3 text-[17px] text-[var(--muted)]">
+                    <span className="h-2 w-2 rounded-full bg-[var(--blue)]" />
+                    {h}
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-7 hr" />
+              <p className="p mt-6">
+                Want the full event breakdown?{" "}
+                <a className="font-extrabold text-[var(--blue)]" href={site.proposalUrl}>
+                  Download the PDF proposal
+                </a>
+                .
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* PARTNERS */}
-      <section id="partners" className="section anchor-pad">
+      <section id="partners" className="section-tight">
         <div className="wrap">
-          <div className="kicker">Partners</div>
-          <h2 className="h2" style={{ marginTop: 10 }}>
-            Built for collaboration
-          </h2>
-          <p className="lead" style={{ marginTop: 12, maxWidth: 880 }}>
+          <div className="kicker">PARTNERS</div>
+          <h2 className="h2 mt-3">Built for collaboration</h2>
+          <p className="lead mt-4 max-w-3xl">
             We work with sponsors, donors, universities, schools, and community organizations.
           </p>
 
-          <div
-            style={{
-              marginTop: 22,
-              display: "grid",
-              gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-              gap: 14,
-            }}
-          >
+          <div className="mt-8 grid gap-5 md:grid-cols-3">
             {partners.map((p) => (
-              <div key={p.name} className="card">
-                <div style={{ fontWeight: 950, fontSize: 18 }}>{p.name}</div>
-                <div className="small-muted" style={{ marginTop: 6 }}>
-                  {p.type}
-                </div>
+              <div key={p.name} className="card-solid p-6">
+                <div className="h3">{p.name}</div>
+                <p className="p mt-2">{p.type}</p>
                 {p.website ? (
                   <a
-                    className="small-muted"
-                    style={{ display: "inline-block", marginTop: 12, fontWeight: 900 }}
+                    className="mt-5 inline-flex font-extrabold text-[var(--blue)]"
                     href={p.website}
                     target="_blank"
                     rel="noreferrer"
                   >
-                    Visit website →
+                    Visit →
                   </a>
-                ) : null}
+                ) : (
+                  <span className="mt-5 inline-flex font-extrabold text-[rgba(11,18,32,0.45)]">
+                    Open to collaborate
+                  </span>
+                )}
               </div>
             ))}
           </div>
@@ -333,66 +254,86 @@ export default async function Home() {
       </section>
 
       {/* GET INVOLVED */}
-      <section id="get-involved" className="section anchor-pad">
+      <section id="get-involved" className="section">
         <div className="wrap">
-          <div className="kicker">Get involved</div>
-          <h2 className="h2" style={{ marginTop: 10 }}>
-            Let’s build the next program together
-          </h2>
-          <p className="lead" style={{ marginTop: 12, maxWidth: 900 }}>
-            Sponsor an event, fund a scholarship pathway, or partner with us to run a repeatable program.
+          <div className="kicker">GET INVOLVED</div>
+          <h2 className="h2 mt-3">Let’s build the next program together</h2>
+          <p className="lead mt-4 max-w-3xl">
+            Sponsor an event, fund a scholarship pathway, or partner with us to run a repeatable
+            program with clear outcomes.
           </p>
 
-          <div style={{ marginTop: 22, display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: 14 }}>
-            <div className="card">
-              <div style={{ fontWeight: 950, fontSize: 18 }}>Sponsor</div>
-              <p className="small-muted" style={{ marginTop: 8 }}>
+          <div className="mt-9 grid gap-5 md:grid-cols-3">
+            <div className="card p-7">
+              <div className="h3">Sponsor</div>
+              <p className="p mt-3">
                 Help fund execution—venues, logistics, materials, and community outreach.
               </p>
+              <div className="mt-6">
+                <a className="btn btn-primary w-full" href="#contact">
+                  Sponsor a program
+                </a>
+              </div>
             </div>
-            <div className="card">
-              <div style={{ fontWeight: 950, fontSize: 18 }}>Partner</div>
-              <p className="small-muted" style={{ marginTop: 8 }}>
+
+            <div className="card p-7">
+              <div className="h3">Partner</div>
+              <p className="p mt-3">
                 Universities, schools, and organizations—run a program together with clear outcomes.
               </p>
+              <div className="mt-6">
+                <a className="btn btn-ghost w-full" href="#contact">
+                  Become a partner
+                </a>
+              </div>
             </div>
-            <div className="card">
-              <div style={{ fontWeight: 950, fontSize: 18 }}>Volunteer</div>
-              <p className="small-muted" style={{ marginTop: 8 }}>
+
+            <div className="card p-7">
+              <div className="h3">Volunteer</div>
+              <p className="p mt-3">
                 Support community-first events and education pathways with a focused role.
               </p>
+              <div className="mt-6">
+                <a className="btn btn-ghost w-full" href="#contact">
+                  Join volunteers
+                </a>
+              </div>
             </div>
           </div>
+        </div>
+      </section>
 
-          <div style={{ marginTop: 22 }} className="card" id="contact">
-            <div style={{ display: "grid", gridTemplateColumns: "1.2fr 0.8fr", gap: 18, alignItems: "center" }}>
+      {/* CONTACT */}
+      <section id="contact" className="section-tight">
+        <div className="wrap">
+          <div className="card-solid p-8">
+            <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
               <div>
-                <div className="kicker">Contact</div>
-                <div style={{ fontWeight: 950, fontSize: 26, letterSpacing: "-0.02em", marginTop: 8 }}>
-                  Ready to collaborate?
-                </div>
-                <p className="lead" style={{ marginTop: 10 }}>
-                  Email us and we’ll reply with a simple collaboration path (sponsor / partner / volunteer).
+                <div className="kicker">CONTACT</div>
+                <h2 className="h2 mt-3">Ready to collaborate?</h2>
+                <p className="lead mt-4">
+                  Email us and we’ll reply with a simple collaboration path (sponsor / partner /
+                  volunteer).
                 </p>
               </div>
-              <div style={{ textAlign: "right" }}>
-                <div style={{ fontWeight: 950, fontSize: 18 }}>{site.email}</div>
-                <a className="btn btn-primary" style={{ marginTop: 12 }} href={`mailto:${site.email}`}>
+
+              <div className="flex flex-col items-start gap-3 lg:items-end">
+                <div className="text-[18px] font-black">{site.email}</div>
+                <a className="btn btn-primary" href={`mailto:${site.email}?subject=Partnership`}>
                   Email IDECN
                 </a>
-                <div className="small-muted" style={{ marginTop: 10 }}>
+                <div className="text-sm text-[rgba(11,18,32,0.55)]">
                   Put “Partnership” in the subject line.
                 </div>
               </div>
             </div>
           </div>
 
-          <div style={{ marginTop: 28 }} className="hr" />
-          <div className="small-muted" style={{ marginTop: 14 }}>
+          <div className="mt-10 pb-10 text-center text-sm text-[rgba(11,18,32,0.55)]">
             © {new Date().getFullYear()} IDECN. All rights reserved.
           </div>
         </div>
       </section>
-    </div>
+    </main>
   );
 }

@@ -1,172 +1,155 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-type NavItem = { id: string; label: string; href: string };
-
-function clamp(n: number, min: number, max: number) {
-  return Math.max(min, Math.min(max, n));
-}
+type NavItem = { id: string; label: string };
 
 export default function Navbar() {
-  const NAV: NavItem[] = useMemo(
+  const items: NavItem[] = useMemo(
     () => [
-      { id: "about", label: "About", href: "#about" },
-      { id: "programs", label: "Programs", href: "#programs" },
-      { id: "portfolio", label: "Portfolio Event", href: "#portfolio" },
-      { id: "partners", label: "Partners", href: "#partners" },
-      { id: "get-involved", label: "Get Involved", href: "#get-involved" },
+      { id: "about", label: "About" },
+      { id: "programs", label: "Programs" },
+      { id: "portfolio", label: "Portfolio Event" },
+      { id: "partners", label: "Partners" },
+      { id: "get-involved", label: "Get Involved" },
+      { id: "contact", label: "Contact" },
     ],
     []
   );
 
-  const [scrolled, setScrolled] = useState(false);
-  const [progress, setProgress] = useState(0); // 0..1
-  const [activeId, setActiveId] = useState<string>("");
+  const [active, setActive] = useState<string>("about");
+  const [open, setOpen] = useState(false);
 
-  // Scroll → (1) navbar style (2) gradient shift progress
+  const ticking = useRef(false);
+
+  // Scroll → update CSS var (smooth, low-cost)
   useEffect(() => {
     const onScroll = () => {
-      const y = window.scrollY || 0;
-      setScrolled(y > 8);
+      if (ticking.current) return;
+      ticking.current = true;
 
-      const doc = document.documentElement;
-      const max = Math.max(1, doc.scrollHeight - window.innerHeight);
-      const p = clamp(y / max, 0, 1);
-      setProgress(p);
+      requestAnimationFrame(() => {
+        const doc = document.documentElement;
+        const scrollTop = window.scrollY || doc.scrollTop || 0;
+        const max = Math.max(1, doc.scrollHeight - window.innerHeight);
+        const p = Math.min(1, Math.max(0, scrollTop / max));
+
+        doc.style.setProperty("--scroll", String(p));
+        if (scrollTop > 8) doc.dataset.scrolled = "1";
+        else delete doc.dataset.scrolled;
+
+        ticking.current = false;
+      });
     };
 
-    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Active section highlight (IntersectionObserver)
+  // Scroll spy (IntersectionObserver)
   useEffect(() => {
-    const ids = NAV.map((n) => n.id).concat(["contact"]);
-    const els = ids
-      .map((id) => document.getElementById(id))
+    const els = items
+      .map((it) => document.getElementById(it.id))
       .filter(Boolean) as HTMLElement[];
 
     if (!els.length) return;
 
     const io = new IntersectionObserver(
       (entries) => {
-        // pick most visible
+        // ambil yang paling "visible"
         const visible = entries
           .filter((e) => e.isIntersecting)
-          .sort((a, b) => (b.intersectionRatio ?? 0) - (a.intersectionRatio ?? 0));
-        if (visible[0]?.target?.id) setActiveId(visible[0].target.id);
+          .sort((a, b) => (b.intersectionRatio ?? 0) - (a.intersectionRatio ?? 0))[0];
+
+        if (visible?.target?.id) setActive(visible.target.id);
       },
       {
         root: null,
         threshold: [0.15, 0.25, 0.35, 0.5, 0.65],
-        rootMargin: "-20% 0px -65% 0px", // biar "aktif" pas section mulai masuk
+        // offset biar header sticky ga nutup
+        rootMargin: "-25% 0px -60% 0px",
       }
     );
 
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
-  }, [NAV]);
+  }, [items]);
 
-  const stripeStyle: React.CSSProperties = {
-    // merah → putih → biru (Indonesia + US), lalu digeser sesuai scroll
-    backgroundImage:
-      "linear-gradient(90deg, var(--id-red) 0%, var(--id-red) 38%, #ffffff 50%, var(--us-blue) 62%, var(--us-blue) 100%)",
-    backgroundSize: "220% 100%",
-    backgroundPosition: `${Math.round(progress * 100)}% 0%`,
+  const go = (id: string) => {
+    setOpen(false);
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    // offset untuk navbar height
+    const y = el.getBoundingClientRect().top + window.scrollY - 84;
+    window.scrollTo({ top: y, behavior: "smooth" });
   };
 
-  const shell =
-    "relative mx-auto flex max-w-6xl items-center gap-4 px-4 md:px-6";
-  const navText =
-    "text-[14px] md:text-[16px] font-semibold tracking-[0.01em] text-[var(--ink)]/80 hover:text-[var(--ink)]";
-
   return (
-    <header className="sticky top-0 z-50">
-      {/* top moving stripe */}
-      <div
-        className="h-[4px] w-full"
-        style={stripeStyle}
-        aria-hidden="true"
-      />
-
-      {/* main bar */}
-      <div
-        className={[
-          "w-full border-b border-black/5",
-          scrolled
-            ? "bg-white/85 backdrop-blur-xl shadow-[0_10px_30px_rgba(2,6,23,0.06)]"
-            : "bg-white/70 backdrop-blur-md",
-        ].join(" ")}
-      >
-        <div className={shell}>
-          {/* Brand */}
-          <a
-            href="#"
-            className="group flex items-center gap-3 py-4 md:py-5"
-            aria-label="Home"
-          >
-            <div className="h-10 w-10 rounded-full border border-black/10 bg-white shadow-[0_10px_25px_rgba(2,6,23,0.10)]" />
-            <div className="leading-tight">
-              <div className="text-[15px] md:text-[17px] font-extrabold tracking-tight text-[var(--ink)]">
-                IDECN
-              </div>
-              <div className="text-[12px] md:text-[13px] font-semibold text-[var(--ink)]/55">
-                Indonesia ↔ U.S.
-              </div>
+    <header className="navShell">
+      <div className="topbar" />
+      <div className="wrap">
+        <div className="navInner">
+          <a className="navBrand" href="#top" onClick={(e) => (e.preventDefault(), go("top"))}>
+            <div className="logoMark" />
+            <div>
+              <div className="brandTitle">IDECN</div>
+              <div className="brandSub">Indonesia ↔ U.S.</div>
             </div>
           </a>
 
-          {/* Center nav */}
-          <nav className="hidden flex-1 items-center justify-center gap-2 md:flex">
-            {NAV.map((item) => {
-              const isActive = activeId === item.id;
-              return (
-                <a
-                  key={item.id}
-                  href={item.href}
-                  className={[
-                    "relative rounded-full px-4 py-2 transition",
-                    isActive
-                      ? "bg-black/[0.05] text-[var(--ink)]"
-                      : "hover:bg-black/[0.04]",
-                    navText,
-                  ].join(" ")}
-                >
-                  {/* tiny indicator */}
-                  <span
-                    className={[
-                      "absolute left-1/2 top-full mt-1 h-[3px] w-10 -translate-x-1/2 rounded-full transition-opacity",
-                      isActive ? "opacity-100" : "opacity-0",
-                    ].join(" ")}
-                    style={{
-                      backgroundImage:
-                        "linear-gradient(90deg, var(--id-red), var(--us-blue))",
-                    }}
-                    aria-hidden="true"
-                  />
-                  {item.label}
-                </a>
-              );
-            })}
+          <nav className="navLinks" aria-label="Primary navigation">
+            {items.slice(0, 5).map((it) => (
+              <button
+                key={it.id}
+                className="navLink"
+                data-active={active === it.id ? "1" : "0"}
+                onClick={() => go(it.id)}
+                type="button"
+              >
+                {it.label}
+              </button>
+            ))}
           </nav>
 
-          {/* Right CTA */}
-          <div className="ml-auto flex items-center gap-3">
-            <a
-              href="#contact"
-              className={[
-                "rounded-full px-5 py-2.5 md:px-6 md:py-3",
-                "text-[14px] md:text-[16px] font-extrabold tracking-tight text-white",
-                "bg-[var(--id-red)] hover:opacity-95",
-                "shadow-[0_14px_30px_rgba(217,31,38,0.25)]",
-              ].join(" ")}
-            >
-              Contact
-            </a>
+          <div className="navRight">
+            <div className="hidden max-[920px]:flex items-center gap-2">
+              <button
+                type="button"
+                className="btn btn-ghost"
+                onClick={() => setOpen((v) => !v)}
+                aria-expanded={open}
+                aria-controls="mobile-drawer"
+              >
+                Menu
+              </button>
+              <button type="button" className="btn btn-primary" onClick={() => go("contact")}>
+                Contact
+              </button>
+            </div>
+
+            <div className="max-[920px]:hidden flex items-center gap-3">
+              <button type="button" className="btn btn-primary" onClick={() => go("contact")}>
+                Contact
+              </button>
+            </div>
           </div>
         </div>
+
+        {open ? (
+          <div id="mobile-drawer" className="drawer max-[920px]:block hidden">
+            {items.map((it) => (
+              <a
+                key={it.id}
+                href={`#${it.id}`}
+                onClick={(e) => (e.preventDefault(), go(it.id))}
+              >
+                {it.label}
+              </a>
+            ))}
+          </div>
+        ) : null}
       </div>
     </header>
   );
