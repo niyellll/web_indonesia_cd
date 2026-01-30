@@ -1,50 +1,24 @@
 import { getEvents, getPartners, getPrograms, getSite } from "../lib/cms";
 
-function ChipRow() {
-  return (
-    <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
-      <span className="pill">Nonprofit (U.S.-based)</span>
-      <span className="pill">Established <strong>2024</strong></span>
-      <span className="pill">
-        <span style={{ color: "var(--red)", fontWeight: 900 }}>Indonesia</span>{" "}
-        ↔{" "}
-        <span style={{ color: "var(--blue)", fontWeight: 900 }}>U.S.</span>
-      </span>
-    </div>
-  );
-}
-
-function Split({
-  left,
-  right,
+function Section({
+  id,
+  kicker,
+  title,
+  children,
 }: {
-  left: React.ReactNode;
-  right: React.ReactNode;
+  id: string;
+  kicker: string;
+  title: string;
+  children: React.ReactNode;
 }) {
   return (
-    <div className="grid gap-8 lg:grid-cols-12 lg:items-start">
-      <div className="lg:col-span-7">{left}</div>
-      <div className="lg:col-span-5">{right}</div>
-    </div>
-  );
-}
-
-function Stat({
-  label,
-  value,
-}: {
-  label: string;
-  value: string;
-}) {
-  return (
-    <div className="panel panel-pad">
-      <div className="text-xs font-extrabold tracking-[0.16em] uppercase text-[var(--muted)]">
-        {label}
+    <section id={id} className="scroll-mt-28">
+      <div className="containerX py-16 md:py-24">
+        <p className="kicker">{kicker}</p>
+        <h2 className="h2 mt-3">{title}</h2>
+        <div className="mt-10">{children}</div>
       </div>
-      <div className="mt-2 text-2xl sm:text-3xl font-black tracking-tight">
-        {value}
-      </div>
-    </div>
+    </section>
   );
 }
 
@@ -54,383 +28,312 @@ export default async function Home() {
   const events = await getEvents();
   const partners = await getPartners();
 
-  const featured = events?.find((e: any) => e.featured) || events?.[0];
+  const featured = events.find((e) => e.featured) || events[0];
 
   return (
-    <main>
-      {/* HERO (Apple-like: center, huge type, lots of whitespace) */}
-      <section className="section">
-        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 text-center">
-          <div className="h-eyebrow">Indonesia Education & Cultural Network</div>
-          <ChipRow />
+    <>
+      {/* HERO */}
+      <section className="relative">
+        <div className="containerX py-16 md:py-24 text-center">
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <span className="chip">Nonprofit (U.S.-based)</span>
+            <span className="chip">Established 2024</span>
+            <span className="chip">
+              <span style={{ color: "var(--red)" }}>Indonesia</span>
+              <span className="opacity-60">↔</span>
+              <span style={{ color: "var(--blue)" }}>U.S.</span>
+            </span>
+          </div>
 
-          <h1 className="h1 mt-8">
+          <h1 className="h1 mt-10">
             {site?.heroTitle || "Indonesia Education & Cultural Network"}
           </h1>
 
           <p className="lead mx-auto mt-6 max-w-3xl">
             {site?.heroSubtitle ||
-              "A U.S.-based nonprofit dedicated to fostering cross-cultural understanding, educational opportunities, and community connections between Indonesia and the United States."}
+              site?.tagline ||
+              "A U.S.-based nonprofit dedicated to education and cultural exchange between Indonesia and the United States."}
           </p>
 
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-            <a href="#get-involved" className="btn btn-primary">
+          <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <a className="btn btn-primary w-full sm:w-auto" href="#get-involved">
               Get involved
             </a>
-            <a
-              href={featured?.proposalHref || "/indonesia-on-the-creek-proposal.pdf"}
-              className="btn btn-outline"
-            >
+            <a className="btn btn-ghost w-full sm:w-auto" href={site?.proposalUrl || "/indonesia-on-the-creek-proposal.pdf"}>
               Download proposal (PDF)
             </a>
-            <a href="#portfolio" className="btn btn-outline">
+            <a className="btn btn-ghost w-full sm:w-auto" href="#portfolio">
               View portfolio event
             </a>
           </div>
 
-          <div className="mt-10 flex justify-center">
-            <div className="accent-underline" />
-          </div>
+          {/* small accent line (solid) */}
+          <div className="mx-auto mt-12 h-[3px] w-24" style={{ background: "var(--red)" }} />
+          <div className="mx-auto mt-2 h-[3px] w-12" style={{ background: "var(--blue)" }} />
         </div>
-      </section>
 
-      <div className="section-divider" />
+        <div className="divider" />
+      </section>
 
       {/* ABOUT */}
-      <section id="about" className="section scroll-mt-28">
-        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6">
-          <div className="text-center">
-            <div className="h-eyebrow">About</div>
-            <h2 className="h2 mt-3">Who we are</h2>
-            <p className="lead mx-auto mt-5 max-w-3xl">
-              {site?.aboutIntro ||
-                "IDECN bridges Indonesian and American communities through education, culture, and professional connection—built for donors, investors, and partners."}
+      <Section id="about" kicker="About" title="Who we are">
+        <div className="grid gap-12 md:grid-cols-12 md:items-start">
+          <div className="md:col-span-7">
+            <p className="lead">
+              IDECN is a U.S.-based nonprofit focused on building meaningful bridges
+              between Indonesia and the United States—through education pathways,
+              cultural exchange, and community programs that people actually enjoy.
             </p>
-          </div>
 
-          <div className="mt-12">
-            <Split
-              left={
-                <div className="panel panel-pad">
-                  <h3 className="text-xl sm:text-2xl font-black tracking-tight">
-                    Mission
-                  </h3>
-                  <p className="mt-4 text-[var(--muted)] leading-relaxed">
-                    {site?.mission ||
-                      "Enhance mutual understanding between Indonesia and the United States by providing resources, support, and opportunities for students, educators, professionals, and cultural enthusiasts."}
-                  </p>
+            <div className="mt-8 space-y-4 text-[color:var(--muted)]">
+              <p>
+                <span className="font-semibold text-[color:var(--fg)]">Purpose:</span>{" "}
+                {site?.purpose ||
+                  "Strengthen education and cultural exchange through programs, partnerships, and community-driven events."}
+              </p>
 
-                  <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                    <Stat label="Audience" value="Donors • Investors • Partners" />
-                    <Stat label="Approach" value="Programs + Events" />
-                  </div>
-                </div>
-              }
-              right={
-                <div className="panel panel-pad">
-                  <div className="h-eyebrow">What you get</div>
-                  <h3 className="mt-3 text-xl sm:text-2xl font-black tracking-tight">
-                    A clear story to share with stakeholders
-                  </h3>
-                  <ul className="mt-5 space-y-3 text-[var(--muted)]">
-                    {[
-                      "Instant overview of the foundation and its impact focus.",
-                      "Portfolio event as proof of execution.",
-                      "Proposal-ready website for sponsors/investors.",
-                      "CMS-ready content structure for updates later.",
-                    ].map((t) => (
-                      <li key={t} className="flex gap-3">
-                        <span
-                          className="mt-2 h-2 w-2 rounded-full"
-                          style={{ background: "var(--blue)" }}
-                        />
-                        <span>{t}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              }
-            />
-          </div>
-        </div>
-      </section>
-
-      <div className="section-divider" />
-
-      {/* PROGRAMS (less cards, more “feature tiles”) */}
-      <section id="programs" className="section scroll-mt-28">
-        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6">
-          <div className="text-center">
-            <div className="h-eyebrow">Programs</div>
-            <h2 className="h2 mt-3">What we do</h2>
-            <p className="lead mx-auto mt-5 max-w-3xl">
-              Four pillars designed to be sponsor-friendly, measurable, and repeatable.
-            </p>
-          </div>
-
-          <div className="mt-12 grid gap-6 md:grid-cols-2">
-            {(programs?.length ? programs : [
-              { title: "Education & Scholarships", bullets: ["Scholarship guidance", "Exchange & study tours", "Language learning", "Internship connections"] },
-              { title: "Cultural Exchange", bullets: ["Public festivals & showcases", "Cross-cultural dialogues", "Workshops & seminars"] },
-              { title: "Professional Networking", bullets: ["Mentorship connections", "Career workshops", "Alumni collaborations"] },
-              { title: "Community Support", bullets: ["Volunteer programs", "Partner initiatives", "Community-driven impact"] },
-            ]).map((p: any) => (
-              <div key={p.title} className="panel panel-pad">
-                <div className="flex items-start justify-between gap-4">
-                  <h3 className="text-xl sm:text-2xl font-black tracking-tight">
-                    {p.title}
-                  </h3>
-                  <span className="pill">
-                    <strong style={{ color: "var(--red)" }}>Pillar</strong>
-                  </span>
-                </div>
-                <ul className="mt-5 space-y-3 text-[var(--muted)]">
-                  {(p.bullets || []).slice(0, 6).map((b: string) => (
-                    <li key={b} className="flex gap-3">
-                      <span
-                        className="mt-2 h-2 w-2 rounded-full"
-                        style={{ background: "var(--red)" }}
-                      />
-                      <span>{b}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <div className="section-divider" />
-
-      {/* PORTFOLIO EVENT (Apple-like: big highlight panel) */}
-      <section id="portfolio" className="section scroll-mt-28">
-        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6">
-          <div className="text-center">
-            <div className="h-eyebrow">Portfolio</div>
-            <h2 className="h2 mt-3">Proof of execution</h2>
-            <p className="lead mx-auto mt-5 max-w-3xl">
-              Culinary Day is presented as a portfolio highlight—demonstrating IDECN’s capability to execute impactful public programs.
-            </p>
-          </div>
-
-          <div className="mt-12">
-            <Split
-              left={
-                <div className="panel panel-pad">
-                  <div className="h-eyebrow">Featured event</div>
-                  <h3 className="mt-3 text-2xl sm:text-3xl font-black tracking-tight">
-                    {featured?.title || "Indonesia Culinary Day on the Creek"}
-                  </h3>
-
-                  <div className="mt-6 grid gap-3 text-[var(--muted)]">
-                    <div><strong className="text-[var(--ink)]">Date:</strong> {featured?.date || "Saturday, August 2, 2025"}</div>
-                    <div><strong className="text-[var(--ink)]">Time:</strong> {featured?.time || "11AM – 4PM"}</div>
-                    <div><strong className="text-[var(--ink)]">Venue:</strong> {featured?.location || "Carroll Creek Park • Downtown Frederick • Maryland, USA"}</div>
-                  </div>
-
-                  <div className="mt-8 flex flex-wrap gap-2 justify-center sm:justify-start">
-                    {["Food Bazaar", "Marketplace", "Exhibition", "Performances", "Art & Craft"].map((t) => (
-                      <span key={t} className="pill">{t}</span>
-                    ))}
-                  </div>
-
-                  <div className="mt-10 flex flex-wrap gap-3">
-                    <a
-                      href={featured?.proposalHref || "/indonesia-on-the-creek-proposal.pdf"}
-                      className="btn btn-primary"
-                    >
-                      Download proposal (PDF)
-                    </a>
-                    <a href="#contact" className="btn btn-outline">
-                      Sponsor / Vendor inquiry
-                    </a>
-                  </div>
-
-                  <p className="mt-6 text-sm text-[var(--muted)]">
-                    Place your PDF at: <strong className="text-[var(--ink)]">/public/indonesia-on-the-creek-proposal.pdf</strong>
-                  </p>
-                </div>
-              }
-              right={
-                <div className="panel panel-pad">
-                  <div className="h-eyebrow">Why it matters</div>
-                  <h3 className="mt-3 text-xl sm:text-2xl font-black tracking-tight">
-                    A repeatable format for sponsors & partners
-                  </h3>
-
-                  <ul className="mt-6 space-y-3 text-[var(--muted)]">
-                    {[
-                      "Clear sponsor visibility (branding, booths, stage mentions).",
-                      "High community turnout potential in public venues.",
-                      "Scalable yearly event that builds IDECN credibility.",
-                      "Supports scholarship guidance & networking programs.",
-                    ].map((t) => (
-                      <li key={t} className="flex gap-3">
-                        <span className="mt-2 h-2 w-2 rounded-full" style={{ background: "var(--blue)" }} />
-                        <span>{t}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="mt-10 grid gap-4 sm:grid-cols-2">
-                    <Stat label="Positioning" value="Portfolio + Proposal" />
-                    <Stat label="Outcome" value="Trust + Funding" />
-                  </div>
-                </div>
-              }
-            />
-          </div>
-        </div>
-      </section>
-
-      <div className="section-divider" />
-
-      {/* PARTNERS */}
-      <section id="partners" className="section scroll-mt-28">
-        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6">
-          <div className="text-center">
-            <div className="h-eyebrow">Partners</div>
-            <h2 className="h2 mt-3">Collaborate with IDECN</h2>
-            <p className="lead mx-auto mt-5 max-w-3xl">
-              We welcome sponsors, institutions, and community partners in the U.S. and Indonesia.
-            </p>
-          </div>
-
-          <div className="mt-12 panel panel-pad">
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              {(partners?.length ? partners : [
-                { name: "Community Partner" },
-                { name: "Education Partner" },
-                { name: "Sponsor Partner" },
-                { name: "Cultural Partner" },
-              ]).map((p: any) => (
-                <a
-                  key={p.name}
-                  href={p.website || "#contact"}
-                  className="pill hover:opacity-90"
-                  target={p.website ? "_blank" : undefined}
-                  rel={p.website ? "noreferrer" : undefined}
-                >
-                  {p.name}
-                </a>
-              ))}
+              <p>
+                <span className="font-semibold text-[color:var(--fg)]">Audience:</span>{" "}
+                {(site?.audience?.length ? site.audience : ["Students", "Educators", "Diaspora", "Partners", "Donors"]).join(
+                  " • "
+                )}
+              </p>
             </div>
 
-            <div className="mt-8 text-center">
-              <a href="#contact" className="btn btn-blue">
-                Become a partner
+            <div className="mt-10 flex flex-wrap justify-center gap-4 md:justify-start">
+              <span className="chip">
+                <span className="font-black" style={{ color: "var(--red)" }}>
+                  Indonesia
+                </span>{" "}
+                perspectives
+              </span>
+              <span className="chip">
+                <span className="font-black" style={{ color: "var(--blue)" }}>
+                  U.S.
+                </span>{" "}
+                opportunities
+              </span>
+              <span className="chip">Community-first</span>
+            </div>
+          </div>
+
+          <div className="md:col-span-5">
+            {/* Apple-ish: bukan kotak rame, cuma panel ringan */}
+            <div
+              className="rounded-[var(--radius)] border p-7"
+              style={{ borderColor: "var(--line)", background: "rgba(255,255,255,0.75)" }}
+            >
+              <p className="kicker">At a glance</p>
+              <div className="mt-6 space-y-5">
+                <div className="flex items-start justify-between gap-6">
+                  <div className="text-sm font-semibold text-[color:var(--muted)]">Focus</div>
+                  <div className="text-right font-bold">Education • Culture • Community</div>
+                </div>
+                <div className="divider" />
+                <div className="flex items-start justify-between gap-6">
+                  <div className="text-sm font-semibold text-[color:var(--muted)]">Operating</div>
+                  <div className="text-right font-bold">U.S.-based</div>
+                </div>
+                <div className="divider" />
+                <div className="flex items-start justify-between gap-6">
+                  <div className="text-sm font-semibold text-[color:var(--muted)]">Contact</div>
+                  <div className="text-right font-bold">{site?.email || "contact@idecn.org"}</div>
+                </div>
+              </div>
+
+              <a
+                href="#contact"
+                className="btn btn-ghost mt-8 w-full text-center"
+              >
+                Talk to us
               </a>
             </div>
           </div>
         </div>
-      </section>
+      </Section>
 
-      <div className="section-divider" />
+      <div className="divider" />
 
-      {/* GET INVOLVED */}
-      <section id="get-involved" className="section scroll-mt-28">
-        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6">
-          <div className="text-center">
-            <div className="h-eyebrow">Get involved</div>
-            <h2 className="h2 mt-3">There’s a place for you</h2>
-            <p className="lead mx-auto mt-5 max-w-3xl">
-              Students, professionals, cultural enthusiasts, community supporters—join IDECN’s mission.
-            </p>
-          </div>
+      {/* PROGRAMS */}
+      <Section id="programs" kicker="Programs" title="What we deliver">
+        <div className="divide-y" style={{ borderColor: "var(--line)" }}>
+          {programs.map((p, idx) => (
+            <article key={idx} className="py-10">
+              <div className="grid gap-8 md:grid-cols-12 md:items-start">
+                <div className="md:col-span-5">
+                  <h3 className="text-xl md:text-2xl font-extrabold tracking-tight">
+                    {p.title}
+                  </h3>
+                  <p className="mt-3 text-[color:var(--muted)]">
+                    Designed to be practical, repeatable, and easy to partner with.
+                  </p>
+                </div>
 
-          <div className="mt-12 grid gap-6 md:grid-cols-2">
-            {[
-              { title: "Students & Scholars", desc: "Scholarship guidance, exchange, and mentorship pathways." },
-              { title: "Cultural Enthusiasts", desc: "Festivals, showcases, and Indonesian cultural experiences." },
-              { title: "Professionals & Alumni", desc: "Networking, collaboration, and career development." },
-              { title: "Community Supporters", desc: "Volunteer, donate, and help expand IDECN’s impact." },
-            ].map((c) => (
-              <div key={c.title} className="panel panel-pad">
-                <h3 className="text-xl sm:text-2xl font-black tracking-tight">{c.title}</h3>
-                <p className="mt-4 text-[var(--muted)] leading-relaxed">{c.desc}</p>
-                <div className="mt-6">
-                  <a href="#contact" className="btn btn-outline">
-                    Contact to join
-                  </a>
+                <div className="md:col-span-7">
+                  <ul className="space-y-3 text-[color:var(--muted)]">
+                    {p.bullets.map((b, i) => (
+                      <li key={i} className="flex gap-3">
+                        <span
+                          className="mt-2 h-2 w-2 rounded-full"
+                          style={{ background: i % 2 === 0 ? "var(--red)" : "var(--blue)" }}
+                        />
+                        <span className="text-base md:text-lg">{b}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
-            ))}
-          </div>
+            </article>
+          ))}
         </div>
-      </section>
+      </Section>
 
-      <div className="section-divider" />
+      <div className="divider" />
 
-      {/* CONTACT */}
-      <section id="contact" className="section scroll-mt-28">
-        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6">
-          <div className="text-center">
-            <div className="h-eyebrow">Contact</div>
-            <h2 className="h2 mt-3">Let’s work together</h2>
-            <p className="lead mx-auto mt-5 max-w-3xl">
-              Sponsorship, vendor slots, partnerships, volunteering, or general inquiries.
+      {/* PORTFOLIO */}
+      <Section id="portfolio" kicker="Portfolio" title="Proof of execution">
+        <div className="grid gap-10 md:grid-cols-12 md:items-center">
+          <div className="md:col-span-7">
+            <h3 className="text-2xl md:text-3xl font-black tracking-tight">
+              {featured?.title || "Portfolio Event"}
+            </h3>
+            <p className="lead mt-4">
+              {featured?.summary ||
+                "A signature event that demonstrates IDECN’s capability to execute impactful public programs."}
             </p>
-          </div>
 
-          <div className="mt-12 grid gap-6 lg:grid-cols-2">
-            <div className="panel panel-pad">
-              <h3 className="text-xl sm:text-2xl font-black tracking-tight">Committee</h3>
-              <div className="mt-6 space-y-3">
-                {(site?.contacts?.length ? site.contacts : [
-                  { name: "Wati Soetojo", role: "Committee", phone: "+1 240 483 6113", href: "tel:+12404836113" },
-                  { name: "Haris Koentjoro", role: "Committee", phone: "+1 443 570 9509", href: "tel:+14435709509" },
-                ]).map((c: any) => (
-                  <a
-                    key={c.phone}
-                    href={c.href || `tel:${String(c.phone).replace(/\s/g,"")}`}
-                    className="flex items-center justify-between gap-4 rounded-2xl border border-[var(--line)] bg-white/70 px-5 py-4 hover:bg-white"
-                  >
-                    <div>
-                      <div className="font-extrabold">{c.name}</div>
-                      <div className="text-[var(--muted)]">{c.role} • {c.phone}</div>
-                    </div>
-                    <span className="pill">
-                      <strong style={{ color: "var(--red)" }}>Call</strong>
-                    </span>
-                  </a>
-                ))}
-              </div>
+            <div className="mt-8 flex flex-wrap justify-center gap-3 md:justify-start">
+              <span className="chip">{featured?.dateText || "2026"}</span>
+              <span className="chip">{featured?.location || "U.S. — Community Venue"}</span>
             </div>
 
-            <div className="panel panel-pad">
-              <h3 className="text-xl sm:text-2xl font-black tracking-tight">Email & Downloads</h3>
-              <p className="mt-4 text-[var(--muted)]">
-                Update with your official IDECN email when ready.
-              </p>
+            <a className="btn btn-primary mt-10 w-full md:w-auto" href="#get-involved">
+              Sponsor the next event
+            </a>
+          </div>
 
-              <div className="mt-6 grid gap-3">
-                <a
-                  className="btn btn-primary w-full"
-                  href={`mailto:${site?.officialEmail || "hello@idecn.org"}`}
-                >
-                  {site?.officialEmail || "hello@idecn.org"}
-                </a>
+          <div className="md:col-span-5">
+            <div
+              className="rounded-[var(--radius)] border p-7"
+              style={{ borderColor: "var(--line)", background: "rgba(255,255,255,0.75)" }}
+            >
+              <p className="kicker">Highlights</p>
+              <ul className="mt-6 space-y-3 text-[color:var(--muted)]">
+                {(featured?.highlights || []).map((h, i) => (
+                  <li key={i} className="flex gap-3">
+                    <span className="mt-2 h-2 w-2 rounded-full" style={{ background: "var(--blue)" }} />
+                    <span className="text-base md:text-lg">{h}</span>
+                  </li>
+                ))}
+              </ul>
 
-                <a
-                  className="btn btn-outline w-full"
-                  href={featured?.proposalHref || "/indonesia-on-the-creek-proposal.pdf"}
-                >
+              <div className="mt-8">
+                <p className="text-sm font-semibold text-[color:var(--muted2)]">
+                  Want the full event breakdown?
+                </p>
+                <a className="btn btn-ghost mt-3 w-full text-center" href={site?.proposalUrl || "/indonesia-on-the-creek-proposal.pdf"}>
                   Download proposal (PDF)
                 </a>
-
-                <p className="text-sm text-[var(--muted)]">
-                  Proposal path: <strong className="text-[var(--ink)]">/public/indonesia-on-the-creek-proposal.pdf</strong>
-                </p>
               </div>
             </div>
           </div>
+        </div>
+      </Section>
 
-          <div className="mt-14 text-center text-sm text-[var(--muted)]">
+      <div className="divider" />
+
+      {/* PARTNERS */}
+      <Section id="partners" kicker="Partners" title="Who we work with">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {partners.map((p, i) => (
+            <div
+              key={i}
+              className="rounded-[var(--radius)] border px-6 py-6"
+              style={{ borderColor: "var(--line)", background: "rgba(255,255,255,0.70)" }}
+            >
+              <div className="text-lg font-extrabold">{p.name}</div>
+              <div className="mt-1 text-sm font-semibold text-[color:var(--muted2)]">{p.type}</div>
+              {p.website ? (
+                <a
+                  className="mt-5 inline-flex text-sm font-bold"
+                  style={{ color: "var(--blue)" }}
+                  href={p.website}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Visit →
+                </a>
+              ) : (
+                <div className="mt-5 text-sm font-semibold text-[color:var(--muted)]">
+                  Open for collaboration
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      <div className="divider" />
+
+      {/* GET INVOLVED */}
+      <section id="get-involved" className="scroll-mt-28">
+        <div className="containerX py-16 md:py-24">
+          <div
+            className="relative overflow-hidden rounded-[var(--radius)] border px-7 py-10 md:px-12 md:py-14 text-center"
+            style={{ borderColor: "var(--line)", background: "rgba(255,255,255,0.78)" }}
+          >
+            <div className="pointer-events-none absolute inset-0 batik opacity-[0.10]" aria-hidden />
+            <p className="kicker">Get involved</p>
+            <h2 className="h2 mt-3">Let’s build the next program together</h2>
+            <p className="lead mx-auto mt-5 max-w-3xl">
+              We’re looking for partners, sponsors, donors, and collaborators who
+              want real impact—and programs that people actually attend.
+            </p>
+
+            <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <a className="btn btn-primary w-full sm:w-auto" href="#contact">
+                Contact us
+              </a>
+              <a className="btn btn-ghost w-full sm:w-auto" href={site?.proposalUrl || "/indonesia-on-the-creek-proposal.pdf"}>
+                Download proposal (PDF)
+              </a>
+            </div>
+
+            <div className="mx-auto mt-10 flex justify-center gap-2">
+              <div className="h-2 w-14 rounded-full" style={{ background: "var(--red)" }} />
+              <div className="h-2 w-14 rounded-full bg-white border" style={{ borderColor: "var(--line)" }} />
+              <div className="h-2 w-14 rounded-full" style={{ background: "var(--blue)" }} />
+            </div>
+          </div>
+        </div>
+
+        <div className="divider" />
+      </section>
+
+      {/* CONTACT / FOOTER */}
+      <footer id="contact">
+        <div className="containerX py-14 md:py-18">
+          <p className="kicker">Contact</p>
+          <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <div className="text-lg md:text-xl font-black">
+              {site?.orgName || "IDECN"}{" "}
+              <span className="font-semibold text-[color:var(--muted2)]">
+                — {site?.tagline || "Indonesia ↔ U.S."}
+              </span>
+            </div>
+            <div className="text-[color:var(--muted)] font-semibold">
+              Email:{" "}
+              <a className="font-black" style={{ color: "var(--blue)" }} href={`mailto:${site?.email || "contact@idecn.org"}`}>
+                {site?.email || "contact@idecn.org"}
+              </a>
+            </div>
+          </div>
+
+          <div className="mt-8 text-sm text-[color:var(--muted2)]">
             © {new Date().getFullYear()} IDECN. All rights reserved.
           </div>
         </div>
-      </section>
-    </main>
+      </footer>
+    </>
   );
 }
