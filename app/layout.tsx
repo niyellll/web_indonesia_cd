@@ -1,8 +1,10 @@
+// app/layout.tsx
 import "./globals.css";
+import type { Metadata } from "next";
 import Navbar from "../components/Navbar";
 
-export const metadata = {
-  title: "IDECN — Indonesia ↔ U.S.",
+export const metadata: Metadata = {
+  title: "IDECN — Indonesia Education & Cultural Network",
   description:
     "A U.S.-based nonprofit dedicated to fostering cross-cultural understanding, educational opportunities, and community connections between Indonesia and the United States.",
 };
@@ -12,12 +14,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         {/* Background layers */}
-        <div className="bg-base" aria-hidden />
-        <div className="bg-batik" aria-hidden />
-        <div className="bg-vignette" aria-hidden />
+        <div className="site-bg" aria-hidden="true" />
+        <div className="batik-bg" aria-hidden="true" />
 
         <Navbar />
-        {children}
+        <main id="content" className="page">
+          {children}
+        </main>
       </body>
     </html>
   );

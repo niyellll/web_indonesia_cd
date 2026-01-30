@@ -1,183 +1,140 @@
+/* app/globals.css */
 @import "tailwindcss";
 
-/* ===== Theme tokens ===== */
 :root {
-  --red: #dc2626; /* red-600 */
-  --blue: #2563eb; /* blue-600 */
+  --bg: #ffffff;
   --ink: #0b1220;
-  --muted: rgba(11, 18, 32, 0.64);
+  --muted: rgba(11, 18, 32, 0.62);
   --line: rgba(11, 18, 32, 0.12);
+
+  --red: #d61f1f;
+  --blue: #1f5bd6;
+
   --card: rgba(255, 255, 255, 0.82);
-  --cardSolid: #ffffff;
-  --shadow: 0 18px 50px rgba(2, 6, 23, 0.12);
-  --shadowSoft: 0 10px 28px rgba(2, 6, 23, 0.10);
-  --radius: 22px;
+  --glass: rgba(255, 255, 255, 0.72);
+  --shadow: 0 18px 40px rgba(11, 18, 32, 0.12);
+  --shadow-soft: 0 10px 26px rgba(11, 18, 32, 0.08);
 
-  /* scroll-driven bar */
-  --scroll: 0; /* 0..1 set by Navbar */
+  /* scroll-driven accent */
+  --accent-x: 0%;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  height: 100%;
+html {
+  scroll-behavior: smooth;
 }
 
 body {
+  background: var(--bg);
   color: var(--ink);
-  background: #ffffff;
-  margin: 0;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial,
-    "Apple Color Emoji", "Segoe UI Emoji";
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
+    Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  font-size: 18px;
+  line-height: 1.6;
+  overflow-x: hidden;
 }
 
-/* ===== Background layers ===== */
-.bg-base {
-  position: fixed;
-  inset: 0;
-  z-index: -30;
-  background: #fff;
+/* Prevent sticky bugs: avoid overflow clipping parents */
+.page {
+  position: relative;
+  z-index: 1;
 }
 
-.bg-batik {
+/* ===== Background ===== */
+.site-bg {
   position: fixed;
   inset: 0;
   z-index: -20;
-  background-image: url("/batik-pattern.svg");
-  background-repeat: repeat;
-  background-size: 900px auto;
-  opacity: 0.06; /* cukup halus */
-  pointer-events: none;
+  background: radial-gradient(1200px 600px at 50% -10%, rgba(31, 91, 214, 0.08), transparent 60%),
+    radial-gradient(1000px 520px at 10% 10%, rgba(214, 31, 31, 0.06), transparent 55%),
+    radial-gradient(900px 520px at 90% 10%, rgba(31, 91, 214, 0.05), transparent 55%),
+    #fff;
 }
 
-.bg-vignette {
+.batik-bg {
   position: fixed;
   inset: 0;
   z-index: -10;
   pointer-events: none;
-  background: radial-gradient(
-      1200px 500px at 50% 0%,
-      rgba(255, 255, 255, 0.5),
-      rgba(255, 255, 255, 0) 55%
-    ),
-    radial-gradient(
-      900px 500px at 50% 110%,
-      rgba(0, 0, 0, 0.06),
-      rgba(0, 0, 0, 0) 60%
-    );
+  opacity: 0.10;
+  background-image: url("/batik-pattern.svg");
+  background-size: 900px auto;
+  background-repeat: repeat;
+  /* soften */
+  filter: grayscale(100%) contrast(90%);
+  /* vignette via mask */
+  -webkit-mask-image: radial-gradient(circle at 50% 20%, rgba(0, 0, 0, 0.9), transparent 68%);
+  mask-image: radial-gradient(circle at 50% 20%, rgba(0, 0, 0, 0.9), transparent 68%);
 }
 
-/* ===== Layout helpers (tanpa @apply) ===== */
+/* ===== Layout helpers ===== */
 .wrap {
+  width: 100%;
   max-width: 1160px;
   margin: 0 auto;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 24px;
+  padding-right: 24px;
 }
 
-.section {
-  padding-top: 78px;
-  padding-bottom: 78px;
+@media (max-width: 640px) {
+  body { font-size: 16px; }
+  .wrap { padding-left: 16px; padding-right: 16px; }
 }
 
-.section-tight {
-  padding-top: 56px;
-  padding-bottom: 56px;
-}
-
-.hr {
-  height: 1px;
-  background: var(--line);
-  width: 100%;
-}
-
-/* ===== Typography (lebih besar & jelas) ===== */
+/* ===== Typography ===== */
 .kicker {
-  font-size: 12px;
   letter-spacing: 0.22em;
-  font-weight: 800;
   text-transform: uppercase;
-  color: rgba(11, 18, 32, 0.55);
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 800;
 }
 
 .h1 {
   font-weight: 900;
   letter-spacing: -0.03em;
-  line-height: 1.05;
-  font-size: clamp(44px, 5vw, 72px);
+  line-height: 1.02;
+  font-size: clamp(42px, 5vw, 72px);
 }
 
 .h2 {
   font-weight: 900;
   letter-spacing: -0.02em;
-  line-height: 1.08;
-  font-size: clamp(30px, 3.2vw, 44px);
+  line-height: 1.06;
+  font-size: clamp(32px, 3.4vw, 48px);
 }
 
 .h3 {
-  font-weight: 900;
-  letter-spacing: -0.015em;
+  font-weight: 800;
+  letter-spacing: -0.01em;
   line-height: 1.15;
-  font-size: clamp(20px, 2.1vw, 26px);
+  font-size: clamp(20px, 2vw, 26px);
 }
 
 .lead {
-  font-size: clamp(18px, 1.5vw, 20px);
-  line-height: 1.7;
   color: var(--muted);
+  font-size: clamp(16px, 1.35vw, 20px);
+  line-height: 1.7;
 }
 
 .p {
-  font-size: 17px;
-  line-height: 1.75;
   color: var(--muted);
+  font-size: 16.5px;
+  line-height: 1.75;
 }
 
-/* ===== Components ===== */
+/* ===== Cards & Buttons ===== */
 .card {
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: var(--shadowSoft);
+  border-radius: 22px;
+  box-shadow: var(--shadow-soft);
 }
 
-.card-solid {
-  background: var(--cardSolid);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: var(--shadowSoft);
-}
-
-.pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 10px 14px;
-  background: rgba(255, 255, 255, 0.65);
-  color: rgba(11, 18, 32, 0.75);
-  font-weight: 700;
-  font-size: 14px;
-}
-
-.dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  background: rgba(11, 18, 32, 0.25);
-}
-
-.dot.red {
-  background: var(--red);
-}
-.dot.blue {
-  background: var(--blue);
+.card-strong {
+  background: rgba(255,255,255,0.92);
+  border: 1px solid rgba(11, 18, 32, 0.14);
+  border-radius: 26px;
+  box-shadow: var(--shadow);
 }
 
 .btn {
@@ -186,183 +143,71 @@ body {
   justify-content: center;
   gap: 10px;
   border-radius: 999px;
-  padding: 12px 18px;
+  padding: 12px 16px;
   font-weight: 800;
   font-size: 15px;
   border: 1px solid var(--line);
-  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease,
-    color 160ms ease, border-color 160ms ease;
-  user-select: none;
+  background: #fff;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+  box-shadow: 0 8px 18px rgba(11, 18, 32, 0.08);
 }
 
-.btn:active {
-  transform: translateY(1px);
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(11, 18, 32, 0.12);
 }
 
 .btn-primary {
   background: var(--red);
-  color: #fff;
-  border-color: rgba(220, 38, 38, 0.45);
-  box-shadow: 0 12px 30px rgba(220, 38, 38, 0.18);
+  color: white;
+  border-color: rgba(0,0,0,0);
+  box-shadow: 0 14px 28px rgba(214, 31, 31, 0.24);
 }
 
 .btn-primary:hover {
-  background: #b91c1c;
+  box-shadow: 0 18px 34px rgba(214, 31, 31, 0.30);
 }
 
 .btn-ghost {
   background: rgba(255, 255, 255, 0.75);
-  color: var(--ink);
+  backdrop-filter: blur(8px);
 }
 
-.btn-ghost:hover {
-  border-color: rgba(11, 18, 32, 0.22);
-  box-shadow: 0 12px 30px rgba(2, 6, 23, 0.08);
-}
-
-/* ===== Navbar + animated top bar ===== */
-.topbar {
-  height: 4px;
-  width: 100%;
-  background-image: linear-gradient(
-    90deg,
-    var(--red) 0%,
-    #ffffff 50%,
-    var(--blue) 100%
-  );
-  background-size: 200% 100%;
-  /* shift with scroll (0..1) */
-  background-position: calc(var(--scroll) * 100%) 0%;
-}
-
-.navShell {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background: rgba(255, 255, 255, 0.78);
-  border-bottom: 1px solid rgba(11, 18, 32, 0.08);
-}
-
-html[data-scrolled="1"] .navShell {
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 18px 50px rgba(2, 6, 23, 0.10);
-}
-
-.navInner {
-  height: 74px;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  gap: 12px;
-}
-
-.navBrand {
+.pill {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  min-width: 220px;
-}
-
-.logoMark {
-  width: 38px;
-  height: 38px;
+  gap: 10px;
+  padding: 8px 12px;
   border-radius: 999px;
   border: 1px solid var(--line);
-  background: #fff;
-}
-
-.brandTitle {
-  font-weight: 900;
-  letter-spacing: -0.01em;
-  font-size: 16px;
-  line-height: 1.1;
-}
-
-.brandSub {
-  font-size: 12.5px;
-  color: rgba(11, 18, 32, 0.6);
-  margin-top: 2px;
-}
-
-.navLinks {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.65);
-  border: 1px solid rgba(11, 18, 32, 0.10);
-}
-
-.navLink {
-  position: relative;
-  padding: 10px 14px;
-  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(8px);
+  color: rgba(11,18,32,0.78);
   font-weight: 800;
-  font-size: 15px;
-  color: rgba(11, 18, 32, 0.72);
-  transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+  font-size: 13px;
 }
 
-.navLink:hover {
-  background: rgba(11, 18, 32, 0.05);
-  color: rgba(11, 18, 32, 0.9);
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--muted);
+  opacity: 0.7;
 }
 
-.navLink[data-active="1"] {
-  background: rgba(11, 18, 32, 0.06);
-  color: rgba(11, 18, 32, 0.95);
+/* ===== Navbar accent bar (scroll-driven gradient shift) ===== */
+.accent-bar {
+  height: 4px;
+  width: 100%;
+  background-image: linear-gradient(90deg, var(--red), #ffffff, var(--blue));
+  background-size: 200% 100%;
+  background-position: var(--accent-x) 0;
+  transition: background-position 120ms linear;
 }
 
-.navLink[data-active="1"]::after {
-  content: "";
-  position: absolute;
-  left: 16px;
-  right: 16px;
-  bottom: 6px;
-  height: 3px;
-  border-radius: 99px;
-  background-image: linear-gradient(
-    90deg,
-    var(--red),
-    #ffffff,
-    var(--blue)
-  );
-}
-
-.navRight {
-  display: flex;
-  justify-content: flex-end;
-}
-
-/* Mobile */
-@media (max-width: 920px) {
-  .navInner {
-    grid-template-columns: 1fr auto;
-  }
-  .navLinks {
-    display: none;
-  }
-}
-
-.drawer {
-  border-top: 1px solid rgba(11, 18, 32, 0.08);
-  padding: 14px 0;
-}
-
-.drawer a {
-  display: block;
-  padding: 12px 16px;
-  font-weight: 800;
-  color: rgba(11, 18, 32, 0.82);
-  border-radius: 12px;
-}
-
-.drawer a:hover {
-  background: rgba(11, 18, 32, 0.05);
-}
-
-/* Smooth anchor scroll */
-html {
-  scroll-behavior: smooth;
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .btn { transition: none; }
+  .accent-bar { transition: none; }
 }

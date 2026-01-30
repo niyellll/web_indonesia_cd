@@ -1,63 +1,66 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 type NavItem = { id: string; label: string };
 
+const NAV: NavItem[] = [
+  { id: "about", label: "About" },
+  { id: "programs", label: "Programs" },
+  { id: "portfolio", label: "Portfolio Event" },
+  { id: "partners", label: "Partners" },
+  { id: "involved", label: "Get Involved" },
+];
+
+function clamp(n: number, min: number, max: number) {
+  return Math.max(min, Math.min(max, n));
+}
+
 export default function Navbar() {
-  const items: NavItem[] = useMemo(
-    () => [
-      { id: "about", label: "About" },
-      { id: "programs", label: "Programs" },
-      { id: "portfolio", label: "Portfolio Event" },
-      { id: "partners", label: "Partners" },
-      { id: "get-involved", label: "Get Involved" },
-      { id: "contact", label: "Contact" },
-    ],
-    []
-  );
-
   const [active, setActive] = useState<string>("about");
+  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const rafRef = useRef<number | null>(null);
 
-  const ticking = useRef(false);
+  const items = useMemo(() => NAV, []);
 
-  // Scroll → update CSS var (smooth, low-cost)
   useEffect(() => {
+    // Sticky polish + scroll-driven gradient shift
     const onScroll = () => {
-      if (ticking.current) return;
-      ticking.current = true;
+      if (rafRef.current) return;
 
-      requestAnimationFrame(() => {
+      rafRef.current = window.requestAnimationFrame(() => {
+        rafRef.current = null;
+
+        const y = window.scrollY || 0;
+        setScrolled(y > 6);
+
         const doc = document.documentElement;
-        const scrollTop = window.scrollY || doc.scrollTop || 0;
         const max = Math.max(1, doc.scrollHeight - window.innerHeight);
-        const p = Math.min(1, Math.max(0, scrollTop / max));
+        const progress = clamp(y / max, 0, 1);
 
-        doc.style.setProperty("--scroll", String(p));
-        if (scrollTop > 8) doc.dataset.scrolled = "1";
-        else delete doc.dataset.scrolled;
-
-        ticking.current = false;
+        // shift from 0% -> 100%
+        doc.style.setProperty("--accent-x", `${Math.round(progress * 100)}%`);
       });
     };
 
-    window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Scroll spy (IntersectionObserver)
   useEffect(() => {
-    const els = items
-      .map((it) => document.getElementById(it.id))
+    // Active section observer
+    const ids = items.map((i) => i.id);
+    const els = ids
+      .map((id) => document.getElementById(id))
       .filter(Boolean) as HTMLElement[];
 
     if (!els.length) return;
 
-    const io = new IntersectionObserver(
+    const obs = new IntersectionObserver(
       (entries) => {
-        // ambil yang paling "visible"
+        // choose the most visible entry
         const visible = entries
           .filter((e) => e.isIntersecting)
           .sort((a, b) => (b.intersectionRatio ?? 0) - (a.intersectionRatio ?? 0))[0];
@@ -66,90 +69,147 @@ export default function Navbar() {
       },
       {
         root: null,
-        threshold: [0.15, 0.25, 0.35, 0.5, 0.65],
-        // offset biar header sticky ga nutup
-        rootMargin: "-25% 0px -60% 0px",
+        // offset for sticky navbar
+        rootMargin: "-88px 0px -60% 0px",
+        threshold: [0.12, 0.2, 0.3, 0.4, 0.55],
       }
     );
 
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
+    els.forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
   }, [items]);
 
-  const go = (id: string) => {
+  const scrollToId = (id: string) => (e?: React.MouseEvent) => {
+    e?.preventDefault();
     setOpen(false);
+
     const el = document.getElementById(id);
     if (!el) return;
 
-    // offset untuk navbar height
-    const y = el.getBoundingClientRect().top + window.scrollY - 84;
-    window.scrollTo({ top: y, behavior: "smooth" });
+    const navOffset = 92; // sticky height
+    const top = el.getBoundingClientRect().top + window.scrollY - navOffset;
+
+    window.history.replaceState(null, "", `#${id}`);
+    window.scrollTo({ top, behavior: "smooth" });
+    setActive(id);
   };
 
   return (
-    <header className="navShell">
-      <div className="topbar" />
-      <div className="wrap">
-        <div className="navInner">
-          <a className="navBrand" href="#top" onClick={(e) => (e.preventDefault(), go("top"))}>
-            <div className="logoMark" />
-            <div>
-              <div className="brandTitle">IDECN</div>
-              <div className="brandSub">Indonesia ↔ U.S.</div>
-            </div>
-          </a>
+    <header className="sticky top-0 z-[9999]">
+      <div className="accent-bar" />
+      <div
+        className={[
+          "w-full border-b",
+          scrolled ? "bg-white/80 backdrop-blur-xl shadow-[0_10px_28px_rgba(11,18,32,0.10)]" : "bg-white/70 backdrop-blur-lg",
+        ].join(" ")}
+        style={{ borderColor: "var(--line)" }}
+      >
+        <div className="wrap">
+          <div className="flex h-[78px] items-center justify-between">
+            {/* Logo */}
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                setOpen(false);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+              className="flex items-center gap-3"
+              aria-label="IDECN Home"
+            >
+              <div
+                className="h-10 w-10 rounded-full border bg-white/60"
+                style={{ borderColor: "var(--line)" }}
+              />
+              <div className="leading-tight">
+                <div className="text-[15px] font-extrabold tracking-tight">IDECN</div>
+                <div className="text-[12px] font-semibold" style={{ color: "var(--muted)" }}>
+                  Indonesia ↔ U.S.
+                </div>
+              </div>
+            </a>
 
-          <nav className="navLinks" aria-label="Primary navigation">
-            {items.slice(0, 5).map((it) => (
-              <button
-                key={it.id}
-                className="navLink"
-                data-active={active === it.id ? "1" : "0"}
-                onClick={() => go(it.id)}
-                type="button"
+            {/* Desktop nav */}
+            <nav className="hidden items-center gap-2 md:flex" aria-label="Primary">
+              <div
+                className="flex items-center gap-1 rounded-full border bg-white/65 p-1 backdrop-blur"
+                style={{ borderColor: "var(--line)" }}
               >
-                {it.label}
-              </button>
-            ))}
-          </nav>
+                {items.map((it) => {
+                  const isActive = active === it.id;
+                  return (
+                    <a
+                      key={it.id}
+                      href={`#${it.id}`}
+                      onClick={scrollToId(it.id)}
+                      className={[
+                        "relative rounded-full px-4 py-2 text-[15px] font-extrabold transition",
+                        isActive ? "text-[var(--ink)]" : "text-[color:var(--muted)] hover:text-[var(--ink)]",
+                      ].join(" ")}
+                    >
+                      {it.label}
+                      {/* underline */}
+                      <span
+                        className={[
+                          "absolute left-4 right-4 -bottom-[2px] h-[3px] rounded-full",
+                          isActive ? "opacity-100" : "opacity-0",
+                        ].join(" ")}
+                        style={{
+                          backgroundImage: "linear-gradient(90deg, var(--red), #fff, var(--blue))",
+                          transition: "opacity 180ms ease",
+                        }}
+                      />
+                    </a>
+                  );
+                })}
+              </div>
 
-          <div className="navRight">
-            <div className="hidden max-[920px]:flex items-center gap-2">
-              <button
-                type="button"
-                className="btn btn-ghost"
-                onClick={() => setOpen((v) => !v)}
-                aria-expanded={open}
-                aria-controls="mobile-drawer"
-              >
-                Menu
-              </button>
-              <button type="button" className="btn btn-primary" onClick={() => go("contact")}>
+              <a href="#contact" onClick={scrollToId("contact")} className="btn btn-primary ml-3">
                 Contact
-              </button>
-            </div>
-
-            <div className="max-[920px]:hidden flex items-center gap-3">
-              <button type="button" className="btn btn-primary" onClick={() => go("contact")}>
-                Contact
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {open ? (
-          <div id="mobile-drawer" className="drawer max-[920px]:block hidden">
-            {items.map((it) => (
-              <a
-                key={it.id}
-                href={`#${it.id}`}
-                onClick={(e) => (e.preventDefault(), go(it.id))}
-              >
-                {it.label}
               </a>
-            ))}
+            </nav>
+
+            {/* Mobile */}
+            <div className="md:hidden flex items-center gap-2">
+              <a href="#contact" onClick={scrollToId("contact")} className="btn btn-primary">
+                Contact
+              </a>
+              <button
+                className="btn"
+                onClick={() => setOpen((v) => !v)}
+                aria-label="Toggle menu"
+                aria-expanded={open}
+              >
+                <span className="text-[16px] font-extrabold">{open ? "Close" : "Menu"}</span>
+              </button>
+            </div>
           </div>
-        ) : null}
+
+          {/* Mobile menu panel */}
+          {open && (
+            <div
+              className="md:hidden pb-4"
+              style={{ borderTop: "1px solid var(--line)" }}
+            >
+              <div className="mt-3 grid gap-2">
+                {items.map((it) => (
+                  <a
+                    key={it.id}
+                    href={`#${it.id}`}
+                    onClick={scrollToId(it.id)}
+                    className={[
+                      "rounded-2xl border bg-white/75 px-4 py-3 text-[16px] font-extrabold backdrop-blur",
+                      active === it.id ? "text-[var(--ink)]" : "text-[color:var(--muted)]",
+                    ].join(" ")}
+                    style={{ borderColor: "var(--line)" }}
+                  >
+                    {it.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );

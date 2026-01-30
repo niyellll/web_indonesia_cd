@@ -1,6 +1,8 @@
+// lib/cms.ts (NO SANITY / STATIC DATA)
+
 export type Program = {
   title: string;
-  subtitle: string;
+  desc: string;
   bullets: string[];
 };
 
@@ -34,17 +36,17 @@ const SITE: SiteSettings = {
   heroSubtitle:
     "A U.S.-based nonprofit dedicated to fostering cross-cultural understanding, educational opportunities, and community connections between Indonesia and the United States.",
   purpose:
-    "Build credible public presence for donors, partners, and communities—plus proof-of-execution through repeatable programs and portfolio events.",
+    "Build credible public presence for donors, partners, and communities—plus a portfolio of executed events as proof of capability.",
   audience: ["Donors", "Partners", "Schools", "Communities"],
   email: "contact@idecn.org",
   proposalUrl: "/indonesia-on-the-creek-proposal.pdf",
-  themeNote: "Red • White • Blue + Batik pattern",
+  themeNote: "Red • White • Blue + Batik background",
 };
 
 const PROGRAMS: Program[] = [
   {
     title: "Educational Programs & Scholarships",
-    subtitle: "Practical pathways to study, mentor, and grow across borders.",
+    desc: "Practical pathways for students and educators to access U.S. opportunities—clear, repeatable, and partner-friendly.",
     bullets: [
       "Scholarship guidance for Indonesian students pursuing U.S. education",
       "Exchange programs for students and educators",
@@ -54,7 +56,7 @@ const PROGRAMS: Program[] = [
   },
   {
     title: "Cultural Exchange & Awareness",
-    subtitle: "Events people actually enjoy—built to be repeatable and sponsor-ready.",
+    desc: "Community-first events that make Indonesian culture visible and accessible—built to be joyful and inclusive.",
     bullets: [
       "Cultural events & festivals showcasing Indonesian arts, food, and traditions",
       "Cross-cultural dialogues: seminars, workshops, discussions",
@@ -63,20 +65,18 @@ const PROGRAMS: Program[] = [
   },
   {
     title: "Professional Networking",
-    subtitle: "Bridge students, alumni, professionals, and partners with clarity.",
+    desc: "Bridge students, alumni, professionals, and partners—so collaboration happens beyond a single event.",
     bullets: [
       "Network bridges between students, alumni, professionals, and partners",
       "Workshops on collaboration and leadership across cultures",
-      "Partner pipelines for community projects and sponsorships",
     ],
   },
   {
     title: "Community Support",
-    subtitle: "Local execution with a global connection—clear roles & outcomes.",
+    desc: "Volunteer-powered initiatives that strengthen local communities in Indonesia and the U.S.",
     bullets: [
       "Volunteer programs and community-led initiatives",
       "Partnership opportunities with nonprofits, universities, and sponsors",
-      "Repeatable playbooks for events and program delivery",
     ],
   },
 ];
