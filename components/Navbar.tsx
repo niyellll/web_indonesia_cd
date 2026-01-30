@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 
 const NAV = [
@@ -12,59 +10,52 @@ const NAV = [
 
 export default function Navbar() {
   return (
-    <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-200">
-      {/* garis merah - putih - biru (bukan gradasi) */}
-      <div className="h-1 w-full">
-        <div className="grid h-full grid-cols-3">
-          <div className="bg-red-600" />
-          <div className="bg-white" />
-          <div className="bg-blue-700" />
-        </div>
-      </div>
+    <header className="sticky top-0 z-50 border-b border-[var(--line)] bg-white/85 backdrop-blur">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
+        <Link href="/" className="flex items-center gap-3">
+          <div className="h-10 w-10 rounded-full border border-[var(--line)] bg-white" />
+          <div className="leading-tight">
+            <p className="text-base font-extrabold tracking-tight text-[var(--ink)]">IDECN</p>
+            <p className="text-sm text-[var(--muted)] -mt-0.5">Indonesia ↔ U.S.</p>
+          </div>
+        </Link>
 
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-4">
-        <div className="grid grid-cols-3 items-center">
-          {/* kiri: logo */}
-          <Link href="/" className="flex items-center gap-3">
-            <div className="h-11 w-11 rounded-2xl border border-slate-200 bg-white" />
-            <div className="leading-tight">
-              <p className="text-[15px] sm:text-base font-semibold text-slate-900">IDECN</p>
-              <p className="text-xs sm:text-sm text-slate-500 -mt-0.5">Indonesia ↔ U.S.</p>
-            </div>
-          </Link>
+        {/* desktop */}
+        <nav className="hidden items-center gap-2 md:flex">
+          {NAV.map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              className="rounded-xl px-3 py-2 text-base font-medium text-[var(--muted)] hover:bg-black/5 hover:text-[var(--ink)]"
+            >
+              {item.label}
+            </a>
+          ))}
+          <a href="#contact" className="btn-primary ml-2">
+            Contact
+          </a>
+        </nav>
 
-          {/* tengah: nav (rata tengah) */}
-          <nav className="hidden md:flex items-center justify-center gap-7 text-[15px] font-medium text-slate-600">
-            {NAV.map((n) => (
-              <a key={n.href} href={n.href} className="hover:text-slate-900">
-                {n.label}
+        {/* mobile */}
+        <details className="md:hidden">
+          <summary className="list-none rounded-xl border border-[var(--line)] bg-white px-3 py-2 text-base">
+            Menu
+          </summary>
+          <div className="mt-2 grid gap-1 rounded-2xl border border-[var(--line)] bg-white p-3">
+            {NAV.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className="rounded-xl px-3 py-2 text-base hover:bg-black/5"
+              >
+                {item.label}
               </a>
             ))}
-          </nav>
-
-          {/* kanan: contact */}
-          <div className="flex justify-end">
-            <a
-              href="#contact"
-              className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2 text-[15px] font-semibold text-slate-900 hover:bg-slate-50"
-            >
+            <a href="#contact" className="btn-primary mt-2 text-center">
               Contact
             </a>
           </div>
-        </div>
-
-        {/* mobile nav */}
-        <div className="md:hidden mt-3 flex flex-wrap gap-2 justify-center">
-          {NAV.map((n) => (
-            <a
-              key={n.href}
-              href={n.href}
-              className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700"
-            >
-              {n.label}
-            </a>
-          ))}
-        </div>
+        </details>
       </div>
     </header>
   );
