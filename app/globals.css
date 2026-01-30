@@ -1,37 +1,54 @@
 @import "tailwindcss";
 
-/* =========
-   Theme tokens (NO GRADIENT)
-   ========= */
-:root{
-  --red: #D32F2F;
-  --red-dark: #B71C1C;
+:root {
+  --bg: #ffffff;
+  --ink: #0b1220;
+  --muted: #51607a;
+  --line: rgba(11, 18, 32, 0.14);
 
-  --blue: #1E3A8A;
-  --blue-dark: #162F73;
-
-  --ink: #0F172A;
-  --muted: #475569;
-
-  --line: #E2E8F0;
-  --line-strong: #CBD5E1;
-
-  --bg-soft: #F8FAFC;
+  /* Theme */
+  --red: #d62828;
+  --blue: #1d4ed8;
 }
 
-html, body{
-  height: 100%;
-}
-
-body{
-  background: #ffffff;
-  color: var(--ink);
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* nicer anchor jumps */
-*{
+html {
   scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+}
+
+.batik {
+  background-image: url("/images/batik-pattern.svg");
+  background-repeat: repeat;
+  background-size: 520px;
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-xl px-5 py-2.5 text-base font-semibold text-white;
+    background: var(--red);
+  }
+  .btn-primary:hover {
+    background: var(--blue);
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center rounded-xl border px-5 py-2.5 text-base font-semibold;
+    border-color: var(--line);
+    background: rgba(255,255,255,0.85);
+  }
+  .btn-outline:hover {
+    background: #ffffff;
+  }
+
+  .section-title {
+    @apply text-3xl sm:text-4xl font-extrabold tracking-tight;
+  }
+
+  .section-kicker {
+    @apply text-sm font-bold uppercase tracking-wider;
+    color: var(--muted);
+  }
 }
