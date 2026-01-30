@@ -16,13 +16,37 @@ function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n));
 }
 
+type Theme = "light" | "dark";
+
+function applyTheme(theme: Theme) {
+  document.documentElement.dataset.theme = theme;
+}
+
+function getInitialTheme(): Theme {
+  if (typeof window === "undefined") return "light";
+  const saved = window.localStorage.getItem("theme") as Theme | null;
+  if (saved === "light" || saved === "dark") return saved;
+
+  const prefersDark =
+    window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  return prefersDark ? "dark" : "light";
+}
+
 export default function Navbar() {
   const [active, setActive] = useState<string>("about");
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const rafRef = useRef<number | null>(null);
+  const [theme, setTheme] = useState<Theme>("light");
 
+  const rafRef = useRef<number | null>(null);
   const items = useMemo(() => NAV, []);
+
+  useEffect(() => {
+    // init theme
+    const t = getInitialTheme();
+    setTheme(t);
+    applyTheme(t);
+  }, []);
 
   useEffect(() => {
     // Sticky polish + scroll-driven gradient shift
@@ -38,8 +62,6 @@ export default function Navbar() {
         const doc = document.documentElement;
         const max = Math.max(1, doc.scrollHeight - window.innerHeight);
         const progress = clamp(y / max, 0, 1);
-
-        // shift from 0% -> 100%
         doc.style.setProperty("--accent-x", `${Math.round(progress * 100)}%`);
       });
     };
@@ -60,7 +82,6 @@ export default function Navbar() {
 
     const obs = new IntersectionObserver(
       (entries) => {
-        // choose the most visible entry
         const visible = entries
           .filter((e) => e.isIntersecting)
           .sort((a, b) => (b.intersectionRatio ?? 0) - (a.intersectionRatio ?? 0))[0];
@@ -69,7 +90,6 @@ export default function Navbar() {
       },
       {
         root: null,
-        // offset for sticky navbar
         rootMargin: "-88px 0px -60% 0px",
         threshold: [0.12, 0.2, 0.3, 0.4, 0.55],
       }
@@ -86,7 +106,7 @@ export default function Navbar() {
     const el = document.getElementById(id);
     if (!el) return;
 
-    const navOffset = 92; // sticky height
+    const navOffset = 92;
     const top = el.getBoundingClientRect().top + window.scrollY - navOffset;
 
     window.history.replaceState(null, "", `#${id}`);
@@ -94,15 +114,23 @@ export default function Navbar() {
     setActive(id);
   };
 
+  const toggleTheme = () => {
+    const next: Theme = theme === "dark" ? "light" : "dark";
+    setTheme(next);
+    applyTheme(next);
+    window.localStorage.setItem("theme", next);
+  };
+
   return (
     <header className="sticky top-0 z-[9999]">
       <div className="accent-bar" />
       <div
-        className={[
-          "w-full border-b",
-          scrolled ? "bg-white/80 backdrop-blur-xl shadow-[0_10px_28px_rgba(11,18,32,0.10)]" : "bg-white/70 backdrop-blur-lg",
-        ].join(" ")}
-        style={{ borderColor: "var(--line)" }}
+        className="w-full border-b backdrop-blur-xl"
+        style={{
+          borderColor: "var(--line)",
+          backgroundColor: scrolled ? "var(--nav-bg-scrolled)" : "var(--nav-bg)",
+          boxShadow: scrolled ? "0 10px 28px rgba(0,0,0,0.12)" : "none",
+        }}
       >
         <div className="wrap">
           <div className="flex h-[78px] items-center justify-between">
@@ -118,8 +146,8 @@ export default function Navbar() {
               aria-label="IDECN Home"
             >
               <div
-                className="h-10 w-10 rounded-full border bg-white/60"
-                style={{ borderColor: "var(--line)" }}
+                className="h-10 w-10 rounded-full border"
+                style={{ borderColor: "var(--line)", background: "var(--surface2)" }}
               />
               <div className="leading-tight">
                 <div className="text-[15px] font-extrabold tracking-tight">IDECN</div>
@@ -132,8 +160,8 @@ export default function Navbar() {
             {/* Desktop nav */}
             <nav className="hidden items-center gap-2 md:flex" aria-label="Primary">
               <div
-                className="flex items-center gap-1 rounded-full border bg-white/65 p-1 backdrop-blur"
-                style={{ borderColor: "var(--line)" }}
+                className="flex items-center gap-1 rounded-full border p-1 backdrop-blur"
+                style={{ borderColor: "var(--line)", background: "var(--surface2)" }}
               >
                 {items.map((it) => {
                   const isActive = active === it.id;
@@ -148,14 +176,13 @@ export default function Navbar() {
                       ].join(" ")}
                     >
                       {it.label}
-                      {/* underline */}
                       <span
                         className={[
                           "absolute left-4 right-4 -bottom-[2px] h-[3px] rounded-full",
                           isActive ? "opacity-100" : "opacity-0",
                         ].join(" ")}
                         style={{
-                          backgroundImage: "linear-gradient(90deg, var(--red), #fff, var(--blue))",
+                          backgroundImage: "linear-gradient(90deg, var(--red), rgba(255,255,255,0.25), var(--blue))",
                           transition: "opacity 180ms ease",
                         }}
                       />
@@ -164,21 +191,37 @@ export default function Navbar() {
                 })}
               </div>
 
-              <a href="#contact" onClick={scrollToId("contact")} className="btn btn-primary ml-3">
+              <button
+                className="btn ml-3"
+                onClick={toggleTheme}
+                type="button"
+                aria-label="Toggle dark mode"
+                title="Toggle theme"
+              >
+                {theme === "dark" ? "Light" : "Dark"}
+              </button>
+
+              <a href="#contact" onClick={scrollToId("contact")} className="btn btn-primary ml-2">
                 Contact
               </a>
             </nav>
 
             {/* Mobile */}
             <div className="md:hidden flex items-center gap-2">
+              <button className="btn" onClick={toggleTheme} type="button" aria-label="Toggle dark mode">
+                {theme === "dark" ? "Light" : "Dark"}
+              </button>
+
               <a href="#contact" onClick={scrollToId("contact")} className="btn btn-primary">
                 Contact
               </a>
+
               <button
                 className="btn"
                 onClick={() => setOpen((v) => !v)}
                 aria-label="Toggle menu"
                 aria-expanded={open}
+                type="button"
               >
                 <span className="text-[16px] font-extrabold">{open ? "Close" : "Menu"}</span>
               </button>
@@ -187,10 +230,7 @@ export default function Navbar() {
 
           {/* Mobile menu panel */}
           {open && (
-            <div
-              className="md:hidden pb-4"
-              style={{ borderTop: "1px solid var(--line)" }}
-            >
+            <div className="md:hidden pb-4" style={{ borderTop: "1px solid var(--line)" }}>
               <div className="mt-3 grid gap-2">
                 {items.map((it) => (
                   <a
@@ -198,10 +238,10 @@ export default function Navbar() {
                     href={`#${it.id}`}
                     onClick={scrollToId(it.id)}
                     className={[
-                      "rounded-2xl border bg-white/75 px-4 py-3 text-[16px] font-extrabold backdrop-blur",
+                      "rounded-2xl border px-4 py-3 text-[16px] font-extrabold backdrop-blur",
                       active === it.id ? "text-[var(--ink)]" : "text-[color:var(--muted)]",
                     ].join(" ")}
-                    style={{ borderColor: "var(--line)" }}
+                    style={{ borderColor: "var(--line)", background: "var(--surface2)" }}
                   >
                     {it.label}
                   </a>
