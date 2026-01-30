@@ -1,131 +1,344 @@
 @import "tailwindcss";
 
+/* =========================
+   Theme tokens (no gradients)
+   ========================= */
 :root {
   --bg: #ffffff;
-  --fg: #0b1220;
+  --bg2: #f6f7f9;
+  --ink: #0b1220;
+  --muted: #5b6475;
+  --line: rgba(15, 23, 42, 0.14);
 
-  --muted: rgba(11, 18, 32, 0.70);
-  --muted2: rgba(11, 18, 32, 0.55);
-  --line: rgba(11, 18, 32, 0.12);
-
-  --red: #d11f2a;
-  --blue: #1f4ed8;
+  --red: #d61f1f;
+  --blue: #1d4ed8;
+  --white: #ffffff;
 
   --radius: 22px;
+  --shadow: 0 16px 40px rgba(2, 6, 23, 0.08);
 }
 
 html {
-  font-size: 18px;
   scroll-behavior: smooth;
 }
 
 body {
-  color: var(--fg);
+  color: var(--ink);
   background: var(--bg);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue",
+    "Apple Color Emoji", "Segoe UI Emoji";
+  font-size: 17px;
+  line-height: 1.65;
 }
 
-/* ===== custom utility classes (NO @apply) ===== */
-.containerX {
+@media (min-width: 1024px) {
+  body {
+    font-size: 18px; /* bigger on desktop */
+  }
+}
+
+/* Offset anchor jumps due to sticky navbar */
+section[id] {
+  scroll-margin-top: 92px;
+}
+
+/* =========================
+   Layout helpers (plain CSS)
+   ========================= */
+.wrap {
   width: 100%;
-  max-width: 72rem; /* = 6xl */
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-}
-
-.h1 {
-  font-size: 2.35rem;
-  line-height: 1.05;
-  font-weight: 900;
-  letter-spacing: -0.02em;
-}
-@media (min-width: 768px) {
-  .h1 {
-    font-size: 4.1rem;
-  }
-}
-
-.h2 {
-  font-size: 1.7rem;
-  line-height: 1.15;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-}
-@media (min-width: 768px) {
-  .h2 {
-    font-size: 2.35rem;
-  }
-}
-
-.lead {
-  font-size: 1.05rem;
-  line-height: 1.7;
-  color: var(--muted);
-}
-@media (min-width: 768px) {
-  .lead {
-    font-size: 1.2rem;
-  }
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 22px;
 }
 
 .kicker {
-  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: var(--muted2);
+  color: var(--muted);
 }
 
+.h1 {
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+  font-size: clamp(44px, 5.8vw, 78px);
+}
+
+.h2 {
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+  font-size: clamp(28px, 3.2vw, 44px);
+}
+
+.lead {
+  font-size: clamp(17px, 1.4vw, 20px);
+  color: var(--muted);
+}
+
+.section {
+  padding: 92px 0;
+}
+
+.section.alt {
+  background: var(--bg2);
+}
+
+.hr {
+  height: 1px;
+  background: var(--line);
+  width: 100%;
+}
+
+/* =========================
+   Batik background layer
+   ========================= */
+.batik-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("/images/batik-pattern.svg");
+  background-repeat: repeat;
+  background-size: 560px;
+  opacity: 0.08;
+  mix-blend-mode: multiply;
+  z-index: -2;
+}
+
+/* A clean “sheet” so text stays readable over pattern */
+.sheet {
+  position: relative;
+  z-index: 0;
+}
+
+/* =========================
+   Buttons (no gradients)
+   ========================= */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 9999px;
-  padding: 0.75rem 1.25rem;
-  font-weight: 600;
-  transition: 150ms ease;
+  gap: 10px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-weight: 800;
   border: 1px solid var(--line);
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, color 160ms ease;
+  user-select: none;
+}
+
+.btn:active {
+  transform: translateY(1px);
 }
 
 .btn-primary {
   background: var(--red);
-  color: #fff;
-  border-color: transparent;
+  color: var(--white);
+  border-color: rgba(214, 31, 31, 0.45);
+  box-shadow: 0 10px 22px rgba(214, 31, 31, 0.18);
 }
+
 .btn-primary:hover {
-  filter: brightness(0.95);
+  box-shadow: 0 14px 30px rgba(214, 31, 31, 0.22);
 }
 
 .btn-ghost {
-  background: #fff;
-  color: var(--fg);
-}
-.btn-ghost:hover {
-  background: rgba(11, 18, 32, 0.04);
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--ink);
 }
 
-.chip {
+.btn-ghost:hover {
+  box-shadow: var(--shadow);
+}
+
+.btn-outline-blue {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(29, 78, 216, 0.35);
+  color: var(--blue);
+}
+
+.btn-outline-blue:hover {
+  box-shadow: 0 16px 40px rgba(29, 78, 216, 0.12);
+}
+
+/* =========================
+   Navbar
+   ========================= */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+
+.flagbar {
+  height: 3px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.flagbar .r {
+  background: var(--red);
+}
+.flagbar .w {
+  background: var(--white);
+}
+.flagbar .b {
+  background: var(--blue);
+}
+
+.nav-inner {
+  display: grid;
+  grid-template-columns: 260px 1fr 170px;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 0;
+}
+
+@media (max-width: 900px) {
+  .nav-inner {
+    grid-template-columns: 1fr auto;
+  }
+  .nav-links {
+    display: none;
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-badge {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.brand-title {
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.brand-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: -2px;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+  font-weight: 700;
+  color: rgba(11, 18, 32, 0.82);
+}
+
+.nav-links a {
+  padding: 10px 10px;
+  border-radius: 999px;
+}
+
+.nav-links a:hover {
+  background: rgba(15, 23, 42, 0.05);
+}
+
+/* =========================
+   Apple-like panels
+   ========================= */
+.panel {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow);
+}
+
+.panel.pad {
+  padding: 22px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.badges {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  border-radius: 9999px;
-  padding: 0.45rem 1rem;
-  font-size: 0.95rem;
-  font-weight: 600;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.85);
+  font-weight: 800;
+  font-size: 13px;
+}
+.badge .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+}
+.dot.red {
+  background: var(--red);
+}
+.dot.blue {
+  background: var(--blue);
 }
 
-.divider {
-  height: 1px;
-  background: var(--line);
+.split {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 34px;
+  align-items: start;
 }
 
-/* batik overlay */
-.batik {
-  background-image: url("/images/batik-pattern.svg");
-  background-size: 720px;
-  background-repeat: repeat;
-  background-position: center;
+@media (max-width: 900px) {
+  .split {
+    grid-template-columns: 1fr;
+  }
+}
+
+.list {
+  display: grid;
+  gap: 12px;
+}
+
+.li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  color: rgba(11, 18, 32, 0.88);
+}
+
+.bullet {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  margin-top: 9px;
+  flex: 0 0 auto;
+  background: var(--red);
+}
+
+.bullet.blue {
+  background: var(--blue);
+}
+
+.footer {
+  padding: 34px 0;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
 }
