@@ -1,42 +1,31 @@
-@import "tailwindcss";
+import type { ReactNode } from "react";
+import "./globals.css";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
-/* ================
-   Proposal-style theme (LIGHT)
-   ================ */
-:root {
-  --bg: #f6f2ea;       /* creamy paper */
-  --surface: #ffffff;  /* cards */
-  --ink: #1f2937;      /* text */
-  --muted: #6b7280;    /* secondary text */
-  --line: rgba(31, 41, 55, 0.12);
-  --accent: #e0652f;   /* proposal orange */
-  --accent-2: #f59e0b; /* warm */
-}
+export const metadata = {
+  title: "IDECN — Indonesia Education & Cultural Network",
+  description:
+    "A nonprofit organization fostering cross-cultural understanding, educational opportunities, and community connections between Indonesia and the U.S.",
+};
 
-html {
-  scroll-behavior: smooth;
-}
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        <div className="relative min-h-screen">
+          {/* background layers */}
+          <div className="site-bg pointer-events-none absolute inset-0 -z-20" aria-hidden />
+          <div className="batik pointer-events-none absolute inset-0 -z-10 opacity-[0.08]" aria-hidden />
 
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--ink);
-}
+          {/* top ribbon (red-white-blue) */}
+          <div className="h-1 w-full bg-[linear-gradient(90deg,#d32f2f_0%,#ffffff_50%,#0b2d5c_100%)]" />
 
-/* selection */
-::selection {
-  background: rgba(224, 101, 47, 0.22);
-}
-
-a {
-  color: inherit;
-  text-underline-offset: 3px;
-}
-
-/* helper background pattern (subtle) */
-.proposal-bg {
-  background:
-    radial-gradient(1200px 600px at 10% 0%, rgba(224, 101, 47, 0.10), transparent 55%),
-    radial-gradient(900px 600px at 90% 10%, rgba(245, 158, 11, 0.10), transparent 60%),
-    linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.0));
+          <Navbar />
+          {children}
+          <Footer />
+        </div>
+      </body>
+    </html>
+  );
 }
