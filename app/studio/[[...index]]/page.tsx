@@ -1,8 +1,9 @@
-import StudioShell from "./StudioShell";
+"use client";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+import dynamicImport from "next/dynamic";
+
+const Studio = dynamicImport(() => import("./Studio"), { ssr: false });
 
 export default function StudioPage() {
-  return <StudioShell />;
+  return <Studio />;
 }
