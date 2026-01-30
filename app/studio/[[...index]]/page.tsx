@@ -1,8 +1,9 @@
-import dynamic from "next/dynamic";
+import dynamicImport from "next/dynamic";
 
-export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+export const revalidate = 0;
 
-const Studio = dynamic(() => import("./Studio"), { ssr: false });
+const Studio = dynamicImport(() => import("./Studio"), { ssr: false });
 
 export default function StudioPage() {
   return <Studio />;
