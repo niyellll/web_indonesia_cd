@@ -10,15 +10,13 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="min-h-screen text-[16px] sm:text-[17px] text-[var(--ink)]">
-        {/* background batik */}
-        <div className="pointer-events-none fixed inset-0 -z-10">
-          <div className="absolute inset-0 bg-white" />
-          <div className="absolute inset-0 batik opacity-[0.08]" />
+      <body className="proposal-bg">
+        <div className="relative min-h-screen">
+          <div className="site-bg pointer-events-none absolute inset-0 -z-20" aria-hidden />
+          <div className="batik pointer-events-none absolute inset-0 -z-10" aria-hidden />
+          <Navbar />
+          {children}
         </div>
-
-        <Navbar />
-        {children}
       </body>
     </html>
   );
