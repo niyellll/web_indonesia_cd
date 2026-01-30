@@ -50,7 +50,7 @@ body{
   z-index: -20;
   pointer-events: none;
   opacity: 0.08;
-  background-image: url("/images/batik-pattern.svg");
+  background-image: url("/batik-pattern.svg");
   background-repeat: repeat;
   background-size: 420px auto;
   filter: grayscale(1);
