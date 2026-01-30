@@ -1,187 +1,178 @@
-/* app/globals.css */
 @import "tailwindcss";
 
+/* =========================
+   Theme tokens (CSS vars)
+   ========================= */
 :root {
-  --bg: #ffffff;
-  --ink: #0b1220;
-  --muted: rgba(11, 18, 32, 0.66);
-  --line: rgba(11, 18, 32, 0.14);
+  --bg: #fbfbfc;
+  --fg: #0b1220;
+  --muted: rgba(11, 18, 32, 0.68);
+  --muted2: rgba(11, 18, 32, 0.52);
 
-  --red: #d61f1f;
-  --blue: #1f5bd6;
+  --card: rgba(255, 255, 255, 0.75);
+  --cardSolid: #ffffff;
+  --border: rgba(15, 23, 42, 0.12);
 
-  --surface: rgba(255, 255, 255, 0.92);
-  --surface2: rgba(255, 255, 255, 0.72);
+  --shadow: 0 16px 50px rgba(2, 6, 23, 0.10);
+  --shadowSoft: 0 10px 28px rgba(2, 6, 23, 0.08);
 
-  --card: rgba(255, 255, 255, 0.84);
-  --glass: rgba(255, 255, 255, 0.72);
+  --red: #e11d2e;
+  --blue: #1d4ed8;
 
-  --shadow: 0 18px 40px rgba(11, 18, 32, 0.12);
-  --shadow-soft: 0 10px 26px rgba(11, 18, 32, 0.08);
+  --pill: rgba(255, 255, 255, 0.7);
 
-  /* navbar backgrounds (light) */
-  --nav-bg: rgba(255, 255, 255, 0.70);
-  --nav-bg-scrolled: rgba(255, 255, 255, 0.84);
+  --navBg: rgba(255, 255, 255, 0.65);
+  --navBorder: rgba(15, 23, 42, 0.10);
 
-  /* scroll-driven accent */
-  --accent-x: 0%;
+  --batikOpacity: 0.18; /* lebih terlihat (light) */
+  --batikScale: 820px;
+
+  --scroll: 0; /* 0..1 set by JS */
 }
 
-/* Dark mode via html[data-theme="dark"] */
-html[data-theme="dark"] {
-  --bg: #0a0f18;
-  --ink: #f3f6ff;
-  --muted: rgba(243, 246, 255, 0.74);
-  --line: rgba(243, 246, 255, 0.16);
+.dark {
+  --bg: #070a10;
+  --fg: #f2f5ff;
+  --muted: rgba(242, 245, 255, 0.70);
+  --muted2: rgba(242, 245, 255, 0.55);
 
-  --surface: rgba(16, 22, 34, 0.92);
-  --surface2: rgba(16, 22, 34, 0.72);
+  --card: rgba(10, 14, 22, 0.68);
+  --cardSolid: #0a0e16;
+  --border: rgba(148, 163, 184, 0.16);
 
-  --card: rgba(16, 22, 34, 0.78);
-  --glass: rgba(16, 22, 34, 0.62);
+  --shadow: 0 18px 60px rgba(0, 0, 0, 0.55);
+  --shadowSoft: 0 12px 34px rgba(0, 0, 0, 0.45);
 
-  --shadow: 0 18px 46px rgba(0, 0, 0, 0.46);
-  --shadow-soft: 0 12px 28px rgba(0, 0, 0, 0.32);
+  --pill: rgba(10, 14, 22, 0.62);
 
-  /* navbar backgrounds (dark) */
-  --nav-bg: rgba(10, 14, 22, 0.62);
-  --nav-bg-scrolled: rgba(10, 14, 22, 0.78);
+  --navBg: rgba(10, 14, 22, 0.62);
+  --navBorder: rgba(148, 163, 184, 0.16);
+
+  --batikOpacity: 0.14; /* tetap terlihat (dark) */
 }
 
+/* =========================
+   Base
+   ========================= */
+html,
+body {
+  height: 100%;
+}
+
+.body-root {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--fg);
+  overflow-x: hidden;
+}
+
+/* Smooth scroll */
 html {
   scroll-behavior: smooth;
 }
 
-body {
-  background: var(--bg);
-  color: var(--ink);
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
-    Arial, "Apple Color Emoji", "Segoe UI Emoji";
-  font-size: 18px;
-  line-height: 1.6;
-  overflow-x: hidden;
-
-  transition: background-color 180ms ease, color 180ms ease;
+/* Sticky navbar offset when clicking anchor */
+section {
+  scroll-margin-top: 96px;
 }
 
-/* Prevent sticky bugs: avoid overflow clipping parents */
-.page {
-  position: relative;
-  z-index: 1;
+/* reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
-/* ===== Background ===== */
-.site-bg {
+/* =========================
+   Background layers
+   ========================= */
+.bg-wash {
+  position: fixed;
+  inset: 0;
+  z-index: -30;
+  pointer-events: none;
+
+  /* Bukan gradient “full background”, cuma glow halus biar hidup */
+  background:
+    radial-gradient(900px 500px at 20% -10%, rgba(225, 29, 46, 0.10), transparent 55%),
+    radial-gradient(900px 500px at 90% 0%, rgba(29, 78, 216, 0.10), transparent 55%),
+    var(--bg);
+}
+
+.bg-batik {
   position: fixed;
   inset: 0;
   z-index: -20;
-  background:
-    radial-gradient(1200px 600px at 50% -10%, rgba(31, 91, 214, 0.08), transparent 60%),
-    radial-gradient(1000px 520px at 10% 10%, rgba(214, 31, 31, 0.06), transparent 55%),
-    radial-gradient(900px 520px at 90% 10%, rgba(31, 91, 214, 0.05), transparent 55%),
-    #fff;
+  pointer-events: none;
+
+  background-image: url("/batik-pattern.svg");
+  background-repeat: repeat;
+  background-size: var(--batikScale);
+  opacity: var(--batikOpacity);
+  filter: saturate(0.9) contrast(1.02);
 }
 
-html[data-theme="dark"] .site-bg {
-  background:
-    radial-gradient(1200px 700px at 50% -20%, rgba(31, 91, 214, 0.18), transparent 62%),
-    radial-gradient(1000px 600px at 10% 10%, rgba(214, 31, 31, 0.14), transparent 58%),
-    radial-gradient(900px 600px at 90% 10%, rgba(31, 91, 214, 0.12), transparent 58%),
-    #070b12;
+.dark .bg-batik {
+  /* supaya batik tetap kelihatan di dark */
+  filter: invert(1) saturate(0.9) contrast(1.05);
 }
 
-.batik-bg {
-  opacity: 0.16; /* naikkan sedikit */
-  background-size: 820px auto; /* sedikit lebih “padat” */
-  filter: grayscale(100%) contrast(110%);
-  -webkit-mask-image: radial-gradient(circle at 50% 22%, rgba(0, 0, 0, 0.95), transparent 74%);
-  mask-image: radial-gradient(circle at 50% 22%, rgba(0, 0, 0, 0.95), transparent 74%);
-}
-
-html[data-theme="dark"] .batik-bg {
-  opacity: 0.12; /* naikkan sedikit */
-  background-size: 820px auto;
-  filter: invert(1) grayscale(100%) contrast(105%);
-  -webkit-mask-image: radial-gradient(circle at 50% 22%, rgba(0, 0, 0, 0.95), transparent 78%);
-  mask-image: radial-gradient(circle at 50% 22%, rgba(0, 0, 0, 0.95), transparent 78%);
-}
-
-
-/* ===== Layout helpers ===== */
-.wrap {
-  width: 100%;
-  max-width: 1160px;
-  margin: 0 auto;
-  padding-left: 24px;
-  padding-right: 24px;
-}
-
-@media (max-width: 640px) {
-  body { font-size: 16px; }
-  .wrap { padding-left: 16px; padding-right: 16px; }
-}
-
-/* ===== Typography ===== */
+/* =========================
+   Typography helpers
+   ========================= */
 .kicker {
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 700;
   font-size: 12px;
-  color: var(--muted);
-  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--muted2);
 }
 
 .h1 {
   font-weight: 900;
   letter-spacing: -0.03em;
-  line-height: 1.02;
-  font-size: clamp(42px, 5vw, 72px);
+  line-height: 0.96;
 }
 
 .h2 {
   font-weight: 900;
   letter-spacing: -0.02em;
-  line-height: 1.06;
-  font-size: clamp(32px, 3.4vw, 48px);
-}
-
-.h3 {
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  line-height: 1.15;
-  font-size: clamp(20px, 2vw, 26px);
+  line-height: 1.05;
 }
 
 .lead {
   color: var(--muted);
-  font-size: clamp(16px, 1.35vw, 20px);
-  line-height: 1.7;
-}
-
-.p {
-  color: var(--muted);
-  font-size: 16.5px;
   line-height: 1.75;
+  font-size: 18px;
 }
 
-/* ===== Cards & Buttons ===== */
+@media (min-width: 768px) {
+  .lead {
+    font-size: 19px;
+  }
+}
+
+/* =========================
+   Card styles
+   ========================= */
 .card {
   background: var(--card);
-  border: 1px solid var(--line);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadowSoft);
   border-radius: 22px;
-  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(12px);
 }
 
-.card-strong {
-  background: var(--surface);
-  border: 1px solid rgba(11, 18, 32, 0.14);
-  border-radius: 26px;
-  box-shadow: var(--shadow);
+.card-solid {
+  background: var(--cardSolid);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadowSoft);
+  border-radius: 22px;
 }
 
-html[data-theme="dark"] .card-strong {
-  border-color: var(--line);
-}
-
+/* =========================
+   Buttons
+   ========================= */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -189,83 +180,39 @@ html[data-theme="dark"] .card-strong {
   gap: 10px;
   border-radius: 999px;
   padding: 12px 16px;
-  font-weight: 800;
-  font-size: 15px;
-  border: 1px solid var(--line);
-  background: var(--surface);
-  color: var(--ink);
+  font-weight: 700;
+  border: 1px solid var(--border);
+  background: var(--pill);
+  color: var(--fg);
   transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
-  box-shadow: 0 8px 18px rgba(11, 18, 32, 0.08);
-}
-
-html[data-theme="dark"] .btn {
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
 }
 
 .btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 14px 28px rgba(11, 18, 32, 0.12);
-}
-
-html[data-theme="dark"] .btn:hover {
-  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.42);
+  box-shadow: var(--shadowSoft);
 }
 
 .btn-primary {
   background: var(--red);
+  border-color: rgba(0, 0, 0, 0.06);
   color: white;
-  border-color: rgba(0,0,0,0);
-  box-shadow: 0 14px 28px rgba(214, 31, 31, 0.24);
 }
 
 .btn-primary:hover {
-  box-shadow: 0 18px 34px rgba(214, 31, 31, 0.30);
+  filter: brightness(1.03);
 }
 
 .btn-ghost {
-  background: var(--surface2);
-  backdrop-filter: blur(8px);
+  background: transparent;
 }
 
-.pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: var(--surface2);
-  backdrop-filter: blur(8px);
-  color: var(--muted);
-  font-weight: 800;
-  font-size: 13px;
-}
-
-.dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  background: var(--muted);
-  opacity: 0.7;
-}
-
-/* ===== Navbar accent bar (scroll-driven gradient shift) ===== */
-.accent-bar {
-  height: 4px;
+/* =========================
+   Top gradient bar (moves with scroll)
+   ========================= */
+.top-gradient-bar {
+  height: 3px;
   width: 100%;
-  background-image: linear-gradient(90deg, var(--red), #ffffff, var(--blue));
+  background: linear-gradient(90deg, var(--red), rgba(255,255,255,0.95), var(--blue));
   background-size: 200% 100%;
-  background-position: var(--accent-x) 0;
-  transition: background-position 120ms linear;
-}
-
-html[data-theme="dark"] .accent-bar {
-  background-image: linear-gradient(90deg, var(--red), rgba(255,255,255,0.12), var(--blue));
-}
-
-/* Reduce motion */
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  .btn { transition: none; }
-  .accent-bar { transition: none; }
+  background-position: calc(var(--scroll) * 100%) 0;
 }
