@@ -129,12 +129,10 @@ export default async function Page() {
                 </div>
               </div>
 
-              <button
-                className="btn mt-5 w-full"
-                onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
-              >
+              {/* FIX: no onClick in Server Component */}
+              <a className="btn mt-5 w-full" href="#contact">
                 Talk to us
-              </button>
+              </a>
             </div>
           </aside>
         </div>
@@ -252,21 +250,13 @@ export default async function Page() {
               <div className="text-xl font-extrabold">{p.name}</div>
               <div className="mt-2 text-sm font-bold text-[var(--muted)]">{p.type}</div>
               {p.website ? (
-                <a
-                  className="btn mt-5 w-full"
-                  href={p.website}
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <a className="btn mt-5 w-full" href={p.website} target="_blank" rel="noreferrer">
                   Visit website
                 </a>
               ) : (
-                <button
-                  className="btn mt-5 w-full"
-                  onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
-                >
+                <a className="btn mt-5 w-full" href="#contact">
                   Partner with us
-                </button>
+                </a>
               )}
             </div>
           ))}
@@ -302,12 +292,11 @@ export default async function Page() {
             <div key={x.title} className="card p-6">
               <div className="text-xl font-extrabold">{x.title}</div>
               <div className="mt-2 text-[15px] leading-7 text-[var(--muted)]">{x.desc}</div>
-              <button
-                className="btn btn-primary mt-5 w-full"
-                onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
-              >
+
+              {/* FIX: no onClick in Server Component */}
+              <a className="btn btn-primary mt-5 w-full" href="#contact">
                 {x.cta}
-              </button>
+              </a>
             </div>
           ))}
         </div>
