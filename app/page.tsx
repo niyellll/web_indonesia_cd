@@ -1,4 +1,6 @@
 import { getEvents, getPartners, getPrograms, getSite } from "../lib/cms";
+import type React from "react";
+
 
 function Dot({ color }: { color: "red" | "blue" | "gray" }) {
   const c =
@@ -224,7 +226,7 @@ export default async function Page() {
     const META: Record<
       string,
       {
-        icon: JSX.Element;
+        icon: React.ReactNode;
         tags: string[];
         accent: string;
       }
