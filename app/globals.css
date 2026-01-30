@@ -91,26 +91,21 @@ html[data-theme="dark"] .site-bg {
 }
 
 .batik-bg {
-  position: fixed;
-  inset: 0;
-  z-index: -10;
-  pointer-events: none;
-  opacity: 0.10;
-  background-image: url("/batik-pattern.svg");
-  background-size: 900px auto;
-  background-repeat: repeat;
-
-  filter: grayscale(100%) contrast(90%);
-  -webkit-mask-image: radial-gradient(circle at 50% 20%, rgba(0, 0, 0, 0.9), transparent 68%);
-  mask-image: radial-gradient(circle at 50% 20%, rgba(0, 0, 0, 0.9), transparent 68%);
+  opacity: 0.16; /* naikkan sedikit */
+  background-size: 820px auto; /* sedikit lebih “padat” */
+  filter: grayscale(100%) contrast(110%);
+  -webkit-mask-image: radial-gradient(circle at 50% 22%, rgba(0, 0, 0, 0.95), transparent 74%);
+  mask-image: radial-gradient(circle at 50% 22%, rgba(0, 0, 0, 0.95), transparent 74%);
 }
 
 html[data-theme="dark"] .batik-bg {
-  opacity: 0.08;
-  filter: invert(1) grayscale(100%) contrast(85%);
-  -webkit-mask-image: radial-gradient(circle at 50% 20%, rgba(0, 0, 0, 0.9), transparent 70%);
-  mask-image: radial-gradient(circle at 50% 20%, rgba(0, 0, 0, 0.9), transparent 70%);
+  opacity: 0.12; /* naikkan sedikit */
+  background-size: 820px auto;
+  filter: invert(1) grayscale(100%) contrast(105%);
+  -webkit-mask-image: radial-gradient(circle at 50% 22%, rgba(0, 0, 0, 0.95), transparent 78%);
+  mask-image: radial-gradient(circle at 50% 22%, rgba(0, 0, 0, 0.95), transparent 78%);
 }
+
 
 /* ===== Layout helpers ===== */
 .wrap {
