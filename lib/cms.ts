@@ -1,6 +1,11 @@
+// lib/cms.ts
 import { createClient, groq } from "next-sanity";
 
-export type Program = { title: string; bullets: string[] };
+export type Program = {
+  title: string;
+  bullets: string[];
+};
+
 export type EventItem = {
   title: string;
   dateText: string;
@@ -9,11 +14,21 @@ export type EventItem = {
   highlights: string[];
   featured?: boolean;
 };
-export type Partner = { name: string; type: string; website?: string };
+
+export type Partner = {
+  name: string;
+  type: string;
+  website?: string;
+};
 
 export type SiteSettings = {
   orgName: string;
   tagline: string;
+
+  // ✅ ditambah biar app/page.tsx bisa pakai site.heroTitle
+  heroTitle?: string;
+  heroSubtitle?: string;
+
   purpose: string;
   audience: string[];
   email: string;
@@ -28,127 +43,122 @@ const FALLBACK: {
   partners: Partner[];
 } = {
   site: {
-    orgName: "Indonesia Education & Cultural Network (IDECN)",
-    tagline:
-      "Fostering cross-cultural understanding, educational opportunities, and community connections between Indonesia and the U.S.",
+    orgName: "IDECN",
+    tagline: "Indonesia ↔ U.S.",
+    heroTitle: "Indonesia Education & Cultural Network",
+    heroSubtitle:
+      "A U.S.-based nonprofit dedicated to fostering cross-cultural understanding, educational opportunities, and community connections between Indonesia and the United States.",
     purpose:
-      "Present IDECN clearly for donors, investors, and partners—so they can quickly understand the foundation and confidently support proposals and collaborations.",
-    audience: ["Donors", "Investors", "Partners"],
-    email: "hello@idecn.org",
+      "Strengthen education and cultural exchange between Indonesia and the U.S. through programs, partnerships, and community-driven events.",
+    audience: ["Students", "Educators", "Diaspora", "Partners", "Donors"],
+    email: "contact@idecn.org",
     proposalUrl: "/indonesia-on-the-creek-proposal.pdf",
-    themeNote: "Red–White–Blue + Batik identity (light proposal-style).",
+    themeNote: "Red • White • Blue — Indonesia ↔ U.S.",
   },
   programs: [
     {
-      title: "Education & Scholarships",
+      title: "Scholarship & Study Guidance",
       bullets: [
-        "Scholarship guidance and support for Indonesian students in the U.S.",
-        "Exchange programs and study tours for students and educators.",
-        "Language learning programs (English & Indonesian).",
-        "Internship connections to build professional experience.",
+        "Mentorship for U.S. admissions",
+        "Essay & CV clinics",
+        "Webinars with alumni",
       ],
     },
     {
-      title: "Cultural Exchange",
-      bullets: [
-        "Cultural festivals and events showcasing arts, music, dance, food, and traditions.",
-        "Seminars/workshops to promote cross-cultural understanding and collaboration.",
-      ],
+      title: "Cultural Exchange Events",
+      bullets: ["Culinary Day", "Film & discussion nights", "Community showcases"],
     },
     {
-      title: "Professional Networking",
-      bullets: [
-        "Mentorship and networking with professionals, alumni, and employers.",
-        "Workshops on cross-cultural communication and international business.",
-      ],
-    },
-    {
-      title: "Community Support",
-      bullets: [
-        "Volunteer opportunities and community-led initiatives.",
-        "Partnership programs with institutions and local organizations.",
-      ],
+      title: "Partnership Programs",
+      bullets: ["University collaborations", "NGO & embassy coordination", "Sponsors"],
     },
   ],
   events: [
     {
-      title: "Indonesia Culinary Day on the Creek",
-      dateText: "Saturday, August 2, 2025 • 11AM–4PM",
-      location: "Carroll Creek Park • Downtown Frederick • Maryland, USA",
+      title: "Culinary Day (Portfolio Highlight)",
+      dateText: "2026",
+      location: "U.S. — Community Venue",
       summary:
-        "A public celebration of Indonesian culture through food, products, performances, and community engagement—free to attend.",
-      highlights: ["Food Bazaar", "Marketplace", "Exhibition", "Cultural Performances", "Interactive Art & Craft"],
+        "A signature community event that demonstrates IDECN’s capability to execute impactful public programs.",
+      highlights: ["Repeatable format", "Multi-stakeholder execution", "Scalable annually"],
       featured: true,
     },
   ],
   partners: [
-    { name: "AACF", type: "Event Host / Community Partner" },
-    { name: "Local Cultural & Community Organizations", type: "Collaboration Partners" },
+    { name: "Universities", type: "Education" },
+    { name: "Diaspora Communities", type: "Community" },
+    { name: "Sponsors & Donors", type: "Funding" },
   ],
 };
 
-const hasSanity =
+const hasSanityEnv =
   !!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID &&
-  !!process.env.NEXT_PUBLIC_SANITY_DATASET;
+  !!process.env.NEXT_PUBLIC_SANITY_DATASET &&
+  !!process.env.NEXT_PUBLIC_SANITY_API_VERSION;
 
-const client = hasSanity
-  ? createClient({
-      projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
-      dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
-      apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || "2025-01-01",
-      useCdn: true,
-    })
-  : null;
+const client = createClient({
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "",
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "",
+  apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || "2025-01-01",
+  useCdn: true,
+});
 
-export async function getSite(): Promise<SiteSettings> {
-  if (!client) return FALLBACK.site;
-  try {
-    const q = groq`*[_type=="siteSettings"][0]{
-      orgName, tagline, purpose, audience, email, proposalUrl, themeNote
-    }`;
-    const data = await client.fetch(q);
-    return data || FALLBACK.site;
-  } catch {
-    return FALLBACK.site;
-  }
+export async function getSite(): Promise<SiteSettings | null> {
+  if (!hasSanityEnv) return FALLBACK.site;
+
+  const q = groq`*[_type=="siteSettings"][0]{
+    orgName,
+    tagline,
+    heroTitle,
+    heroSubtitle,
+    purpose,
+    audience,
+    email,
+    proposalUrl,
+    themeNote
+  }`;
+
+  const data = await client.fetch<SiteSettings | null>(q);
+  return data || FALLBACK.site;
 }
 
 export async function getPrograms(): Promise<Program[]> {
-  if (!client) return FALLBACK.programs;
-  try {
-    const q = groq`*[_type=="program"]|order(order asc){
-      title, bullets
-    }`;
-    const data = await client.fetch(q);
-    return (data && data.length ? data : FALLBACK.programs) as Program[];
-  } catch {
-    return FALLBACK.programs;
-  }
+  if (!hasSanityEnv) return FALLBACK.programs;
+
+  const q = groq`*[_type=="program"]|order(orderRank asc, _createdAt asc){
+    title,
+    bullets
+  }`;
+
+  const data = await client.fetch<Program[]>(q);
+  return data?.length ? data : FALLBACK.programs;
 }
 
 export async function getEvents(): Promise<EventItem[]> {
-  if (!client) return FALLBACK.events;
-  try {
-    const q = groq`*[_type=="event"]|order(order asc){
-      title, dateText, location, summary, highlights, featured
-    }`;
-    const data = await client.fetch(q);
-    return (data && data.length ? data : FALLBACK.events) as EventItem[];
-  } catch {
-    return FALLBACK.events;
-  }
+  if (!hasSanityEnv) return FALLBACK.events;
+
+  const q = groq`*[_type=="event"]|order(featured desc, _createdAt desc){
+    title,
+    dateText,
+    location,
+    summary,
+    highlights,
+    featured
+  }`;
+
+  const data = await client.fetch<EventItem[]>(q);
+  return data?.length ? data : FALLBACK.events;
 }
 
 export async function getPartners(): Promise<Partner[]> {
-  if (!client) return FALLBACK.partners;
-  try {
-    const q = groq`*[_type=="partner"]|order(order asc){
-      name, type, website
-    }`;
-    const data = await client.fetch(q);
-    return (data && data.length ? data : FALLBACK.partners) as Partner[];
-  } catch {
-    return FALLBACK.partners;
-  }
-}
+  if (!hasSanityEnv) return FALLBACK.partners;
 
+  const q = groq`*[_type=="partner"]|order(_createdAt asc){
+    name,
+    type,
+    website
+  }`;
+
+  const data = await client.fetch<Partner[]>(q);
+  return data?.length ? data : FALLBACK.partners;
+}
