@@ -28,7 +28,6 @@ function MoonIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
-
 function SunIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" {...props}>
@@ -44,8 +43,8 @@ function SunIcon(props: React.SVGProps<SVGSVGElement>) {
 }
 
 export default function ThemeToggle() {
-  const [resolved, setResolved] = React.useState<"light" | "dark">("light");
   const [mode, setMode] = React.useState<Mode>("system");
+  const [resolved, setResolved] = React.useState<"light" | "dark">("light");
 
   React.useEffect(() => {
     const saved = (localStorage.getItem(KEY) as Mode | null) ?? "system";

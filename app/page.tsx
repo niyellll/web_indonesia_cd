@@ -1,17 +1,23 @@
 import Reveal from "../components/Reveal";
-import { about, programs, portfolio, partners, getInvolved, hero, site } from "../lib/cms";
+import SpotlightCard from "../components/SpotlightCard";
+import { site, hero, about, programs, portfolio, partners, getInvolved } from "../lib/cms";
 
-function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+function SectionTitle({ eyebrow, title, subtitle }: { eyebrow?: string; title: string; subtitle?: string }) {
   return (
-    <div
-      className={[
-        "rounded-[28px] border border-slate-200/70 bg-white/70 backdrop-blur-xl",
-        "shadow-[0_16px_60px_rgba(2,6,23,0.08)] transition-all duration-500",
-        "dark:border-white/10 dark:bg-slate-900/45 dark:shadow-[0_18px_70px_rgba(0,0,0,0.45)]",
-        className,
-      ].join(" ")}
-    >
-      {children}
+    <div className="text-center">
+      {eyebrow && (
+        <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-red-600 dark:text-red-400">
+          {eyebrow}
+        </div>
+      )}
+      <h2 className="mt-3 text-4xl font-black tracking-tight text-slate-900 dark:text-white md:text-5xl">
+        {title}
+      </h2>
+      {subtitle && (
+        <p className="mx-auto mt-4 max-w-2xl text-base md:text-lg text-slate-600 dark:text-slate-300">
+          {subtitle}
+        </p>
+      )}
     </div>
   );
 }
@@ -19,12 +25,12 @@ function Card({ children, className = "" }: { children: React.ReactNode; classNa
 export default function Page() {
   return (
     <main className="pt-24">
-      {/* HERO (split layout, not like web2) */}
+      {/* HERO (editorial split — distinct from web2) */}
       <section className="mx-auto max-w-7xl px-6 py-16 md:py-20">
-        <div className="grid gap-10 lg:grid-cols-12 lg:items-center">
+        <div className="grid gap-12 lg:grid-cols-12 lg:items-center">
           <div className="lg:col-span-7">
-            <Reveal delayMs={50}>
-              <div className="mb-7 flex flex-wrap gap-3">
+            <Reveal delayMs={40}>
+              <div className="mb-8 flex flex-wrap gap-3">
                 {hero.chips.map((t) => (
                   <span
                     key={t}
@@ -41,9 +47,7 @@ export default function Page() {
             <Reveal delayMs={120}>
               <h1 className="text-5xl font-black tracking-tight text-slate-900 dark:text-white md:text-7xl lg:text-8xl leading-[0.95]">
                 {hero.headingTop}{" "}
-                <span
-                  className="block bg-gradient-to-r from-red-600 via-purple-500 to-blue-600 bg-clip-text text-transparent idecn-shimmer"
-                >
+                <span className="block bg-gradient-to-r from-red-600 via-purple-500 to-blue-600 bg-clip-text text-transparent idecn-shimmer">
                   {hero.headingGradient}
                 </span>
               </h1>
@@ -59,77 +63,67 @@ export default function Page() {
               <div className="mt-10 flex flex-col gap-4 sm:flex-row">
                 <a
                   href={hero.ctas.primary.href}
-                  className="rounded-2xl bg-red-600 px-9 py-4 text-lg font-bold text-white shadow-xl shadow-red-600/20 transition hover:-translate-y-1 hover:bg-red-700"
+                  className="btn-shine rounded-2xl bg-red-600 px-9 py-4 text-lg font-bold text-white shadow-xl shadow-red-600/20 transition hover:-translate-y-1 hover:bg-red-700"
                 >
                   {hero.ctas.primary.label}
                 </a>
 
                 <a
                   href={hero.ctas.proposal.href}
-                  className="rounded-2xl border border-slate-200/70 bg-white/70 px-9 py-4 text-lg font-bold text-slate-900 backdrop-blur transition hover:bg-white
+                  className="btn-shine rounded-2xl border border-slate-200/70 bg-white/70 px-9 py-4 text-lg font-bold text-slate-900 backdrop-blur transition hover:bg-white
                              dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
                 >
                   {hero.ctas.proposal.label}
                 </a>
 
-                {/* FIX: works because section below has id=portfolio, and no overlay blocks clicks */}
+                {/* FIX: anchor works because section below is id="portfolio" + no overlay blocks clicks */}
                 <a
                   href={hero.ctas.portfolio.href}
-                  className="rounded-2xl bg-blue-600 px-9 py-4 text-lg font-bold text-white shadow-xl shadow-blue-600/20 transition hover:-translate-y-1 hover:bg-blue-700"
+                  className="btn-shine rounded-2xl bg-blue-600 px-9 py-4 text-lg font-bold text-white shadow-xl shadow-blue-600/20 transition hover:-translate-y-1 hover:bg-blue-700"
                 >
                   {hero.ctas.portfolio.label}
                 </a>
               </div>
             </Reveal>
+
+            <Reveal delayMs={360}>
+              <div className="mt-10 inline-flex items-center gap-3 text-sm font-semibold text-slate-500 dark:text-slate-400">
+                <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 bg-white/70 dark:border-white/10 dark:bg-white/10 idecn-bob">
+                  ↓
+                </span>
+                <span>Scroll to explore</span>
+              </div>
+            </Reveal>
           </div>
 
-          {/* right feature panel (distinct from web2) */}
           <div className="lg:col-span-5">
             <Reveal delayMs={160}>
-              <Card className="relative overflow-hidden p-8 md:p-10">
-                {/* IMPORTANT: pointer-events-none so it never blocks clicks */}
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 opacity-[0.18] dark:opacity-[0.12]"
-                  style={{
-                    backgroundImage: "url('/batik-pattern.svg')",
-                    backgroundRepeat: "repeat",
-                    backgroundPosition: "center",
-                    backgroundSize: "760px 760px",
-                  }}
-                />
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 bg-gradient-to-br from-red-600/10 via-transparent to-blue-600/10 dark:from-red-500/14 dark:to-blue-500/14"
-                />
-
-                <div className="relative">
-                  <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-red-600 dark:text-red-400">
-                    At a glance
-                  </div>
-                  <div className="mt-4 space-y-5">
-                    <div>
-                      <div className="text-sm font-bold text-slate-900 dark:text-white">Focus</div>
-                      <div className="mt-1 text-slate-600 dark:text-slate-300">Education, Culture, Tech, Culinary</div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-bold text-slate-900 dark:text-white">Operating</div>
-                      <div className="mt-1 text-slate-600 dark:text-slate-300">Since 2024 (U.S.-based nonprofit)</div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-bold text-slate-900 dark:text-white">Contact</div>
-                      <div className="mt-1 text-slate-600 dark:text-slate-300">{site.email}</div>
-                    </div>
-
-                    <a
-                      href={`mailto:${site.email}`}
-                      className="mt-2 inline-flex w-full items-center justify-center rounded-2xl bg-slate-900 px-6 py-4 text-lg font-bold text-white transition hover:opacity-95 dark:bg-white dark:text-slate-900"
-                    >
-                      Talk to us
-                    </a>
-                  </div>
+              <SpotlightCard className="p-9 md:p-10">
+                <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-red-600 dark:text-red-400">
+                  At a glance
                 </div>
-              </Card>
+
+                <div className="mt-5 space-y-6">
+                  {about.atAGlance.items.map((r) => (
+                    <div key={r.k} className="border-b border-slate-100 pb-5 last:border-0 last:pb-0 dark:border-white/10">
+                      <div className="text-sm font-bold text-slate-900 dark:text-white">{r.k}</div>
+                      <div className="mt-2 text-lg font-semibold text-slate-700 dark:text-slate-200">{r.v}</div>
+                    </div>
+                  ))}
+
+                  <a
+                    href={about.atAGlance.cta.href}
+                    className="btn-shine mt-2 inline-flex w-full items-center justify-center rounded-2xl bg-slate-900 px-6 py-4 text-lg font-bold text-white transition hover:opacity-95 dark:bg-white dark:text-slate-900"
+                  >
+                    {about.atAGlance.cta.label}
+                  </a>
+                </div>
+
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none mt-8 h-[140px] rounded-2xl border border-slate-200/60 bg-gradient-to-r from-red-600/10 via-purple-600/8 to-blue-600/10 dark:border-white/10 dark:from-red-500/14 dark:to-blue-500/14 idecn-shimmer"
+                />
+              </SpotlightCard>
             </Reveal>
           </div>
         </div>
@@ -143,34 +137,39 @@ export default function Page() {
               <h2 className="text-4xl font-black tracking-tight text-slate-900 dark:text-white md:text-5xl">
                 {about.title}
               </h2>
-              <p className="mt-6 text-base md:text-xl leading-relaxed text-slate-600 dark:text-slate-300">
-                {about.lead}
-              </p>
-              <p className="mt-6 text-base md:text-lg leading-relaxed text-slate-600 dark:text-slate-300">
-                {about.purpose}
-              </p>
-              <p className="mt-6 text-base md:text-lg leading-relaxed text-slate-600 dark:text-slate-300">
-                {about.audience}
-              </p>
+              <p className="mt-6 text-base md:text-xl leading-relaxed text-slate-600 dark:text-slate-300">{about.lead}</p>
+
+              <div className="mt-10 space-y-6">
+                <div className="rounded-2xl border border-slate-200/70 bg-white/60 p-6 backdrop-blur dark:border-white/10 dark:bg-white/5">
+                  <div className="text-lg font-bold text-slate-900 dark:text-white">Our Purpose</div>
+                  <p className="mt-2 text-slate-600 dark:text-slate-300">{about.purpose}</p>
+                </div>
+                <div className="rounded-2xl border border-slate-200/70 bg-white/60 p-6 backdrop-blur dark:border-white/10 dark:bg-white/5">
+                  <div className="text-lg font-bold text-slate-900 dark:text-white">Primary Audience</div>
+                  <p className="mt-2 text-slate-600 dark:text-slate-300">{about.audience}</p>
+                </div>
+              </div>
             </div>
 
-            <Card className="p-9 md:p-10">
-              <div className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">{about.atAGlance.title}</div>
-              <div className="mt-7 space-y-6">
-                {about.atAGlance.items.map((r) => (
-                  <div key={r.k} className="border-b border-slate-100 pb-5 last:border-0 last:pb-0 dark:border-white/10">
-                    <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-red-600 dark:text-red-400">{r.k}</div>
-                    <div className="mt-2 text-lg font-semibold text-slate-900 dark:text-white">{r.v}</div>
-                  </div>
-                ))}
-                <a
-                  href={about.atAGlance.cta.href}
-                  className="inline-flex w-full items-center justify-center rounded-2xl bg-slate-900 px-6 py-4 text-lg font-bold text-white transition hover:opacity-95 dark:bg-white dark:text-slate-900"
-                >
-                  {about.atAGlance.cta.label}
-                </a>
-              </div>
-            </Card>
+            <Reveal delayMs={120}>
+              <SpotlightCard className="p-9 md:p-10">
+                <div className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">{about.atAGlance.title}</div>
+                <div className="mt-7 space-y-6">
+                  {about.atAGlance.items.map((r) => (
+                    <div key={r.k} className="border-b border-slate-100 pb-5 last:border-0 last:pb-0 dark:border-white/10">
+                      <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-red-600 dark:text-red-400">{r.k}</div>
+                      <div className="mt-2 text-lg font-semibold text-slate-900 dark:text-white">{r.v}</div>
+                    </div>
+                  ))}
+                  <a
+                    href={about.atAGlance.cta.href}
+                    className="btn-shine inline-flex w-full items-center justify-center rounded-2xl bg-slate-900 px-6 py-4 text-lg font-bold text-white transition hover:opacity-95 dark:bg-white dark:text-slate-900"
+                  >
+                    {about.atAGlance.cta.label}
+                  </a>
+                </div>
+              </SpotlightCard>
+            </Reveal>
           </div>
         </Reveal>
       </section>
@@ -178,19 +177,18 @@ export default function Page() {
       {/* PROGRAMS */}
       <section id="programs" className="scroll-mt-28 mx-auto max-w-7xl px-6 py-24 md:py-28">
         <Reveal>
-          <div className="text-center">
-            <h2 className="text-4xl font-black tracking-tight text-slate-900 dark:text-white md:text-5xl">{programs.title}</h2>
-            <p className="mx-auto mt-4 max-w-2xl text-base md:text-lg text-slate-600 dark:text-slate-300">{programs.subtitle}</p>
-          </div>
+          <SectionTitle title={programs.title} subtitle={programs.subtitle} />
         </Reveal>
 
         <div className="mt-12 grid gap-7 md:grid-cols-2">
           {programs.cards.map((c, i) => (
             <Reveal key={c.title} delayMs={80 + i * 60}>
-              <Card className="p-9 md:p-10 hover:-translate-y-1.5 hover:shadow-[0_28px_90px_rgba(2,6,23,0.14)] dark:hover:shadow-[0_28px_90px_rgba(0,0,0,0.55)]">
+              <SpotlightCard className="p-9 md:p-10">
                 <div className="flex items-start justify-between gap-6">
                   <div>
-                    <div className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">{c.title}</div>
+                    <div className="text-2xl md:text-3xl font-black tracking-tight text-slate-900 dark:text-white">
+                      {c.title}
+                    </div>
                     <ul className="mt-5 space-y-3 text-base md:text-lg text-slate-600 dark:text-slate-300">
                       {c.bullets.map((b) => (
                         <li key={b} className="flex gap-3">
@@ -201,8 +199,10 @@ export default function Page() {
                     </ul>
                   </div>
 
-                  {/* corner accent (beda dari web2) */}
-                  <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-red-600 to-blue-600 opacity-85 shadow-md" aria-hidden="true" />
+                  <div
+                    aria-hidden="true"
+                    className="h-12 w-12 rounded-2xl bg-gradient-to-br from-red-600 to-blue-600 opacity-85 shadow-md idecn-float"
+                  />
                 </div>
 
                 <div className="mt-7 flex flex-wrap gap-2.5">
@@ -212,7 +212,7 @@ export default function Page() {
                     </span>
                   ))}
                 </div>
-              </Card>
+              </SpotlightCard>
             </Reveal>
           ))}
         </div>
@@ -221,16 +221,13 @@ export default function Page() {
       {/* PORTFOLIO */}
       <section id="portfolio" className="scroll-mt-28 mx-auto max-w-7xl px-6 py-24 md:py-28">
         <Reveal>
-          <div className="text-center">
-            <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-red-600 dark:text-red-400">{portfolio.eyebrow}</div>
-            <h2 className="mt-3 text-4xl font-black tracking-tight text-slate-900 dark:text-white md:text-5xl">{portfolio.title}</h2>
-          </div>
+          <SectionTitle eyebrow={portfolio.eyebrow} title={portfolio.title} />
         </Reveal>
 
         <Reveal delayMs={140}>
-          <Card className="mt-12 overflow-hidden">
-            <div className="grid lg:grid-cols-12">
-              <div className="p-9 md:p-10 lg:col-span-6">
+          <SpotlightCard className="mt-12 p-9 md:p-10">
+            <div className="grid gap-10 lg:grid-cols-12 lg:items-start">
+              <div className="lg:col-span-7">
                 <div className="flex flex-wrap gap-3">
                   <span className="rounded-full bg-slate-900 px-4 py-2 text-sm font-bold text-white dark:bg-white dark:text-slate-900">
                     {portfolio.featured.date}
@@ -240,7 +237,7 @@ export default function Page() {
                   </span>
                 </div>
 
-                <h3 className="mt-6 text-3xl font-black tracking-tight text-slate-900 dark:text-white md:text-4xl">
+                <h3 className="mt-6 text-3xl md:text-4xl font-black tracking-tight text-slate-900 dark:text-white">
                   {portfolio.featured.name}
                 </h3>
 
@@ -257,12 +254,12 @@ export default function Page() {
                 </div>
 
                 <div className="mt-9 flex flex-wrap gap-4">
-                  <a href={portfolio.featured.ctaDownload.href} className="rounded-2xl bg-red-600 px-8 py-4 font-bold text-white transition hover:bg-red-700">
+                  <a href={portfolio.featured.ctaDownload.href} className="btn-shine rounded-2xl bg-red-600 px-8 py-4 font-bold text-white transition hover:bg-red-700">
                     {portfolio.featured.ctaDownload.label}
                   </a>
                   <a
                     href={portfolio.featured.ctaSecondary.href}
-                    className="rounded-2xl border border-slate-200/70 bg-white/70 px-8 py-4 font-bold text-slate-900 backdrop-blur transition hover:bg-white
+                    className="btn-shine rounded-2xl border border-slate-200/70 bg-white/70 px-8 py-4 font-bold text-slate-900 backdrop-blur transition hover:bg-white
                            dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
                   >
                     {portfolio.featured.ctaSecondary.label}
@@ -270,32 +267,53 @@ export default function Page() {
                 </div>
               </div>
 
-              <div className="relative min-h-[280px] lg:col-span-6 lg:min-h-[420px]">
-                <div className="absolute inset-0 bg-gradient-to-tr from-slate-950/55 via-slate-950/10 to-transparent" />
-                <img src={portfolio.featured.imageSrc} alt={portfolio.featured.imageAlt} className="h-full w-full object-cover" />
+              {/* Right visual block (no external image required; no “missing”) */}
+              <div className="lg:col-span-5">
+                <div className="relative overflow-hidden rounded-[22px] border border-slate-200/70 bg-white/60 p-7 backdrop-blur dark:border-white/10 dark:bg-white/5">
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 opacity-[0.22] dark:opacity-[0.14]"
+                    style={{
+                      backgroundImage: "url('/batik-pattern.svg')",
+                      backgroundRepeat: "repeat",
+                      backgroundPosition: "center",
+                      backgroundSize: "820px 820px",
+                    }}
+                  />
+                  <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-br from-red-600/10 via-transparent to-blue-600/10 dark:from-red-500/14 dark:to-blue-500/14" />
+                  <div className="relative">
+                    <div className="text-sm font-extrabold uppercase tracking-[0.18em] text-slate-700 dark:text-slate-200">
+                      Execution Snapshot
+                    </div>
+                    <div className="mt-4 space-y-3 text-slate-600 dark:text-slate-300">
+                      <div className="flex justify-between gap-4"><span>Format</span><span className="font-semibold">Community Event</span></div>
+                      <div className="flex justify-between gap-4"><span>Focus</span><span className="font-semibold">Culinary & Culture</span></div>
+                      <div className="flex justify-between gap-4"><span>Outcome</span><span className="font-semibold">Partner-ready playbook</span></div>
+                    </div>
+
+                    <div className="mt-6 h-1 w-24 rounded-full bg-gradient-to-r from-red-600 to-blue-600" />
+                  </div>
+                </div>
               </div>
             </div>
-          </Card>
+          </SpotlightCard>
         </Reveal>
       </section>
 
       {/* PARTNERS */}
       <section id="partners" className="scroll-mt-28 mx-auto max-w-7xl px-6 py-24 md:py-28">
         <Reveal>
-          <div className="text-center">
-            <h2 className="text-4xl font-black tracking-tight text-slate-900 dark:text-white md:text-5xl">{partners.title}</h2>
-            <p className="mx-auto mt-4 max-w-2xl text-base md:text-lg text-slate-600 dark:text-slate-300">{partners.subtitle}</p>
-          </div>
+          <SectionTitle title={partners.title} subtitle={partners.subtitle} />
         </Reveal>
 
         <div className="mt-12 grid gap-7 lg:grid-cols-3">
           {partners.cards.map((c, i) => (
             <Reveal key={c.title} delayMs={80 + i * 60}>
-              <Card className="p-9 md:p-10 hover:-translate-y-1.5">
-                <div className="text-xl font-black tracking-tight text-slate-900 dark:text-white">{c.title}</div>
+              <SpotlightCard className="p-9 md:p-10">
+                <div className="text-xl md:text-2xl font-black tracking-tight text-slate-900 dark:text-white">{c.title}</div>
                 <p className="mt-4 text-base md:text-lg text-slate-600 dark:text-slate-300">{c.desc}</p>
                 <div className="mt-7 h-1 w-20 rounded-full bg-gradient-to-r from-red-600 to-blue-600" aria-hidden="true" />
-              </Card>
+              </SpotlightCard>
             </Reveal>
           ))}
         </div>
@@ -304,38 +322,37 @@ export default function Page() {
       {/* GET INVOLVED */}
       <section id="get-involved" className="scroll-mt-28 mx-auto max-w-7xl px-6 py-24 md:py-28">
         <Reveal>
-          <div className="text-center">
-            <h2 className="text-4xl font-black tracking-tight text-slate-900 dark:text-white md:text-5xl">{getInvolved.title}</h2>
-            <p className="mx-auto mt-4 max-w-2xl text-base md:text-lg text-slate-600 dark:text-slate-300">{getInvolved.subtitle}</p>
-          </div>
+          <SectionTitle title={getInvolved.title} subtitle={getInvolved.subtitle} />
         </Reveal>
 
         <div className="mt-12 grid gap-7 lg:grid-cols-3">
           {getInvolved.cards.map((c, i) => (
             <Reveal key={c.title} delayMs={80 + i * 60}>
-              <Card className="p-9 md:p-10 hover:-translate-y-1.5">
+              <SpotlightCard className="p-9 md:p-10">
                 <div className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">{c.title}</div>
                 <p className="mt-3 text-base md:text-lg text-slate-600 dark:text-slate-300">{c.subtitle}</p>
                 <a href={`mailto:${site.email}`} className="mt-6 inline-flex font-bold text-blue-700 hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-200">
                   Start here →
                 </a>
-              </Card>
+              </SpotlightCard>
             </Reveal>
           ))}
         </div>
 
         <Reveal delayMs={140}>
-          <div className="mt-12 overflow-hidden rounded-[34px] bg-gradient-to-br from-slate-900 to-slate-950 p-10 text-white shadow-[0_30px_120px_rgba(2,6,23,0.35)] dark:from-white/10 dark:to-white/5 md:p-14">
-            <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
+          <div className="mt-12 overflow-hidden rounded-[34px] border border-slate-200/70 bg-white/65 p-10 backdrop-blur dark:border-white/10 dark:bg-white/6 md:p-14">
+            <div className="grid gap-10 lg:grid-cols-12 lg:items-center">
               <div className="lg:col-span-8">
-                <div className="text-3xl font-black tracking-tight md:text-4xl">{getInvolved.banner.title}</div>
-                <p className="mt-3 text-base md:text-lg text-white/80">{getInvolved.banner.desc}</p>
+                <div className="text-3xl font-black tracking-tight text-slate-900 dark:text-white md:text-4xl">
+                  {getInvolved.banner.title}
+                </div>
+                <p className="mt-3 text-base md:text-lg text-slate-600 dark:text-slate-300">{getInvolved.banner.desc}</p>
               </div>
               <div className="lg:col-span-4 flex flex-col gap-3 sm:flex-row lg:flex-col">
-                <a href={getInvolved.banner.primary.href} className="rounded-2xl bg-red-600 px-7 py-4 text-center font-bold hover:bg-red-700 transition">
+                <a href={getInvolved.banner.primary.href} className="btn-shine rounded-2xl bg-red-600 px-7 py-4 text-center font-bold text-white hover:bg-red-700 transition">
                   {getInvolved.banner.primary.label}
                 </a>
-                <a href={getInvolved.banner.secondary.href} className="rounded-2xl bg-white/10 px-7 py-4 text-center font-bold hover:bg-white/15 transition">
+                <a href={getInvolved.banner.secondary.href} className="btn-shine rounded-2xl border border-slate-200/70 bg-white/70 px-7 py-4 text-center font-bold text-slate-900 hover:bg-white transition dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15">
                   {getInvolved.banner.secondary.label}
                 </a>
               </div>
@@ -344,7 +361,6 @@ export default function Page() {
         </Reveal>
       </section>
 
-      {/* footer minimal */}
       <footer className="border-t border-slate-200/70 bg-white/55 px-6 py-14 backdrop-blur dark:border-white/10 dark:bg-slate-950/40">
         <div className="mx-auto max-w-7xl text-sm text-slate-600 dark:text-slate-300">
           © 2024 {site.orgShort} — {site.orgName}. All rights reserved.

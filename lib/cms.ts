@@ -5,11 +5,6 @@ export const site = {
   orgName: "Indonesia Education & Cultural Network",
   tagline: "Connecting Indonesia ↔ U.S. through education, culture, and collaboration.",
   email: "hello@idecn.org",
-  social: {
-    instagram: "#",
-    linkedin: "#",
-    x: "#",
-  },
 };
 
 export const navItems: NavItem[] = [
@@ -57,25 +52,21 @@ export const programs = {
   subtitle: "Designed as repeatable playbooks—built to scale with the right partners.",
   cards: [
     {
-      icon: "globe",
       title: "Cultural Exchange",
       bullets: ["Annual cultural festivals", "Community showcases", "Language & heritage workshops"],
       tags: ["Culture", "Community", "Exchange"],
     },
     {
-      icon: "award",
       title: "Academic Excellence",
       bullets: ["Mentorship & advising", "Scholarship enablement", "Research & collaboration support"],
       tags: ["Education", "Mentoring", "Research"],
     },
     {
-      icon: "users",
       title: "Professional Network",
       bullets: ["Diaspora & alumni network", "Career talks & panels", "Partner-led opportunities"],
       tags: ["Network", "Career", "Partnership"],
     },
     {
-      icon: "layout",
       title: "Digital Innovation",
       bullets: ["Digital literacy initiatives", "Community tech projects", "Program ops enablement"],
       tags: ["Digital", "Innovation", "Operations"],
@@ -95,8 +86,6 @@ export const portfolio = {
     highlights: ["Community engagement", "Vendor collaboration", "Cultural showcase", "Partnership-ready playbook"],
     ctaDownload: { label: "Download report", href: "/portfolio-report.pdf" },
     ctaSecondary: { label: "Discuss next event", href: `mailto:${site.email}` },
-    imageSrc: "/event-hero.jpg",
-    imageAlt: "Indonesia Culinary Day on the Creek",
   },
 };
 
@@ -105,17 +94,14 @@ export const partners = {
   subtitle: "We collaborate with mission-aligned organizations to scale impact with clarity and trust.",
   cards: [
     {
-      icon: "award",
       title: "Sponsors & Donors",
       desc: "Support programs and events with clear reporting, measurable outcomes, and strong brand alignment.",
     },
     {
-      icon: "book",
       title: "Universities & Schools",
       desc: "Co-create pathways for learning, exchange, mentorship, and applied collaboration across borders.",
     },
     {
-      icon: "users",
       title: "Community Organizations",
       desc: "Partner to deliver events and programs that strengthen local communities and cultural presence.",
     },
@@ -126,9 +112,9 @@ export const getInvolved = {
   title: "Get involved",
   subtitle: "Choose the role that fits you—then we’ll guide the next steps.",
   cards: [
-    { icon: "award", title: "Sponsor", subtitle: "Fund programs & events with clear deliverables." },
-    { icon: "book", title: "Partner", subtitle: "Collaborate on education & cultural initiatives." },
-    { icon: "users", title: "Volunteer", subtitle: "Join execution teams and community operations." },
+    { title: "Sponsor", subtitle: "Fund programs & events with clear deliverables." },
+    { title: "Partner", subtitle: "Collaborate on education & cultural initiatives." },
+    { title: "Volunteer", subtitle: "Join execution teams and community operations." },
   ],
   banner: {
     title: "Ready to collaborate?",
@@ -136,17 +122,4 @@ export const getInvolved = {
     primary: { label: "Contact IDECN", href: `mailto:${site.email}` },
     secondary: { label: "Download proposal", href: "/proposal.pdf" },
   },
-};
-
-export const footer = {
-  blurb:
-    "IDECN is a nonprofit network connecting Indonesia and the U.S. through education, cultural exchange, and community partnerships—designed for real-world execution.",
-  quickLinks: [
-    { label: "About", href: "#about" },
-    { label: "Programs", href: "#programs" },
-    { label: "Portfolio", href: "#portfolio" },
-    { label: "Partners", href: "#partners" },
-    { label: "Get involved", href: "#get-involved" },
-  ],
-  legal: ["Privacy", "Terms", "Accessibility"],
 };

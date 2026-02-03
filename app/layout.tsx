@@ -16,14 +16,14 @@ export const metadata: Metadata = {
 };
 
 const themeInitScript = `
-(function() {
+(function () {
   try {
-    var key = 'idecn-theme';
-    var mode = localStorage.getItem(key) || 'system';
-    var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    var resolved = (mode === 'system') ? (prefersDark ? 'dark' : 'light') : mode;
+    var key = "idecn-theme";
+    var mode = localStorage.getItem(key) || "system";
+    var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    var resolved = (mode === "system") ? (prefersDark ? "dark" : "light") : mode;
     document.documentElement.dataset.theme = mode;
-    document.documentElement.classList.toggle('dark', resolved === 'dark');
+    document.documentElement.classList.toggle("dark", resolved === "dark");
   } catch (e) {}
 })();
 `;
@@ -36,21 +36,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
 
       <body className="min-h-screen bg-slate-50 text-slate-900 text-[16px] md:text-[17px] selection:bg-red-600 selection:text-white dark:bg-slate-950 dark:text-slate-100">
-        {/* batik light */}
+        {/* Batik layer (stronger but masked by wash for readability) */}
         <div
           aria-hidden="true"
-          className="pointer-events-none fixed inset-0 z-0 dark:hidden"
+          className="pointer-events-none fixed inset-0 z-0"
           style={{
             backgroundImage: "url('/batik-pattern.svg')",
             backgroundRepeat: "repeat",
             backgroundPosition: "center",
-            backgroundSize: "720px 720px",
-            opacity: 0.16,
+            backgroundSize: "760px 760px",
+            opacity: 0.22,
+            filter: "grayscale(1) contrast(1.55) brightness(1.02)",
             mixBlendMode: "multiply",
-            filter: "grayscale(1) contrast(1.45) brightness(1.02)",
+            WebkitMaskImage:
+              "radial-gradient(1400px 700px at 50% 20%, rgba(0,0,0,.95) 0%, rgba(0,0,0,.75) 55%, transparent 100%)",
+            maskImage:
+              "radial-gradient(1400px 700px at 50% 20%, rgba(0,0,0,.95) 0%, rgba(0,0,0,.75) 55%, transparent 100%)",
           }}
         />
-        {/* batik dark */}
+
+        {/* Dark batik (invert, controlled) */}
         <div
           aria-hidden="true"
           className="pointer-events-none fixed inset-0 z-0 hidden dark:block"
@@ -58,32 +63,37 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             backgroundImage: "url('/batik-pattern.svg')",
             backgroundRepeat: "repeat",
             backgroundPosition: "center",
-            backgroundSize: "720px 720px",
-            opacity: 0.12,
-            filter: "grayscale(1) invert(1) contrast(1.1) brightness(0.9)",
+            backgroundSize: "760px 760px",
+            opacity: 0.16,
+            filter: "grayscale(1) invert(1) contrast(1.15) brightness(0.9)",
+            mixBlendMode: "screen",
+            WebkitMaskImage:
+              "radial-gradient(1400px 700px at 50% 20%, rgba(0,0,0,.95) 0%, rgba(0,0,0,.7) 55%, transparent 100%)",
+            maskImage:
+              "radial-gradient(1400px 700px at 50% 20%, rgba(0,0,0,.95) 0%, rgba(0,0,0,.7) 55%, transparent 100%)",
           }}
         />
 
-        {/* readability wash (lebih kuat di light, supaya teks tetap aman) */}
+        {/* Readability wash */}
         <div
           aria-hidden="true"
           className="pointer-events-none fixed inset-0 z-0
-                     bg-gradient-to-b from-white/72 via-white/42 to-white/18
-                     dark:from-slate-950/85 dark:via-slate-950/55 dark:to-slate-950/30"
+                     bg-gradient-to-b from-white/78 via-white/48 to-white/18
+                     dark:from-slate-950/88 dark:via-slate-950/60 dark:to-slate-950/30"
         />
 
-        {/* soft glows */}
+        {/* Premium glows (subtle, not like web2) */}
         <div
           aria-hidden="true"
           className="pointer-events-none fixed inset-0 z-0
-                     [background:radial-gradient(900px_540px_at_20%_20%,rgba(239,68,68,0.12),transparent_60%)]
-                     dark:[background:radial-gradient(900px_540px_at_20%_20%,rgba(239,68,68,0.18),transparent_60%)]"
+                     [background:radial-gradient(900px_520px_at_18%_20%,rgba(239,68,68,0.12),transparent_60%)]
+                     dark:[background:radial-gradient(900px_520px_at_18%_20%,rgba(239,68,68,0.18),transparent_60%)]"
         />
         <div
           aria-hidden="true"
           className="pointer-events-none fixed inset-0 z-0
-                     [background:radial-gradient(980px_560px_at_75%_25%,rgba(59,130,246,0.12),transparent_60%)]
-                     dark:[background:radial-gradient(980px_560px_at_75%_25%,rgba(59,130,246,0.18),transparent_60%)]"
+                     [background:radial-gradient(980px_560px_at_78%_18%,rgba(59,130,246,0.12),transparent_60%)]
+                     dark:[background:radial-gradient(980px_560px_at_78%_18%,rgba(59,130,246,0.18),transparent_60%)]"
         />
 
         <div className="relative z-10">

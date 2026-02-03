@@ -30,17 +30,20 @@ export default function Navbar({
 
     const io = new IntersectionObserver(
       (entries) => {
-        const v = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        const v = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
         if (v[0]?.target?.id) setActive(v[0].target.id);
       },
       { rootMargin: "-25% 0px -65% 0px", threshold: [0.12, 0.2, 0.35] }
     );
+
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
   }, [items]);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[80] border-b border-slate-200/70 bg-white/80 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/60">
+    <header className="fixed top-0 left-0 right-0 z-[80] border-b border-slate-200/70 bg-white/82 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/62">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
         <a href="#" className="inline-flex items-center gap-3">
           <span className="grid h-10 w-10 place-items-center rounded-xl bg-red-600 text-xl font-black text-white shadow-sm shadow-red-600/20">
@@ -49,7 +52,7 @@ export default function Navbar({
           <span className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">{brandShort}</span>
         </a>
 
-        <nav className="hidden md:flex items-center gap-8" aria-label="Primary">
+        <nav className="hidden md:flex items-center gap-9" aria-label="Primary">
           {items.map((it) => {
             const isActive = active === it.id;
             return (
@@ -64,9 +67,7 @@ export default function Navbar({
                 }}
                 className={[
                   "relative text-[16px] font-semibold tracking-tight transition-colors",
-                  isActive
-                    ? "text-slate-900 dark:text-white"
-                    : "text-slate-600 hover:text-blue-700 dark:text-white/70 dark:hover:text-blue-300",
+                  isActive ? "text-slate-900 dark:text-white" : "text-slate-600 hover:text-blue-700 dark:text-white/70 dark:hover:text-blue-300",
                 ].join(" ")}
               >
                 {it.label}
@@ -90,7 +91,7 @@ export default function Navbar({
 
           <button
             type="button"
-            className="md:hidden inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white/80 text-slate-900 backdrop-blur hover:bg-white transition dark:border-white/15 dark:bg-white/10 dark:text-white"
+            className="md:hidden inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white/82 text-slate-900 backdrop-blur hover:bg-white transition dark:border-white/15 dark:bg-white/10 dark:text-white"
             onClick={() => setOpen((v) => !v)}
             aria-label="Toggle menu"
           >
@@ -100,7 +101,7 @@ export default function Navbar({
       </div>
 
       {open && (
-        <div className="md:hidden border-t border-slate-200/70 bg-white/85 px-6 py-6 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/70">
+        <div className="md:hidden border-t border-slate-200/70 bg-white/88 px-6 py-6 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/72">
           <div className="flex flex-col gap-4">
             {items.map((it) => (
               <a
