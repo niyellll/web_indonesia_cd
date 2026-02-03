@@ -30,7 +30,330 @@ function SectionTitle({
   );
 }
 
+function Pill({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="rounded-full bg-slate-100/80 px-3.5 py-2 text-sm font-semibold text-slate-700 dark:bg-white/10 dark:text-slate-200">
+      {children}
+    </span>
+  );
+}
+
 export default function Page() {
+  // Carousel slides: tetap “isi sama”, tapi dibagi jadi 3 view premium (overview / snapshot / next steps)
+  const portfolioSlides = [
+    {
+      key: "overview",
+      title: "Event Overview",
+      content: (
+        <div className="grid gap-10 lg:grid-cols-12 lg:items-start">
+          <div className="lg:col-span-7">
+            <div className="flex flex-wrap gap-3">
+              <span className="rounded-full bg-slate-900 px-4 py-2 text-sm font-bold text-white dark:bg-white dark:text-slate-900">
+                {portfolio.featured.date}
+              </span>
+              <span className="rounded-full bg-slate-100 px-4 py-2 text-sm font-bold text-slate-800 dark:bg-white/10 dark:text-slate-100">
+                {portfolio.featured.location}
+              </span>
+            </div>
+
+            <h3 className="mt-6 text-3xl md:text-4xl font-black tracking-tight text-slate-900 dark:text-white">
+              {portfolio.featured.name}
+            </h3>
+
+            <p className="mt-5 text-base md:text-lg leading-relaxed text-slate-600 dark:text-slate-300">
+              {portfolio.featured.summary}
+            </p>
+
+            <div className="mt-7 flex flex-wrap gap-2.5">
+              {portfolio.featured.highlights.map((h: string) => (
+                <Pill key={h}>{h}</Pill>
+              ))}
+            </div>
+
+            <div className="mt-9 flex flex-wrap gap-4">
+              <a
+                href={portfolio.featured.ctaDownload.href}
+                className="btn-shine rounded-2xl bg-red-600 px-8 py-4 font-bold text-white transition hover:bg-red-700"
+              >
+                {portfolio.featured.ctaDownload.label}
+              </a>
+
+              <a
+                href={portfolio.featured.ctaSecondary.href}
+                className="btn-shine rounded-2xl border border-slate-200/70 bg-white/70 px-8 py-4 font-bold text-slate-900 backdrop-blur transition hover:bg-white
+                           dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
+              >
+                {portfolio.featured.ctaSecondary.label}
+              </a>
+            </div>
+          </div>
+
+          {/* Right: Snapshot card */}
+          <div className="lg:col-span-5">
+            <div
+              className="group relative overflow-hidden rounded-[24px] border border-slate-200/70 bg-white/70 p-7 backdrop-blur
+                         shadow-[0_18px_70px_rgba(2,6,23,0.10)]
+                         transition hover:-translate-y-1 hover:shadow-[0_28px_90px_rgba(2,6,23,0.14)]
+                         dark:border-white/10 dark:bg-white/5 dark:shadow-[0_22px_80px_rgba(0,0,0,0.45)]"
+            >
+              {/* Batik texture (calmer) */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 opacity-[0.18] dark:opacity-[0.12]"
+                style={{
+                  backgroundImage: "url('/batik-pattern.svg')",
+                  backgroundRepeat: "repeat",
+                  backgroundPosition: "center",
+                  backgroundSize: "820px 820px",
+                  filter: "grayscale(1) contrast(1.3)",
+                }}
+              />
+
+              {/* Readability scrim */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0
+                           bg-gradient-to-b from-white/90 via-white/70 to-white/55
+                           dark:from-slate-950/35 dark:via-slate-950/25 dark:to-slate-950/15"
+              />
+
+              {/* Accent wash */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0
+                           bg-gradient-to-br from-red-600/10 via-transparent to-blue-600/10
+                           dark:from-red-500/14 dark:to-blue-500/14"
+              />
+
+              {/* Accent bar */}
+              <div
+                aria-hidden="true"
+                className="absolute left-6 top-6 h-1 w-24 rounded-full bg-gradient-to-r from-red-600 to-blue-600"
+              />
+
+              <div className="relative mt-5">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-slate-800 dark:text-slate-200">
+                    Execution Snapshot
+                  </div>
+
+                  <span
+                    className="rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-xs font-bold text-slate-800
+                               shadow-sm dark:border-white/10 dark:bg-white/10 dark:text-slate-100"
+                  >
+                    {portfolio.featured.date}
+                  </span>
+                </div>
+
+                {/* Content panel */}
+                <div
+                  className="mt-5 rounded-2xl border border-slate-200/70 bg-white/82 p-5 backdrop-blur
+                             dark:border-white/10 dark:bg-slate-950/28"
+                >
+                  <dl className="grid gap-4">
+                    <div className="grid grid-cols-[110px_1fr] items-start gap-4">
+                      <dt className="text-sm font-bold text-slate-700 dark:text-slate-300">Format</dt>
+                      <dd className="text-sm font-extrabold text-slate-900 dark:text-white">Community Event</dd>
+                    </div>
+
+                    <div className="h-px bg-slate-200/70 dark:bg-white/10" />
+
+                    <div className="grid grid-cols-[110px_1fr] items-start gap-4">
+                      <dt className="text-sm font-bold text-slate-700 dark:text-slate-300">Focus</dt>
+                      <dd className="text-sm font-extrabold text-slate-900 dark:text-white">
+                        Culinary &amp; Culture
+                      </dd>
+                    </div>
+
+                    <div className="h-px bg-slate-200/70 dark:bg-white/10" />
+
+                    <div className="grid grid-cols-[110px_1fr] items-start gap-4">
+                      <dt className="text-sm font-bold text-slate-700 dark:text-slate-300">Outcome</dt>
+                      <dd className="text-sm font-extrabold text-slate-900 dark:text-white">
+                        Partner-ready playbook
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+
+                <div className="mt-6 flex items-center gap-3">
+                  <span className="h-2 w-2 rounded-full bg-red-600" />
+                  <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                    Clear summary, easy to pitch to partners.
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+
+    {
+      key: "outputs",
+      title: "Outputs & Materials",
+      content: (
+        <div className="grid gap-10 lg:grid-cols-12 lg:items-start">
+          <div className="lg:col-span-7">
+            <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-red-600 dark:text-red-400">
+              What we deliver
+            </div>
+            <h3 className="mt-3 text-3xl md:text-4xl font-black tracking-tight text-slate-900 dark:text-white">
+              Partner-ready assets that make collaboration easy.
+            </h3>
+
+            <p className="mt-5 text-base md:text-lg leading-relaxed text-slate-600 dark:text-slate-300">
+              Instead of “just an event”, we package outputs that can be reused and scaled: documentation, reporting, and a clean
+              playbook.
+            </p>
+
+            <div className="mt-7 grid gap-4 sm:grid-cols-2">
+              {[
+                { k: "Post-event report", v: "Highlights + outcomes + notes" },
+                { k: "Playbook", v: "Repeatable partner workflow" },
+                { k: "Vendor kit", v: "Onboarding + logistics checklist" },
+                { k: "Media pack", v: "Photos + key story points" },
+              ].map((x) => (
+                <div
+                  key={x.k}
+                  className="rounded-2xl border border-slate-200/70 bg-white/70 p-5 backdrop-blur
+                             dark:border-white/10 dark:bg-white/6"
+                >
+                  <div className="text-base font-black text-slate-900 dark:text-white">{x.k}</div>
+                  <div className="mt-1 text-slate-600 dark:text-slate-300">{x.v}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-9 flex flex-wrap gap-4">
+              <a
+                href={portfolio.featured.ctaDownload.href}
+                className="btn-shine rounded-2xl bg-red-600 px-8 py-4 font-bold text-white transition hover:bg-red-700"
+              >
+                Download report
+              </a>
+              <a
+                href={`mailto:${site.email}`}
+                className="btn-shine rounded-2xl border border-slate-200/70 bg-white/70 px-8 py-4 font-bold text-slate-900 backdrop-blur transition hover:bg-white
+                           dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
+              >
+                Request full deck
+              </a>
+            </div>
+          </div>
+
+          <div className="lg:col-span-5">
+            <SpotlightCard className="p-7 md:p-8">
+              <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-red-600 dark:text-red-400">
+                Quick highlights
+              </div>
+
+              <div className="mt-5 space-y-4">
+                {portfolio.featured.highlights.map((h: string) => (
+                  <div key={h} className="flex items-start gap-3">
+                    <span className="mt-2 h-2 w-2 rounded-full bg-blue-600" />
+                    <div className="text-base md:text-lg font-semibold text-slate-800 dark:text-slate-100">{h}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-7 h-px bg-slate-200/70 dark:bg-white/10" />
+
+              <div className="mt-6 rounded-2xl border border-slate-200/70 bg-white/70 p-5 backdrop-blur dark:border-white/10 dark:bg-white/6">
+                <div className="text-sm font-extrabold uppercase tracking-[0.18em] text-slate-700 dark:text-slate-300">
+                  Notes
+                </div>
+                <div className="mt-2 text-slate-600 dark:text-slate-300">
+                  Built with volunteers + local partners, designed to be repeated in other locations with minimal overhead.
+                </div>
+              </div>
+            </SpotlightCard>
+          </div>
+        </div>
+      ),
+    },
+
+    {
+      key: "nextsteps",
+      title: "Next Steps",
+      content: (
+        <div className="grid gap-10 lg:grid-cols-12 lg:items-start">
+          <div className="lg:col-span-7">
+            <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-red-600 dark:text-red-400">
+              Scaling pathway
+            </div>
+            <h3 className="mt-3 text-3xl md:text-4xl font-black tracking-tight text-slate-900 dark:text-white">
+              Make the next collaboration fast and predictable.
+            </h3>
+
+            <p className="mt-5 text-base md:text-lg leading-relaxed text-slate-600 dark:text-slate-300">
+              We keep execution simple: clear roles, clear timeline, clear deliverables. The goal is to make partnership easy to
+              say “yes” to.
+            </p>
+
+            <div className="mt-7 space-y-4">
+              {[
+                { step: "1", t: "Align objective", d: "Education / culture / community engagement target." },
+                { step: "2", t: "Pick format", d: "Community event, workshop, or campus activation." },
+                { step: "3", t: "Run playbook", d: "Repeatable plan with partners + volunteers." },
+                { step: "4", t: "Report & package", d: "Share outcomes, documentation, and media kit." },
+              ].map((x) => (
+                <div
+                  key={x.step}
+                  className="flex gap-4 rounded-2xl border border-slate-200/70 bg-white/70 p-5 backdrop-blur
+                             dark:border-white/10 dark:bg-white/6"
+                >
+                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-red-600 to-blue-600 text-white font-black">
+                    {x.step}
+                  </div>
+                  <div>
+                    <div className="text-lg font-black text-slate-900 dark:text-white">{x.t}</div>
+                    <div className="mt-1 text-slate-600 dark:text-slate-300">{x.d}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-9 flex flex-wrap gap-4">
+              <a
+                href={`mailto:${site.email}`}
+                className="btn-shine rounded-2xl bg-red-600 px-8 py-4 font-bold text-white transition hover:bg-red-700"
+              >
+                Discuss next event
+              </a>
+              <a
+                href={portfolio.featured.ctaDownload.href}
+                className="btn-shine rounded-2xl border border-slate-200/70 bg-white/70 px-8 py-4 font-bold text-slate-900 backdrop-blur transition hover:bg-white
+                           dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
+              >
+                Download report
+              </a>
+            </div>
+          </div>
+
+          <div className="lg:col-span-5">
+            <SpotlightCard className="p-8">
+              <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-red-600 dark:text-red-400">
+                Contact
+              </div>
+              <div className="mt-4 text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+                Let’s build the next collaboration.
+              </div>
+              <p className="mt-3 text-slate-600 dark:text-slate-300">
+                We can adapt the playbook for sponsors, universities, and community partners.
+              </p>
+
+              <div className="mt-6 rounded-2xl border border-slate-200/70 bg-white/70 p-5 backdrop-blur dark:border-white/10 dark:bg-white/6">
+                <div className="text-sm font-bold text-slate-900 dark:text-white">Email</div>
+                <div className="mt-1 font-semibold text-slate-700 dark:text-slate-200">{site.email}</div>
+              </div>
+            </SpotlightCard>
+          </div>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <main className="pt-24">
       {/* HERO */}
@@ -38,9 +361,9 @@ export default function Page() {
         <div className="relative">
           <div className="pointer-events-none absolute inset-x-0 -top-6 h-px bg-gradient-to-r from-transparent via-slate-200/80 to-transparent dark:via-white/10" />
 
-          <Reveal delayMs={40}>
+          <Reveal delayMs={40} variant="fade" staggerChildren>
             <div className="flex flex-wrap justify-center gap-3">
-              {hero.chips.map((t) => (
+              {hero.chips.map((t: string) => (
                 <span
                   key={t}
                   className="inline-flex items-center gap-2 rounded-full border border-slate-300/70 bg-white/75 px-4 py-2 text-sm font-semibold text-slate-700 backdrop-blur
@@ -54,7 +377,7 @@ export default function Page() {
             </div>
           </Reveal>
 
-          <Reveal delayMs={120}>
+          <Reveal delayMs={120} variant="zoom">
             <h1 className="mt-8 text-center text-5xl font-black tracking-tight text-slate-900 dark:text-white md:text-7xl lg:text-8xl leading-[0.95]">
               <span className="block">{hero.headingTop}</span>
               <span className="mt-1 block bg-gradient-to-r from-red-600 via-purple-500 to-blue-600 bg-clip-text text-transparent idecn-shimmer">
@@ -63,13 +386,13 @@ export default function Page() {
             </h1>
           </Reveal>
 
-          <Reveal delayMs={200}>
+          <Reveal delayMs={200} variant="up">
             <p className="mx-auto mt-6 max-w-3xl text-center text-base md:text-xl leading-relaxed text-slate-600 dark:text-slate-300">
               {hero.subtitle}
             </p>
           </Reveal>
 
-          <Reveal delayMs={280}>
+          <Reveal delayMs={280} variant="up">
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <a
                 href={hero.ctas.primary.href}
@@ -100,83 +423,12 @@ export default function Page() {
               </a>
             </div>
           </Reveal>
-
-          <Reveal delayMs={360}>
-            <div className="mt-10 flex items-center justify-center gap-3 text-sm font-semibold text-slate-500 dark:text-slate-400">
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white/75 shadow-sm dark:border-white/10 dark:bg-white/10 idecn-bob">
-                ↓
-              </span>
-              <span>Scroll to explore</span>
-            </div>
-          </Reveal>
-
-          {/* Premium row */}
-          <div className="mt-14 grid gap-7 lg:grid-cols-12 lg:items-stretch">
-            <div className="lg:col-span-7">
-              <Reveal delayMs={120}>
-                <SpotlightCard className="p-8 md:p-10">
-                  <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
-                    <div>
-                      <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-red-600 dark:text-red-400">
-                        Why it matters
-                      </div>
-                      <div className="mt-3 text-2xl md:text-3xl font-black tracking-tight text-slate-900 dark:text-white">
-                        Clear programs. Real execution. Partner-ready delivery.
-                      </div>
-                      <p className="mt-3 text-base md:text-lg leading-relaxed text-slate-600 dark:text-slate-300">
-                        We design initiatives that are easy to run, easy to report, and easy to scale with the right partners.
-                      </p>
-                    </div>
-
-                    <div className="mt-2 md:mt-0 shrink-0 rounded-2xl border border-slate-200/70 bg-white/60 px-5 py-4 backdrop-blur dark:border-white/10 dark:bg-white/6">
-                      <div className="text-sm font-bold text-slate-900 dark:text-white">Operating</div>
-                      <div className="mt-1 text-slate-600 dark:text-slate-300">U.S.-based • Since 2024</div>
-                      <div className="mt-3 h-1 w-20 rounded-full bg-gradient-to-r from-red-600 to-blue-600" />
-                    </div>
-                  </div>
-                </SpotlightCard>
-              </Reveal>
-            </div>
-
-            <div className="lg:col-span-5">
-              <Reveal delayMs={180}>
-                <SpotlightCard className="p-8 md:p-10">
-                  <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-red-600 dark:text-red-400">
-                    At a glance
-                  </div>
-
-                  <div className="mt-6 space-y-6">
-                    {about.atAGlance.items.map((r) => (
-                      <div key={r.k} className="border-b border-slate-100 pb-5 last:border-0 last:pb-0 dark:border-white/10">
-                        <div className="text-sm font-bold text-slate-900 dark:text-white">{r.k}</div>
-                        <div className="mt-2 text-lg font-semibold text-slate-700 dark:text-slate-200">{r.v}</div>
-                      </div>
-                    ))}
-
-                    <a
-                      href={about.atAGlance.cta.href}
-                      className="btn-shine mt-2 inline-flex w-full items-center justify-center rounded-2xl bg-slate-900 px-6 py-4 text-lg font-bold text-white
-                                 transition hover:opacity-95 focus:outline-none focus:ring-4 focus:ring-slate-900/15
-                                 dark:bg-white dark:text-slate-900 dark:focus:ring-white/12"
-                    >
-                      {about.atAGlance.cta.label}
-                    </a>
-
-                    <div
-                      aria-hidden="true"
-                      className="pointer-events-none mt-7 h-[110px] rounded-2xl border border-slate-200/60 bg-gradient-to-r from-red-600/10 via-purple-600/8 to-blue-600/10 dark:border-white/10 dark:from-red-500/14 dark:to-blue-500/14 idecn-shimmer"
-                    />
-                  </div>
-                </SpotlightCard>
-              </Reveal>
-            </div>
-          </div>
         </div>
       </section>
 
       {/* ABOUT */}
       <section id="about" className="scroll-mt-28 mx-auto max-w-7xl px-6 py-24 md:py-28">
-        <Reveal>
+        <Reveal variant="up">
           <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
             <div>
               <h2 className="text-4xl font-black tracking-tight text-slate-900 dark:text-white md:text-5xl">
@@ -199,14 +451,14 @@ export default function Page() {
               </div>
             </div>
 
-            <Reveal delayMs={120}>
+            <Reveal delayMs={120} variant="right">
               <SpotlightCard className="p-9 md:p-10">
                 <div className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
                   {about.atAGlance.title}
                 </div>
 
                 <div className="mt-7 space-y-6">
-                  {about.atAGlance.items.map((r) => (
+                  {about.atAGlance.items.map((r: any) => (
                     <div key={r.k} className="border-b border-slate-100 pb-5 last:border-0 last:pb-0 dark:border-white/10">
                       <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-red-600 dark:text-red-400">
                         {r.k}
@@ -235,8 +487,8 @@ export default function Page() {
         </Reveal>
 
         <div className="mt-12 grid gap-7 md:grid-cols-2">
-          {programs.cards.map((c, i) => (
-            <Reveal key={c.title} delayMs={80 + i * 60}>
+          {programs.cards.map((c: any, i: number) => (
+            <Reveal key={c.title} delayMs={80 + i * 60} variant={i % 2 === 0 ? "left" : "right"}>
               <SpotlightCard className="p-9 md:p-10">
                 <div className="flex items-start justify-between gap-6">
                   <div>
@@ -245,7 +497,7 @@ export default function Page() {
                     </div>
 
                     <ul className="mt-5 space-y-3 text-base md:text-lg text-slate-600 dark:text-slate-300">
-                      {c.bullets.map((b) => (
+                      {c.bullets.map((b: string) => (
                         <li key={b} className="flex gap-3">
                           <span className="mt-2 h-2 w-2 rounded-full bg-red-600" />
                           <span>{b}</span>
@@ -258,13 +510,8 @@ export default function Page() {
                 </div>
 
                 <div className="mt-7 flex flex-wrap gap-2.5">
-                  {c.tags.map((t) => (
-                    <span
-                      key={t}
-                      className="rounded-full bg-slate-100/80 px-3.5 py-2 text-sm font-semibold text-slate-700 dark:bg-white/10 dark:text-slate-200"
-                    >
-                      {t}
-                    </span>
+                  {c.tags.map((t: string) => (
+                    <Pill key={t}>{t}</Pill>
                   ))}
                 </div>
               </SpotlightCard>
@@ -273,155 +520,75 @@ export default function Page() {
         </div>
       </section>
 
-      {/* PORTFOLIO */}
+      {/* PORTFOLIO (Carousel) */}
       <section id="portfolio" className="scroll-mt-28 mx-auto max-w-7xl px-6 py-24 md:py-28">
         <Reveal>
-          <SectionTitle eyebrow={portfolio.eyebrow} title={portfolio.title} />
+          <SectionTitle eyebrow={portfolio.eyebrow} title={portfolio.title} subtitle={portfolio.subtitle} />
         </Reveal>
 
-        <Reveal delayMs={140}>
-          <SpotlightCard className="mt-12 p-9 md:p-10">
-            <div className="grid gap-10 lg:grid-cols-12 lg:items-start">
-              <div className="lg:col-span-7">
-                <div className="flex flex-wrap gap-3">
-                  <span className="rounded-full bg-slate-900 px-4 py-2 text-sm font-bold text-white dark:bg-white dark:text-slate-900">
-                    {portfolio.featured.date}
-                  </span>
-                  <span className="rounded-full bg-slate-100 px-4 py-2 text-sm font-bold text-slate-800 dark:bg-white/10 dark:text-slate-100">
-                    {portfolio.featured.location}
-                  </span>
-                </div>
-
-                <h3 className="mt-6 text-3xl md:text-4xl font-black tracking-tight text-slate-900 dark:text-white">
-                  {portfolio.featured.name}
-                </h3>
-
-                <p className="mt-5 text-base md:text-lg leading-relaxed text-slate-600 dark:text-slate-300">
-                  {portfolio.featured.summary}
-                </p>
-
-                <div className="mt-7 flex flex-wrap gap-2.5">
-                  {portfolio.featured.highlights.map((h) => (
-                    <span
-                      key={h}
-                      className="rounded-full bg-slate-100/80 px-3.5 py-2 text-sm font-semibold text-slate-700 dark:bg-white/10 dark:text-slate-200"
-                    >
-                      {h}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="mt-9 flex flex-wrap gap-4">
-                  <a
-                    href={portfolio.featured.ctaDownload.href}
-                    className="btn-shine rounded-2xl bg-red-600 px-8 py-4 font-bold text-white transition hover:bg-red-700"
-                  >
-                    {portfolio.featured.ctaDownload.label}
-                  </a>
-
-                  <a
-                    href={portfolio.featured.ctaSecondary.href}
-                    className="btn-shine rounded-2xl border border-slate-200/70 bg-white/70 px-8 py-4 font-bold text-slate-900 backdrop-blur transition hover:bg-white
-                           dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
-                  >
-                    {portfolio.featured.ctaSecondary.label}
-                  </a>
-                </div>
+        <Reveal delayMs={120} variant="fade">
+          <div className="mt-10 rounded-[34px] border border-slate-200/70 bg-white/55 p-6 backdrop-blur dark:border-white/10 dark:bg-white/5 md:p-8">
+            <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+              <div className="text-sm font-semibold text-slate-600 dark:text-slate-300">
+                Swipe / scroll to view slides
               </div>
-
-              {/* ✅ Execution Snapshot (improved readability + premium) */}
-              <div className="lg:col-span-5">
-                <div
-                  className="group relative overflow-hidden rounded-[24px] border border-slate-200/70 bg-white/70 p-7 backdrop-blur
-                             shadow-[0_18px_70px_rgba(2,6,23,0.10)]
-                             transition hover:-translate-y-1 hover:shadow-[0_28px_90px_rgba(2,6,23,0.14)]
-                             dark:border-white/10 dark:bg-white/5 dark:shadow-[0_22px_80px_rgba(0,0,0,0.45)]"
-                >
-                  {/* Batik texture (calmer) */}
-                  <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute inset-0 opacity-[0.18] dark:opacity-[0.12]"
-                    style={{
-                      backgroundImage: "url('/batik-pattern.svg')",
-                      backgroundRepeat: "repeat",
-                      backgroundPosition: "center",
-                      backgroundSize: "820px 820px",
-                      filter: "grayscale(1) contrast(1.3)",
-                    }}
-                  />
-
-                  {/* Readability scrim */}
-                  <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute inset-0
-                               bg-gradient-to-b from-white/90 via-white/70 to-white/55
-                               dark:from-slate-950/35 dark:via-slate-950/25 dark:to-slate-950/15"
-                  />
-
-                  {/* Accent wash */}
-                  <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute inset-0
-                               bg-gradient-to-br from-red-600/10 via-transparent to-blue-600/10
-                               dark:from-red-500/14 dark:to-blue-500/14"
-                  />
-
-                  {/* Accent bar */}
-                  <div
-                    aria-hidden="true"
-                    className="absolute left-6 top-6 h-1 w-24 rounded-full bg-gradient-to-r from-red-600 to-blue-600"
-                  />
-
-                  <div className="relative mt-5">
-                    <div className="flex items-center justify-between gap-4">
-                      <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-slate-800 dark:text-slate-200">
-                        Execution Snapshot
-                      </div>
-
-                      <span className="rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-xs font-bold text-slate-800
-                                       shadow-sm dark:border-white/10 dark:bg-white/10 dark:text-slate-100"
-                      >
-                        {portfolio.featured.date}
-                      </span>
-                    </div>
-
-                    {/* Content panel */}
-                    <div className="mt-5 rounded-2xl border border-slate-200/70 bg-white/82 p-5 backdrop-blur
-                                    dark:border-white/10 dark:bg-slate-950/28"
-                    >
-                      <dl className="grid gap-4">
-                        <div className="grid grid-cols-[110px_1fr] items-start gap-4">
-                          <dt className="text-sm font-bold text-slate-700 dark:text-slate-300">Format</dt>
-                          <dd className="text-sm font-extrabold text-slate-900 dark:text-white">Community Event</dd>
-                        </div>
-
-                        <div className="h-px bg-slate-200/70 dark:bg-white/10" />
-
-                        <div className="grid grid-cols-[110px_1fr] items-start gap-4">
-                          <dt className="text-sm font-bold text-slate-700 dark:text-slate-300">Focus</dt>
-                          <dd className="text-sm font-extrabold text-slate-900 dark:text-white">Culinary &amp; Culture</dd>
-                        </div>
-
-                        <div className="h-px bg-slate-200/70 dark:bg-white/10" />
-
-                        <div className="grid grid-cols-[110px_1fr] items-start gap-4">
-                          <dt className="text-sm font-bold text-slate-700 dark:text-slate-300">Outcome</dt>
-                          <dd className="text-sm font-extrabold text-slate-900 dark:text-white">Partner-ready playbook</dd>
-                        </div>
-                      </dl>
-                    </div>
-
-                    <div className="mt-6 flex items-center gap-3">
-                      <span className="h-2 w-2 rounded-full bg-red-600" />
-                      <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
-                        Clear summary, easy to pitch to partners.
-                      </span>
-                    </div>
-                  </div>
-                </div>
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-red-600" />
+                <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">Portfolio carousel</span>
               </div>
             </div>
-          </SpotlightCard>
+
+            <div className="relative mt-6">
+              {/* edge fades */}
+              <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r from-white/80 to-transparent dark:from-slate-950/40" />
+              <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-white/80 to-transparent dark:from-slate-950/40" />
+
+              {/* scroll-snap track */}
+              <div
+                className="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-6 pr-6
+                           [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+              >
+                {portfolioSlides.map((s, idx) => (
+                  <div
+                    key={s.key}
+                    className="snap-center shrink-0 w-[92%] md:w-[86%] lg:w-[78%]"
+                    aria-label={`Portfolio slide ${idx + 1}: ${s.title}`}
+                  >
+                    <Reveal delayMs={60 + idx * 90} variant="up">
+                      <SpotlightCard className="p-9 md:p-10">
+                        <div className="flex items-center justify-between gap-4">
+                          <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-red-600 dark:text-red-400">
+                            Slide {idx + 1} / {portfolioSlides.length}
+                          </div>
+                          <div className="rounded-full border border-slate-200/70 bg-white/70 px-3 py-1 text-xs font-bold text-slate-800 backdrop-blur
+                                          dark:border-white/10 dark:bg-white/10 dark:text-slate-100"
+                          >
+                            {s.title}
+                          </div>
+                        </div>
+
+                        <div className="mt-7">{s.content}</div>
+                      </SpotlightCard>
+                    </Reveal>
+                  </div>
+                ))}
+              </div>
+
+              {/* dots (visual) */}
+              <div className="mt-2 flex justify-center gap-2">
+                {portfolioSlides.map((s, i) => (
+                  <span
+                    key={s.key}
+                    className={[
+                      "h-2.5 w-2.5 rounded-full transition",
+                      i === 0 ? "bg-slate-900 dark:bg-white" : "bg-slate-300/80 dark:bg-white/20",
+                    ].join(" ")}
+                    aria-hidden="true"
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
         </Reveal>
       </section>
 
@@ -432,8 +599,8 @@ export default function Page() {
         </Reveal>
 
         <div className="mt-12 grid gap-7 lg:grid-cols-3">
-          {partners.cards.map((c, i) => (
-            <Reveal key={c.title} delayMs={80 + i * 60}>
+          {partners.cards.map((c: any, i: number) => (
+            <Reveal key={c.title} delayMs={80 + i * 60} variant="up">
               <SpotlightCard className="p-9 md:p-10">
                 <div className="text-xl md:text-2xl font-black tracking-tight text-slate-900 dark:text-white">
                   {c.title}
@@ -453,8 +620,8 @@ export default function Page() {
         </Reveal>
 
         <div className="mt-12 grid gap-7 lg:grid-cols-3">
-          {getInvolved.cards.map((c, i) => (
-            <Reveal key={c.title} delayMs={80 + i * 60}>
+          {getInvolved.cards.map((c: any, i: number) => (
+            <Reveal key={c.title} delayMs={80 + i * 60} variant="up">
               <SpotlightCard className="p-9 md:p-10">
                 <div className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">{c.title}</div>
                 <p className="mt-3 text-base md:text-lg text-slate-600 dark:text-slate-300">{c.subtitle}</p>
@@ -469,7 +636,7 @@ export default function Page() {
           ))}
         </div>
 
-        <Reveal delayMs={140}>
+        <Reveal delayMs={140} variant="zoom">
           <div className="mt-12 overflow-hidden rounded-[34px] border border-slate-200/70 bg-white/65 p-10 backdrop-blur dark:border-white/10 dark:bg-white/6 md:p-14">
             <div className="grid gap-10 lg:grid-cols-12 lg:items-center">
               <div className="lg:col-span-8">
