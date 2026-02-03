@@ -105,3 +105,96 @@ body {
   from { transform: translateX(-40%) rotate(10deg); }
   to { transform: translateX(40%) rotate(10deg); }
 }
+
+
+/* ------------------------------ */
+/* Reveal variants + stagger       */
+/* ------------------------------ */
+
+.reveal {
+  --reveal-x: 0px;
+  --reveal-y: 18px;
+  --reveal-s: 1;
+  opacity: 0;
+  transform: translate3d(var(--reveal-x), var(--reveal-y), 0) scale(var(--reveal-s));
+  filter: blur(10px);
+  transition:
+    opacity 780ms cubic-bezier(.2,.8,.2,1),
+    transform 780ms cubic-bezier(.2,.8,.2,1),
+    filter 780ms cubic-bezier(.2,.8,.2,1);
+  transition-delay: var(--reveal-delay);
+  will-change: opacity, transform, filter;
+}
+
+.reveal[data-reveal="fade"] { --reveal-y: 0px; }
+.reveal[data-reveal="zoom"] { --reveal-y: 10px; --reveal-s: .965; }
+.reveal[data-reveal="left"] { --reveal-x: -26px; --reveal-y: 0px; }
+.reveal[data-reveal="right"]{ --reveal-x:  26px; --reveal-y: 0px; }
+
+.reveal--in {
+  opacity: 1;
+  transform: translate3d(0,0,0) scale(1);
+  filter: blur(0);
+}
+
+/* stagger: kasih delay bertingkat ke anak-anak */
+.reveal-stagger > * { transition-delay: calc(var(--reveal-delay) + 0ms) !important; }
+.reveal-stagger > :nth-child(2) { transition-delay: calc(var(--reveal-delay) + 80ms) !important; }
+.reveal-stagger > :nth-child(3) { transition-delay: calc(var(--reveal-delay) + 160ms) !important; }
+.reveal-stagger > :nth-child(4) { transition-delay: calc(var(--reveal-delay) + 240ms) !important; }
+.reveal-stagger > :nth-child(5) { transition-delay: calc(var(--reveal-delay) + 320ms) !important; }
+.reveal-stagger > :nth-child(6) { transition-delay: calc(var(--reveal-delay) + 400ms) !important; }
+
+/* ------------------------------ */
+/* Premium border beam on cards    */
+/* ------------------------------ */
+
+@media (prefers-reduced-motion: no-preference) {
+  .spotlight::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    opacity: 0;
+    pointer-events: none;
+    background: linear-gradient(90deg,
+      rgba(239,68,68,0.0),
+      rgba(239,68,68,0.45),
+      rgba(59,130,246,0.45),
+      rgba(59,130,246,0.0)
+    );
+    background-size: 220% 100%;
+    transform: translateZ(0);
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    transition: opacity 260ms ease;
+  }
+
+  .spotlight:hover::after {
+    opacity: 1;
+    animation: idecn-beam 1.25s ease-in-out both;
+  }
+
+  @keyframes idecn-beam {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+  }
+}
+
+/* ------------------------------ */
+/* Accessibility: reduce motion    */
+/* ------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal--in {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+  }
+  .spotlight::after { display: none !important; }
+}
