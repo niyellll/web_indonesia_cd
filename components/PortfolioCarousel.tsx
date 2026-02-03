@@ -9,7 +9,12 @@ type Props = {
   label?: string;
 };
 
-export default function PortfolioCarousel({ children, count, className = "", label = "Portfolio carousel" }: Props) {
+export default function PortfolioCarousel({
+  children,
+  count,
+  className = "",
+  label = "Portfolio carousel",
+}: Props) {
   const scrollerRef = React.useRef<HTMLDivElement | null>(null);
   const [active, setActive] = React.useState(0);
 
@@ -28,7 +33,6 @@ export default function PortfolioCarousel({ children, count, className = "", lab
       const target = slides[idx];
       if (!target) return;
 
-      // center target slide in viewport
       const left = target.offsetLeft - (el.clientWidth - target.clientWidth) / 2;
       el.scrollTo({ left, behavior: "smooth" });
     },
@@ -71,7 +75,6 @@ export default function PortfolioCarousel({ children, count, className = "", lab
     };
 
     el.addEventListener("scroll", onScroll, { passive: true });
-    // initial
     updateActive();
 
     return () => {
@@ -154,15 +157,15 @@ export default function PortfolioCarousel({ children, count, className = "", lab
       tabIndex={0}
       onKeyDown={onKeyDown}
     >
-      {/* Edge fades */}
+      {/* edge fades */}
       <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r from-white/80 to-transparent dark:from-slate-950/40" />
       <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-white/80 to-transparent dark:from-slate-950/40" />
 
-      {/* Arrows */}
+      {/* arrows */}
       <ArrowBtn dir="left" onClick={prev} disabled={active === 0} />
       <ArrowBtn dir="right" onClick={next} disabled={active === count - 1} />
 
-      {/* Track */}
+      {/* track */}
       <div
         ref={scrollerRef}
         className="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-6 pr-6
@@ -171,7 +174,7 @@ export default function PortfolioCarousel({ children, count, className = "", lab
         {children}
       </div>
 
-      {/* Dots (aktif ikut slide) */}
+      {/* dots */}
       <div className="mt-2 flex justify-center gap-2">
         {Array.from({ length: count }).map((_, i) => (
           <button
