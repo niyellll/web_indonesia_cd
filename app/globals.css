@@ -33,7 +33,7 @@ body {
   filter: blur(0);
 }
 
-/* Shimmer */
+/* Shimmer + micro motion */
 @media (prefers-reduced-motion: no-preference) {
   .idecn-shimmer {
     background-size: 200% 200%;
@@ -60,7 +60,7 @@ body {
   50% { transform: translateY(6px); opacity: 1; }
 }
 
-/* Interactive spotlight (works with CSS vars set by client component) */
+/* Interactive spotlight */
 .spotlight {
   position: relative;
   overflow: hidden;

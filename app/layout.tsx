@@ -36,7 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
 
       <body className="min-h-screen bg-slate-50 text-slate-900 text-[16px] md:text-[17px] selection:bg-red-600 selection:text-white dark:bg-slate-950 dark:text-slate-100">
-        {/* Batik layer (stronger but masked by wash for readability) */}
+        {/* Batik layer (stronger but masked, still readable) */}
         <div
           aria-hidden="true"
           className="pointer-events-none fixed inset-0 z-0"
@@ -82,7 +82,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                      dark:from-slate-950/88 dark:via-slate-950/60 dark:to-slate-950/30"
         />
 
-        {/* Premium glows (subtle, not like web2) */}
+        {/* Premium glows (not like web2) */}
         <div
           aria-hidden="true"
           className="pointer-events-none fixed inset-0 z-0

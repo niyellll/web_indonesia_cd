@@ -83,7 +83,7 @@ export const portfolio = {
     location: "Washington, D.C., USA",
     summary:
       "A community-based cultural event celebrating Indonesian cuisine and cross-cultural connection—executed with partners and volunteers on the ground.",
-    highlights: ["Community engagement", "Vendor collaboration", "Cultural showcase", "Partnership-ready playbook"],
+    highlights: ["Community engagement", "Vendor collaboration", "Cultural showcase", "Partner-ready playbook"],
     ctaDownload: { label: "Download report", href: "/portfolio-report.pdf" },
     ctaSecondary: { label: "Discuss next event", href: `mailto:${site.email}` },
   },
@@ -93,18 +93,9 @@ export const partners = {
   title: "Partners",
   subtitle: "We collaborate with mission-aligned organizations to scale impact with clarity and trust.",
   cards: [
-    {
-      title: "Sponsors & Donors",
-      desc: "Support programs and events with clear reporting, measurable outcomes, and strong brand alignment.",
-    },
-    {
-      title: "Universities & Schools",
-      desc: "Co-create pathways for learning, exchange, mentorship, and applied collaboration across borders.",
-    },
-    {
-      title: "Community Organizations",
-      desc: "Partner to deliver events and programs that strengthen local communities and cultural presence.",
-    },
+    { title: "Sponsors & Donors", desc: "Support programs and events with clear reporting, measurable outcomes, and strong brand alignment." },
+    { title: "Universities & Schools", desc: "Co-create pathways for learning, exchange, mentorship, and applied collaboration across borders." },
+    { title: "Community Organizations", desc: "Partner to deliver events and programs that strengthen local communities and cultural presence." },
   ],
 };
 
