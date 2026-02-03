@@ -2,7 +2,15 @@ import Reveal from "../components/Reveal";
 import SpotlightCard from "../components/SpotlightCard";
 import { site, hero, about, programs, portfolio, partners, getInvolved } from "../lib/cms";
 
-function SectionTitle({ eyebrow, title, subtitle }: { eyebrow?: string; title: string; subtitle?: string }) {
+function SectionTitle({
+  eyebrow,
+  title,
+  subtitle,
+}: {
+  eyebrow?: string;
+  title: string;
+  subtitle?: string;
+}) {
   return (
     <div className="text-center">
       {eyebrow && (
@@ -10,9 +18,13 @@ function SectionTitle({ eyebrow, title, subtitle }: { eyebrow?: string; title: s
           {eyebrow}
         </div>
       )}
-      <h2 className="mt-3 text-4xl font-black tracking-tight text-slate-900 dark:text-white md:text-5xl">{title}</h2>
+      <h2 className="mt-3 text-4xl font-black tracking-tight text-slate-900 dark:text-white md:text-5xl">
+        {title}
+      </h2>
       {subtitle && (
-        <p className="mx-auto mt-4 max-w-2xl text-base md:text-lg text-slate-600 dark:text-slate-300">{subtitle}</p>
+        <p className="mx-auto mt-4 max-w-2xl text-base md:text-lg text-slate-600 dark:text-slate-300">
+          {subtitle}
+        </p>
       )}
     </div>
   );
@@ -21,7 +33,7 @@ function SectionTitle({ eyebrow, title, subtitle }: { eyebrow?: string; title: s
 export default function Page() {
   return (
     <main className="pt-24">
-      {/* HERO: centered title + premium composition */}
+      {/* HERO */}
       <section className="mx-auto max-w-7xl px-6 py-16 md:py-20">
         <div className="relative">
           <div className="pointer-events-none absolute inset-x-0 -top-6 h-px bg-gradient-to-r from-transparent via-slate-200/80 to-transparent dark:via-white/10" />
@@ -98,7 +110,7 @@ export default function Page() {
             </div>
           </Reveal>
 
-          {/* Secondary premium row */}
+          {/* Premium row */}
           <div className="mt-14 grid gap-7 lg:grid-cols-12 lg:items-stretch">
             <div className="lg:col-span-7">
               <Reveal delayMs={120}>
@@ -167,14 +179,19 @@ export default function Page() {
         <Reveal>
           <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
             <div>
-              <h2 className="text-4xl font-black tracking-tight text-slate-900 dark:text-white md:text-5xl">{about.title}</h2>
-              <p className="mt-6 text-base md:text-xl leading-relaxed text-slate-600 dark:text-slate-300">{about.lead}</p>
+              <h2 className="text-4xl font-black tracking-tight text-slate-900 dark:text-white md:text-5xl">
+                {about.title}
+              </h2>
+              <p className="mt-6 text-base md:text-xl leading-relaxed text-slate-600 dark:text-slate-300">
+                {about.lead}
+              </p>
 
               <div className="mt-10 space-y-6">
                 <div className="rounded-2xl border border-slate-200/70 bg-white/60 p-6 backdrop-blur dark:border-white/10 dark:bg-white/5">
                   <div className="text-lg font-bold text-slate-900 dark:text-white">Our Purpose</div>
                   <p className="mt-2 text-slate-600 dark:text-slate-300">{about.purpose}</p>
                 </div>
+
                 <div className="rounded-2xl border border-slate-200/70 bg-white/60 p-6 backdrop-blur dark:border-white/10 dark:bg-white/5">
                   <div className="text-lg font-bold text-slate-900 dark:text-white">Primary Audience</div>
                   <p className="mt-2 text-slate-600 dark:text-slate-300">{about.audience}</p>
@@ -184,14 +201,20 @@ export default function Page() {
 
             <Reveal delayMs={120}>
               <SpotlightCard className="p-9 md:p-10">
-                <div className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">{about.atAGlance.title}</div>
+                <div className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+                  {about.atAGlance.title}
+                </div>
+
                 <div className="mt-7 space-y-6">
                   {about.atAGlance.items.map((r) => (
                     <div key={r.k} className="border-b border-slate-100 pb-5 last:border-0 last:pb-0 dark:border-white/10">
-                      <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-red-600 dark:text-red-400">{r.k}</div>
+                      <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-red-600 dark:text-red-400">
+                        {r.k}
+                      </div>
                       <div className="mt-2 text-lg font-semibold text-slate-900 dark:text-white">{r.v}</div>
                     </div>
                   ))}
+
                   <a
                     href={about.atAGlance.cta.href}
                     className="btn-shine inline-flex w-full items-center justify-center rounded-2xl bg-slate-900 px-6 py-4 text-lg font-bold text-white transition hover:opacity-95 dark:bg-white dark:text-slate-900"
@@ -217,7 +240,10 @@ export default function Page() {
               <SpotlightCard className="p-9 md:p-10">
                 <div className="flex items-start justify-between gap-6">
                   <div>
-                    <div className="text-2xl md:text-3xl font-black tracking-tight text-slate-900 dark:text-white">{c.title}</div>
+                    <div className="text-2xl md:text-3xl font-black tracking-tight text-slate-900 dark:text-white">
+                      {c.title}
+                    </div>
+
                     <ul className="mt-5 space-y-3 text-base md:text-lg text-slate-600 dark:text-slate-300">
                       {c.bullets.map((b) => (
                         <li key={b} className="flex gap-3">
@@ -233,7 +259,10 @@ export default function Page() {
 
                 <div className="mt-7 flex flex-wrap gap-2.5">
                   {c.tags.map((t) => (
-                    <span key={t} className="rounded-full bg-slate-100/80 px-3.5 py-2 text-sm font-semibold text-slate-700 dark:bg-white/10 dark:text-slate-200">
+                    <span
+                      key={t}
+                      className="rounded-full bg-slate-100/80 px-3.5 py-2 text-sm font-semibold text-slate-700 dark:bg-white/10 dark:text-slate-200"
+                    >
                       {t}
                     </span>
                   ))}
@@ -263,22 +292,33 @@ export default function Page() {
                   </span>
                 </div>
 
-                <h3 className="mt-6 text-3xl md:text-4xl font-black tracking-tight text-slate-900 dark:text-white">{portfolio.featured.name}</h3>
+                <h3 className="mt-6 text-3xl md:text-4xl font-black tracking-tight text-slate-900 dark:text-white">
+                  {portfolio.featured.name}
+                </h3>
 
-                <p className="mt-5 text-base md:text-lg leading-relaxed text-slate-600 dark:text-slate-300">{portfolio.featured.summary}</p>
+                <p className="mt-5 text-base md:text-lg leading-relaxed text-slate-600 dark:text-slate-300">
+                  {portfolio.featured.summary}
+                </p>
 
                 <div className="mt-7 flex flex-wrap gap-2.5">
                   {portfolio.featured.highlights.map((h) => (
-                    <span key={h} className="rounded-full bg-slate-100/80 px-3.5 py-2 text-sm font-semibold text-slate-700 dark:bg-white/10 dark:text-slate-200">
+                    <span
+                      key={h}
+                      className="rounded-full bg-slate-100/80 px-3.5 py-2 text-sm font-semibold text-slate-700 dark:bg-white/10 dark:text-slate-200"
+                    >
                       {h}
                     </span>
                   ))}
                 </div>
 
                 <div className="mt-9 flex flex-wrap gap-4">
-                  <a href={portfolio.featured.ctaDownload.href} className="btn-shine rounded-2xl bg-red-600 px-8 py-4 font-bold text-white transition hover:bg-red-700">
+                  <a
+                    href={portfolio.featured.ctaDownload.href}
+                    className="btn-shine rounded-2xl bg-red-600 px-8 py-4 font-bold text-white transition hover:bg-red-700"
+                  >
                     {portfolio.featured.ctaDownload.label}
                   </a>
+
                   <a
                     href={portfolio.featured.ctaSecondary.href}
                     className="btn-shine rounded-2xl border border-slate-200/70 bg-white/70 px-8 py-4 font-bold text-slate-900 backdrop-blur transition hover:bg-white
@@ -289,30 +329,94 @@ export default function Page() {
                 </div>
               </div>
 
+              {/* ✅ Execution Snapshot (improved readability + premium) */}
               <div className="lg:col-span-5">
-                <div className="relative overflow-hidden rounded-[22px] border border-slate-200/70 bg-white/60 p-7 backdrop-blur dark:border-white/10 dark:bg-white/5">
+                <div
+                  className="group relative overflow-hidden rounded-[24px] border border-slate-200/70 bg-white/70 p-7 backdrop-blur
+                             shadow-[0_18px_70px_rgba(2,6,23,0.10)]
+                             transition hover:-translate-y-1 hover:shadow-[0_28px_90px_rgba(2,6,23,0.14)]
+                             dark:border-white/10 dark:bg-white/5 dark:shadow-[0_22px_80px_rgba(0,0,0,0.45)]"
+                >
+                  {/* Batik texture (calmer) */}
                   <div
                     aria-hidden="true"
-                    className="pointer-events-none absolute inset-0 opacity-[0.22] dark:opacity-[0.14]"
+                    className="pointer-events-none absolute inset-0 opacity-[0.18] dark:opacity-[0.12]"
                     style={{
                       backgroundImage: "url('/batik-pattern.svg')",
                       backgroundRepeat: "repeat",
                       backgroundPosition: "center",
                       backgroundSize: "820px 820px",
+                      filter: "grayscale(1) contrast(1.3)",
                     }}
                   />
-                  <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-br from-red-600/10 via-transparent to-blue-600/10 dark:from-red-500/14 dark:to-blue-500/14" />
-                  <div className="relative">
-                    <div className="text-sm font-extrabold uppercase tracking-[0.18em] text-slate-700 dark:text-slate-200">
-                      Execution Snapshot
-                    </div>
-                    <div className="mt-4 space-y-3 text-slate-600 dark:text-slate-300">
-                      <div className="flex justify-between gap-4"><span>Format</span><span className="font-semibold">Community Event</span></div>
-                      <div className="flex justify-between gap-4"><span>Focus</span><span className="font-semibold">Culinary & Culture</span></div>
-                      <div className="flex justify-between gap-4"><span>Outcome</span><span className="font-semibold">Partner-ready playbook</span></div>
+
+                  {/* Readability scrim */}
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0
+                               bg-gradient-to-b from-white/90 via-white/70 to-white/55
+                               dark:from-slate-950/35 dark:via-slate-950/25 dark:to-slate-950/15"
+                  />
+
+                  {/* Accent wash */}
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0
+                               bg-gradient-to-br from-red-600/10 via-transparent to-blue-600/10
+                               dark:from-red-500/14 dark:to-blue-500/14"
+                  />
+
+                  {/* Accent bar */}
+                  <div
+                    aria-hidden="true"
+                    className="absolute left-6 top-6 h-1 w-24 rounded-full bg-gradient-to-r from-red-600 to-blue-600"
+                  />
+
+                  <div className="relative mt-5">
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-slate-800 dark:text-slate-200">
+                        Execution Snapshot
+                      </div>
+
+                      <span className="rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-xs font-bold text-slate-800
+                                       shadow-sm dark:border-white/10 dark:bg-white/10 dark:text-slate-100"
+                      >
+                        {portfolio.featured.date}
+                      </span>
                     </div>
 
-                    <div className="mt-6 h-1 w-24 rounded-full bg-gradient-to-r from-red-600 to-blue-600" />
+                    {/* Content panel */}
+                    <div className="mt-5 rounded-2xl border border-slate-200/70 bg-white/82 p-5 backdrop-blur
+                                    dark:border-white/10 dark:bg-slate-950/28"
+                    >
+                      <dl className="grid gap-4">
+                        <div className="grid grid-cols-[110px_1fr] items-start gap-4">
+                          <dt className="text-sm font-bold text-slate-700 dark:text-slate-300">Format</dt>
+                          <dd className="text-sm font-extrabold text-slate-900 dark:text-white">Community Event</dd>
+                        </div>
+
+                        <div className="h-px bg-slate-200/70 dark:bg-white/10" />
+
+                        <div className="grid grid-cols-[110px_1fr] items-start gap-4">
+                          <dt className="text-sm font-bold text-slate-700 dark:text-slate-300">Focus</dt>
+                          <dd className="text-sm font-extrabold text-slate-900 dark:text-white">Culinary &amp; Culture</dd>
+                        </div>
+
+                        <div className="h-px bg-slate-200/70 dark:bg-white/10" />
+
+                        <div className="grid grid-cols-[110px_1fr] items-start gap-4">
+                          <dt className="text-sm font-bold text-slate-700 dark:text-slate-300">Outcome</dt>
+                          <dd className="text-sm font-extrabold text-slate-900 dark:text-white">Partner-ready playbook</dd>
+                        </div>
+                      </dl>
+                    </div>
+
+                    <div className="mt-6 flex items-center gap-3">
+                      <span className="h-2 w-2 rounded-full bg-red-600" />
+                      <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                        Clear summary, easy to pitch to partners.
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -331,7 +435,9 @@ export default function Page() {
           {partners.cards.map((c, i) => (
             <Reveal key={c.title} delayMs={80 + i * 60}>
               <SpotlightCard className="p-9 md:p-10">
-                <div className="text-xl md:text-2xl font-black tracking-tight text-slate-900 dark:text-white">{c.title}</div>
+                <div className="text-xl md:text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+                  {c.title}
+                </div>
                 <p className="mt-4 text-base md:text-lg text-slate-600 dark:text-slate-300">{c.desc}</p>
                 <div className="mt-7 h-1 w-20 rounded-full bg-gradient-to-r from-red-600 to-blue-600" aria-hidden="true" />
               </SpotlightCard>
@@ -352,7 +458,10 @@ export default function Page() {
               <SpotlightCard className="p-9 md:p-10">
                 <div className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">{c.title}</div>
                 <p className="mt-3 text-base md:text-lg text-slate-600 dark:text-slate-300">{c.subtitle}</p>
-                <a href={`mailto:${site.email}`} className="mt-6 inline-flex font-bold text-blue-700 hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-200">
+                <a
+                  href={`mailto:${site.email}`}
+                  className="mt-6 inline-flex font-bold text-blue-700 hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-200"
+                >
                   Start here →
                 </a>
               </SpotlightCard>
@@ -364,14 +473,25 @@ export default function Page() {
           <div className="mt-12 overflow-hidden rounded-[34px] border border-slate-200/70 bg-white/65 p-10 backdrop-blur dark:border-white/10 dark:bg-white/6 md:p-14">
             <div className="grid gap-10 lg:grid-cols-12 lg:items-center">
               <div className="lg:col-span-8">
-                <div className="text-3xl font-black tracking-tight text-slate-900 dark:text-white md:text-4xl">{getInvolved.banner.title}</div>
+                <div className="text-3xl font-black tracking-tight text-slate-900 dark:text-white md:text-4xl">
+                  {getInvolved.banner.title}
+                </div>
                 <p className="mt-3 text-base md:text-lg text-slate-600 dark:text-slate-300">{getInvolved.banner.desc}</p>
               </div>
+
               <div className="lg:col-span-4 flex flex-col gap-3 sm:flex-row lg:flex-col">
-                <a href={getInvolved.banner.primary.href} className="btn-shine rounded-2xl bg-red-600 px-7 py-4 text-center font-bold text-white hover:bg-red-700 transition">
+                <a
+                  href={getInvolved.banner.primary.href}
+                  className="btn-shine rounded-2xl bg-red-600 px-7 py-4 text-center font-bold text-white hover:bg-red-700 transition"
+                >
                   {getInvolved.banner.primary.label}
                 </a>
-                <a href={getInvolved.banner.secondary.href} className="btn-shine rounded-2xl border border-slate-200/70 bg-white/70 px-7 py-4 text-center font-bold text-slate-900 hover:bg-white transition dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15">
+
+                <a
+                  href={getInvolved.banner.secondary.href}
+                  className="btn-shine rounded-2xl border border-slate-200/70 bg-white/70 px-7 py-4 text-center font-bold text-slate-900 hover:bg-white transition
+                             dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
+                >
                   {getInvolved.banner.secondary.label}
                 </a>
               </div>
@@ -380,6 +500,7 @@ export default function Page() {
         </Reveal>
       </section>
 
+      {/* FOOTER */}
       <footer className="border-t border-slate-200/70 bg-white/55 px-6 py-14 backdrop-blur dark:border-white/10 dark:bg-slate-950/40">
         <div className="mx-auto max-w-7xl text-sm text-slate-600 dark:text-slate-300">
           © 2024 {site.orgShort} — {site.orgName}. All rights reserved.
