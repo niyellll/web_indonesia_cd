@@ -109,61 +109,56 @@ export default function PortfolioCarousel({
       disabled={disabled}
       aria-label={dir === "left" ? "Previous slide" : "Next slide"}
       className={[
-        "group/btn absolute top-1/2 z-20 -translate-y-1/2",
-        dir === "left" ? "left-3 md:left-4" : "right-3 md:right-4",
-        "h-11 w-11 md:h-12 md:w-12 rounded-2xl",
-        "border border-slate-200/70 bg-white/75 backdrop-blur",
-        "shadow-[0_18px_55px_rgba(2,6,23,0.14)]",
+        "pointer-events-auto",
+        "h-12 w-12 md:h-14 md:w-14 rounded-2xl",
+        "grid place-items-center",
+        "bg-gradient-to-br from-red-600 via-purple-600 to-blue-600 text-white",
+        "shadow-[0_18px_55px_rgba(2,6,23,0.35)]",
+        "ring-1 ring-white/20",
         "transition",
-        "hover:-translate-y-1/2 hover:scale-[1.02]",
-        "active:scale-[0.98]",
-        "dark:border-white/12 dark:bg-white/10 dark:shadow-[0_22px_70px_rgba(0,0,0,0.55)]",
-        "disabled:opacity-40 disabled:cursor-not-allowed",
+        "hover:scale-[1.03] active:scale-[0.98]",
+        "disabled:opacity-30 disabled:cursor-not-allowed",
       ].join(" ")}
     >
-      <span
-        aria-hidden="true"
-        className="absolute inset-0 rounded-2xl opacity-0 transition-opacity group-hover/btn:opacity-100"
-        style={{
-          background:
-            "linear-gradient(90deg, rgba(239,68,68,.28), rgba(59,130,246,.28))",
-        }}
-      />
-      <span className="relative grid h-full w-full place-items-center">
-        {dir === "left" ? (
-          <svg width="18" height="18" viewBox="0 0 24 24" className="text-slate-900 dark:text-white">
-            <path
-              fill="currentColor"
-              d="M15.5 19.5a1 1 0 0 1-.7-.3l-7-7a1 1 0 0 1 0-1.4l7-7a1 1 0 1 1 1.4 1.4L9.9 11.5l6.3 6.3a1 1 0 0 1-.7 1.7Z"
-            />
-          </svg>
-        ) : (
-          <svg width="18" height="18" viewBox="0 0 24 24" className="text-slate-900 dark:text-white">
-            <path
-              fill="currentColor"
-              d="M8.5 19.5a1 1 0 0 1-.7-1.7l6.3-6.3l-6.3-6.3a1 1 0 1 1 1.4-1.4l7 7a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-.7.3Z"
-            />
-          </svg>
-        )}
-      </span>
+      {dir === "left" ? (
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M15.5 19.5a1 1 0 0 1-.7-.3l-7-7a1 1 0 0 1 0-1.4l7-7a1 1 0 1 1 1.4 1.4L9.9 11.5l6.3 6.3a1 1 0 0 1-.7 1.7Z"
+          />
+        </svg>
+      ) : (
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M8.5 19.5a1 1 0 0 1-.7-1.7l6.3-6.3l-6.3-6.3a1 1 0 1 1 1.4-1.4l7 7a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-.7.3Z"
+          />
+        </svg>
+      )}
     </button>
   );
 
+  const showControls = count > 1;
+
   return (
     <div
-      className={["relative", className].join(" ")}
+      className={["relative overflow-visible", className].join(" ")}
       role="region"
       aria-label={label}
       tabIndex={0}
       onKeyDown={onKeyDown}
     >
       {/* edge fades */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r from-white/80 to-transparent dark:from-slate-950/40" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-white/80 to-transparent dark:from-slate-950/40" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r from-white/85 to-transparent dark:from-slate-950/40" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-white/85 to-transparent dark:from-slate-950/40" />
 
-      {/* arrows */}
-      <ArrowBtn dir="left" onClick={prev} disabled={active === 0} />
-      <ArrowBtn dir="right" onClick={next} disabled={active === count - 1} />
+      {/* arrows layer (pasti kelihatan) */}
+      {showControls ? (
+        <div className="pointer-events-none absolute inset-y-0 left-0 right-0 z-30 flex items-center justify-between px-3 md:px-4">
+          <ArrowBtn dir="left" onClick={prev} disabled={active === 0} />
+          <ArrowBtn dir="right" onClick={next} disabled={active === count - 1} />
+        </div>
+      ) : null}
 
       {/* track */}
       <div
@@ -175,20 +170,22 @@ export default function PortfolioCarousel({
       </div>
 
       {/* dots */}
-      <div className="mt-2 flex justify-center gap-2">
-        {Array.from({ length: count }).map((_, i) => (
-          <button
-            key={i}
-            type="button"
-            aria-label={`Go to slide ${i + 1}`}
-            onClick={() => scrollToIndex(i)}
-            className={[
-              "h-3 w-3 rounded-full transition",
-              i === active ? "bg-slate-900 dark:bg-white" : "bg-slate-300/80 dark:bg-white/20",
-            ].join(" ")}
-          />
-        ))}
-      </div>
+      {showControls ? (
+        <div className="mt-2 flex justify-center gap-2">
+          {Array.from({ length: count }).map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              aria-label={`Go to slide ${i + 1}`}
+              onClick={() => scrollToIndex(i)}
+              className={[
+                "h-3 w-3 rounded-full transition",
+                i === active ? "bg-slate-900 dark:bg-white" : "bg-slate-300/80 dark:bg-white/20",
+              ].join(" ")}
+            />
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }
