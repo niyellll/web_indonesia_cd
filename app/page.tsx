@@ -132,7 +132,7 @@ export default function Page() {
 
           <div className="lg:col-span-5">
             <div
-              className="group relative overflow-hidden rounded-[24px] border border-slate-200/70 bg-white/70 p-7 backdrop-blur
+              className="group relative overflow-visible rounded-[24px] border border-slate-200/70 bg-white/70 p-7 backdrop-blur
                          shadow-[0_18px_70px_rgba(2,6,23,0.10)]
                          transition hover:-translate-y-1 hover:shadow-[0_28px_90px_rgba(2,6,23,0.14)]
                          dark:border-white/10 dark:bg-white/5 dark:shadow-[0_22px_80px_rgba(0,0,0,0.45)]"
@@ -651,7 +651,7 @@ export default function Page() {
         </div>
 
         <Reveal delayMs={140} variant="zoom">
-          <div className="mt-12 overflow-hidden rounded-[34px] border border-slate-200/70 bg-white/65 p-10 backdrop-blur dark:border-white/10 dark:bg-white/6 md:p-14">
+          <div className="mt-12 overflow-visible rounded-[34px] border border-slate-200/70 bg-white/65 p-10 backdrop-blur dark:border-white/10 dark:bg-white/6 md:p-14">
             <div className="grid gap-10 lg:grid-cols-12 lg:items-center">
               <div className="lg:col-span-8">
                 <div className="text-3xl font-black tracking-tight text-slate-900 dark:text-white md:text-4xl">
