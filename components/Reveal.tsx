@@ -2,16 +2,19 @@
 
 import * as React from "react";
 
-type Props = {
+export default function Reveal({
+  children,
+  className = "",
+  delayMs = 0,
+  once = true,
+}: {
   children: React.ReactNode;
   className?: string;
   delayMs?: number;
   once?: boolean;
-};
-
-export default function Reveal({ children, className = "", delayMs = 0, once = true }: Props) {
+}) {
   const ref = React.useRef<HTMLDivElement | null>(null);
-  const [shown, setShown] = React.useState(false);
+  const [inView, setInView] = React.useState(false);
 
   React.useEffect(() => {
     const el = ref.current;
@@ -21,14 +24,14 @@ export default function Reveal({ children, className = "", delayMs = 0, once = t
       (entries) => {
         for (const e of entries) {
           if (e.isIntersecting) {
-            setShown(true);
+            setInView(true);
             if (once) io.disconnect();
           } else if (!once) {
-            setShown(false);
+            setInView(false);
           }
         }
       },
-      { threshold: 0.18, rootMargin: "0px 0px -10% 0px" }
+      { threshold: 0.16, rootMargin: "0px 0px -12% 0px" }
     );
 
     io.observe(el);
@@ -38,11 +41,7 @@ export default function Reveal({ children, className = "", delayMs = 0, once = t
   return (
     <div
       ref={ref}
-      className={[
-        "reveal",
-        shown ? "reveal--in" : "",
-        className,
-      ].join(" ")}
+      className={["reveal", inView ? "reveal--in" : "", className].join(" ")}
       style={{ ["--reveal-delay" as any]: `${delayMs}ms` }}
     >
       {children}

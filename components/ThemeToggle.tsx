@@ -2,18 +2,31 @@
 
 import * as React from "react";
 
-type ThemeMode = "light" | "dark" | "system";
-const STORAGE_KEY = "idecn-theme";
+type Mode = "light" | "dark" | "system";
+const KEY = "idecn-theme";
 
-function getSystemTheme(): "light" | "dark" {
+function systemTheme(): "light" | "dark" {
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
-function applyTheme(mode: ThemeMode) {
+function apply(mode: Mode) {
   const root = document.documentElement;
-  const resolved = mode === "system" ? getSystemTheme() : mode;
+  const resolved = mode === "system" ? systemTheme() : mode;
   root.classList.toggle("dark", resolved === "dark");
   root.dataset.theme = mode;
+}
+
+function MoonIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" {...props}>
+      <path
+        d="M21 13.2A7.8 7.8 0 0 1 10.8 3a7.1 7.1 0 1 0 10.2 10.2Z"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
 }
 
 function SunIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -30,35 +43,22 @@ function SunIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-function MoonIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" {...props}>
-      <path
-        d="M21 13.2A7.8 7.8 0 0 1 10.8 3a7.1 7.1 0 1 0 10.2 10.2Z"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
 export default function ThemeToggle() {
-  const [mode, setMode] = React.useState<ThemeMode>("system");
   const [resolved, setResolved] = React.useState<"light" | "dark">("light");
+  const [mode, setMode] = React.useState<Mode>("system");
 
   React.useEffect(() => {
-    const saved = (localStorage.getItem(STORAGE_KEY) as ThemeMode | null) ?? "system";
+    const saved = (localStorage.getItem(KEY) as Mode | null) ?? "system";
     setMode(saved);
-    applyTheme(saved);
-    setResolved(saved === "system" ? getSystemTheme() : saved);
+    apply(saved);
+    setResolved(saved === "system" ? systemTheme() : saved);
 
     const mql = window.matchMedia("(prefers-color-scheme: dark)");
     const onChange = () => {
-      const current = (document.documentElement.dataset.theme as ThemeMode) ?? "system";
+      const current = (document.documentElement.dataset.theme as Mode) ?? "system";
       if (current === "system") {
-        applyTheme("system");
-        setResolved(getSystemTheme());
+        apply("system");
+        setResolved(systemTheme());
       }
     };
     mql.addEventListener("change", onChange);
@@ -66,11 +66,11 @@ export default function ThemeToggle() {
   }, []);
 
   const toggle = () => {
-    const currentResolved = mode === "system" ? getSystemTheme() : mode;
-    const next: ThemeMode = currentResolved === "dark" ? "light" : "dark";
-    localStorage.setItem(STORAGE_KEY, next);
+    const current = mode === "system" ? systemTheme() : mode;
+    const next: Mode = current === "dark" ? "light" : "dark";
+    localStorage.setItem(KEY, next);
     setMode(next);
-    applyTheme(next);
+    apply(next);
     setResolved(next);
   };
 
@@ -79,10 +79,9 @@ export default function ThemeToggle() {
       type="button"
       onClick={toggle}
       className="inline-flex h-11 w-11 items-center justify-center rounded-full
-                 border border-slate-200/70 bg-white/70 text-slate-900 shadow-sm
-                 hover:bg-white hover:shadow-md
-                 dark:border-white/15 dark:bg-white/10 dark:text-white
-                 backdrop-blur transition"
+                 border border-slate-200 bg-white/80 text-slate-900 shadow-sm backdrop-blur
+                 hover:bg-white hover:shadow-md transition
+                 dark:border-white/15 dark:bg-white/10 dark:text-white"
       aria-label="Toggle theme"
       title="Toggle theme"
     >

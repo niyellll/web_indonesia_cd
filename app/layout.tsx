@@ -19,13 +19,11 @@ const themeInitScript = `
 (function() {
   try {
     var key = 'idecn-theme';
-    var stored = localStorage.getItem(key);
-    var mode = stored || 'system';
+    var mode = localStorage.getItem(key) || 'system';
     var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     var resolved = (mode === 'system') ? (prefersDark ? 'dark' : 'light') : mode;
     document.documentElement.dataset.theme = mode;
-    if (resolved === 'dark') document.documentElement.classList.add('dark');
-    else document.documentElement.classList.remove('dark');
+    document.documentElement.classList.toggle('dark', resolved === 'dark');
   } catch (e) {}
 })();
 `;
@@ -38,7 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
 
       <body className="min-h-screen bg-slate-50 text-slate-900 text-[16px] md:text-[17px] selection:bg-red-600 selection:text-white dark:bg-slate-950 dark:text-slate-100">
-        {/* Batik Light */}
+        {/* batik light */}
         <div
           aria-hidden="true"
           className="pointer-events-none fixed inset-0 z-0 dark:hidden"
@@ -46,18 +44,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             backgroundImage: "url('/batik-pattern.svg')",
             backgroundRepeat: "repeat",
             backgroundPosition: "center",
-            backgroundSize: "640px 640px",
-            opacity: 0.18,
+            backgroundSize: "720px 720px",
+            opacity: 0.16,
             mixBlendMode: "multiply",
-            filter: "grayscale(1) contrast(1.55) brightness(1.02)",
-            WebkitMaskImage:
-              "radial-gradient(circle at 50% 28%, #000 0%, #000 75%, transparent 98%)",
-            maskImage:
-              "radial-gradient(circle at 50% 28%, #000 0%, #000 75%, transparent 98%)",
+            filter: "grayscale(1) contrast(1.45) brightness(1.02)",
           }}
         />
-
-        {/* Batik Dark */}
+        {/* batik dark */}
         <div
           aria-hidden="true"
           className="pointer-events-none fixed inset-0 z-0 hidden dark:block"
@@ -65,44 +58,32 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             backgroundImage: "url('/batik-pattern.svg')",
             backgroundRepeat: "repeat",
             backgroundPosition: "center",
-            backgroundSize: "640px 640px",
-            opacity: 0.14,
-            filter: "grayscale(1) invert(1) contrast(1.15) brightness(0.9)",
-            WebkitMaskImage:
-              "radial-gradient(circle at 50% 28%, #000 0%, #000 75%, transparent 98%)",
-            maskImage:
-              "radial-gradient(circle at 50% 28%, #000 0%, #000 75%, transparent 98%)",
+            backgroundSize: "720px 720px",
+            opacity: 0.12,
+            filter: "grayscale(1) invert(1) contrast(1.1) brightness(0.9)",
           }}
         />
 
-        {/* Readability wash */}
+        {/* readability wash (lebih kuat di light, supaya teks tetap aman) */}
         <div
           aria-hidden="true"
           className="pointer-events-none fixed inset-0 z-0
-                     bg-gradient-to-b from-white/70 via-white/40 to-white/18
-                     dark:from-slate-950/82 dark:via-slate-950/55 dark:to-slate-950/32"
+                     bg-gradient-to-b from-white/72 via-white/42 to-white/18
+                     dark:from-slate-950/85 dark:via-slate-950/55 dark:to-slate-950/30"
         />
 
-        {/* Premium glows */}
+        {/* soft glows */}
         <div
           aria-hidden="true"
           className="pointer-events-none fixed inset-0 z-0
-                     [background:radial-gradient(1200px_700px_at_50%_18%,rgba(37,99,235,0.12),transparent_60%)]
-                     dark:[background:radial-gradient(1200px_700px_at_50%_18%,rgba(37,99,235,0.18),transparent_60%)]"
+                     [background:radial-gradient(900px_540px_at_20%_20%,rgba(239,68,68,0.12),transparent_60%)]
+                     dark:[background:radial-gradient(900px_540px_at_20%_20%,rgba(239,68,68,0.18),transparent_60%)]"
         />
         <div
           aria-hidden="true"
           className="pointer-events-none fixed inset-0 z-0
-                     [background:radial-gradient(900px_520px_at_28%_30%,rgba(220,38,38,0.10),transparent_62%)]
-                     dark:[background:radial-gradient(900px_520px_at_28%_30%,rgba(220,38,38,0.16),transparent_62%)]"
-        />
-
-        {/* Vignette */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none fixed inset-0 z-0
-                     [background:radial-gradient(1400px_700px_at_50%_20%,transparent_55%,rgba(2,6,23,0.10)_100%)]
-                     dark:[background:radial-gradient(1400px_700px_at_50%_20%,transparent_55%,rgba(0,0,0,0.45)_100%)]"
+                     [background:radial-gradient(980px_560px_at_75%_25%,rgba(59,130,246,0.12),transparent_60%)]
+                     dark:[background:radial-gradient(980px_560px_at_75%_25%,rgba(59,130,246,0.18),transparent_60%)]"
         />
 
         <div className="relative z-10">
