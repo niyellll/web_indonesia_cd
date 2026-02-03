@@ -1,483 +1,528 @@
-import { getEvents, getPartners, getPrograms, getSite } from "../lib/cms";
-import type React from "react";
+import type { ReactNode, SVGProps } from "react";
+import Reveal from "../components/Reveal";
+import { site, hero, about, programs, portfolio, partners, getInvolved, footer } from "../lib/cms";
 
+type IconName = "book" | "globe" | "layout" | "award" | "users" | "download" | "arrow";
 
-function Dot({ color }: { color: "red" | "blue" | "gray" }) {
-  const c =
-    color === "red"
-      ? "var(--red)"
-      : color === "blue"
-      ? "var(--blue)"
-      : "rgba(148,163,184,0.8)";
-  return <span className="inline-block h-2 w-2 rounded-full" style={{ background: c }} />;
+function Icon({ name, className = "h-6 w-6" }: { name: IconName; className?: string }) {
+  const p = { className, "aria-hidden": true } as SVGProps<SVGSVGElement>;
+  switch (name) {
+    case "book":
+      return (
+        <svg viewBox="0 0 24 24" fill="none" {...p}>
+          <path
+            d="M4 5.5C4 4.1 5.1 3 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5V5.5Z"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinejoin="round"
+          />
+          <path d="M20 19H6.5A2.5 2.5 0 0 0 4 21.5" stroke="currentColor" strokeWidth="2" />
+        </svg>
+      );
+    case "globe":
+      return (
+        <svg viewBox="0 0 24 24" fill="none" {...p}>
+          <path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z" stroke="currentColor" strokeWidth="2" />
+          <path d="M3 12h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          <path
+            d="M12 3c2.5 2.6 4 5.7 4 9s-1.5 6.4-4 9c-2.5-2.6-4-5.7-4-9s1.5-6.4 4-9Z"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinejoin="round"
+          />
+        </svg>
+      );
+    case "layout":
+      return (
+        <svg viewBox="0 0 24 24" fill="none" {...p}>
+          <path d="M4 5h16v6H4V5Z" stroke="currentColor" strokeWidth="2" />
+          <path d="M4 13h7v6H4v-6Z" stroke="currentColor" strokeWidth="2" />
+          <path d="M13 13h7v6h-7v-6Z" stroke="currentColor" strokeWidth="2" />
+        </svg>
+      );
+    case "award":
+      return (
+        <svg viewBox="0 0 24 24" fill="none" {...p}>
+          <path d="M12 15a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z" stroke="currentColor" strokeWidth="2" />
+          <path d="M9 14.5 8 21l4-2 4 2-1-6.5" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
+        </svg>
+      );
+    case "users":
+      return (
+        <svg viewBox="0 0 24 24" fill="none" {...p}>
+          <path d="M16 11a4 4 0 1 0-8 0 4 4 0 0 0 8 0Z" stroke="currentColor" strokeWidth="2" />
+          <path d="M4 20c.7-3.4 4-6 8-6s7.3 2.6 8 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+      );
+    case "download":
+      return (
+        <svg viewBox="0 0 24 24" fill="none" {...p}>
+          <path d="M12 3v10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          <path d="M8 11l4 4 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M4 21h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+      );
+    case "arrow":
+      return (
+        <svg viewBox="0 0 24 24" fill="none" {...p}>
+          <path d="M5 12h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          <path d="M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+    default:
+      return <span className={className} />;
+  }
 }
 
-function Badge({ children }: { children: React.ReactNode }) {
+function GlassCard({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--pill)] px-4 py-2 text-sm font-bold text-[var(--muted)]">
+    <div
+      className={[
+        "rounded-[32px] border border-slate-200/70 dark:border-slate-800/70",
+        "bg-white/72 dark:bg-slate-900/45 backdrop-blur-xl",
+        "shadow-[0_18px_60px_rgba(2,6,23,0.08)] dark:shadow-[0_18px_60px_rgba(0,0,0,0.40)]",
+        "transition-all duration-500",
+        className,
+      ].join(" ")}
+    >
       {children}
-    </span>
+    </div>
   );
 }
 
-export default async function Page() {
-  const site = await getSite();
-  const programs = await getPrograms();
-  const events = await getEvents();
-  const partners = await getPartners();
-  const featured = events.find((e) => e.featured) || events[0];
-
+function SectionHeader({
+  eyebrow,
+  title,
+  subtitle,
+}: {
+  eyebrow?: string;
+  title: string;
+  subtitle?: string;
+}) {
   return (
-    <main id="top" className="mx-auto max-w-6xl px-4 pb-20 pt-10 md:pt-16">
+    <div className="mb-14 text-center">
+      {eyebrow && (
+        <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-red-600 dark:text-red-400">
+          {eyebrow}
+        </div>
+      )}
+      <h2 className="mt-3 text-4xl font-black tracking-tight text-slate-900 dark:text-white md:text-5xl">
+        {title}
+      </h2>
+      {subtitle && (
+        <p className="mx-auto mt-4 max-w-2xl text-base md:text-lg text-slate-600 dark:text-slate-300">
+          {subtitle}
+        </p>
+      )}
+    </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <main className="relative z-10 pt-24">
       {/* HERO */}
-      <section className="relative">
-        <div className="mx-auto max-w-4xl text-center">
-          <div className="flex flex-wrap items-center justify-center gap-2">
-            <Badge>
-              <Dot color="blue" />
-              Nonprofit (U.S.-based)
-            </Badge>
-            <Badge>
-              <Dot color="gray" />
-              Established 2024
-            </Badge>
-            <Badge>
-              <Dot color="red" />
-              {site.tagline}
-            </Badge>
-          </div>
+      <section className="relative overflow-hidden px-6 py-20">
+        {/* background layers - IMPORTANT: pointer-events-none so CTA can be clicked */}
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0">
+          <div
+            className="absolute -top-52 left-1/2 h-[560px] w-[1200px] -translate-x-1/2 rounded-full blur-3xl idecn-shimmer
+                       bg-gradient-to-r from-red-500/18 via-purple-500/12 to-blue-500/18
+                       dark:from-red-500/22 dark:via-purple-500/16 dark:to-blue-500/20"
+          />
+          <div
+            className="absolute -bottom-72 left-1/2 h-[520px] w-[980px] -translate-x-1/2 rounded-full blur-3xl
+                       bg-gradient-to-r from-blue-500/14 via-red-500/12 to-transparent
+                       dark:from-blue-500/18 dark:via-red-500/14"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/35 via-white/10 to-white/25 dark:from-black/62 dark:via-black/26 dark:to-black/55" />
+        </div>
 
-          <h1 className="h1 mt-8 text-5xl md:text-7xl">{site.heroTitle}</h1>
+        <div className="relative z-10 mx-auto flex min-h-[74vh] max-w-7xl flex-col items-center justify-center text-center">
+          <Reveal delayMs={60}>
+            <div className="mb-10 flex flex-wrap justify-center gap-3">
+              {hero.chips.map((tag) => (
+                <span
+                  key={tag}
+                  className="inline-flex items-center gap-2 rounded-full border border-slate-300/70 bg-white/60 px-4 py-2 text-sm font-semibold text-slate-700 backdrop-blur
+                             dark:border-white/15 dark:bg-white/10 dark:text-white/90"
+                >
+                  <span className="h-2 w-2 rounded-full bg-gradient-to-r from-red-600 to-blue-600" />
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </Reveal>
 
-          <p className="lead mx-auto mt-6 max-w-3xl">{site.heroSubtitle}</p>
+          <Reveal delayMs={120}>
+            <h1 className="mb-7 text-6xl font-black tracking-tight leading-[0.92] text-slate-900 dark:text-white md:text-8xl lg:text-9xl">
+              {hero.headingTop}
+              <br />
+              <span className="bg-gradient-to-r from-red-600 via-purple-500 to-blue-600 bg-clip-text text-transparent idecn-shimmer">
+                {hero.headingGradient}
+              </span>
+            </h1>
+          </Reveal>
 
-          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <a className="btn btn-primary w-full sm:w-auto" href="#get-involved">
-              Get involved
-            </a>
-            <a className="btn w-full sm:w-auto" href={site.proposalUrl}>
-              Download proposal (PDF)
-            </a>
-            <a className="btn w-full sm:w-auto" href="#portfolio">
-              View portfolio event
-            </a>
-          </div>
+          <Reveal delayMs={200}>
+            <p className="mb-12 max-w-3xl text-base md:text-xl leading-relaxed text-slate-600 dark:text-slate-300">
+              {hero.subtitle}
+            </p>
+          </Reveal>
 
-          {/* mini underline accent */}
-          <div className="mx-auto mt-7 h-[3px] w-28 rounded-full bg-[var(--border)] overflow-hidden">
-            <div
-              className="h-full w-full"
-              style={{
-                background:
-                  "linear-gradient(90deg, var(--red), rgba(255,255,255,0.95), var(--blue))",
-                backgroundSize: "200% 100%",
-                backgroundPosition: "center",
-              }}
-            />
-          </div>
+          <Reveal delayMs={280}>
+            <div className="flex flex-col gap-4 sm:flex-row">
+              <a
+                href={hero.ctas.primary.href}
+                className="relative z-20 rounded-2xl bg-red-600 px-10 py-5 text-lg font-bold text-white shadow-xl shadow-red-600/20 transition hover:-translate-y-1 hover:bg-red-700"
+              >
+                {hero.ctas.primary.label}
+              </a>
+
+              <a
+                href={hero.ctas.proposal.href}
+                className="relative z-20 flex items-center justify-center gap-2 rounded-2xl border border-slate-200/70 bg-white/60 px-10 py-5 text-lg font-bold text-slate-900 backdrop-blur transition hover:bg-white/85
+                           dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
+              >
+                <Icon name="download" className="h-5 w-5" />
+                {hero.ctas.proposal.label}
+              </a>
+
+              {/* FIX: anchor to #portfolio + z-20 so clickable */}
+              <a
+                href={hero.ctas.portfolio.href}
+                className="relative z-20 rounded-2xl bg-blue-600 px-10 py-5 text-lg font-bold text-white shadow-xl shadow-blue-600/20 transition hover:-translate-y-1 hover:bg-blue-700"
+              >
+                {hero.ctas.portfolio.label}
+              </a>
+            </div>
+          </Reveal>
         </div>
       </section>
 
       {/* ABOUT */}
-      <section id="about" className="mt-16 md:mt-20">
-        <div className="kicker">About</div>
-        <div className="mt-3 grid gap-6 md:grid-cols-12 md:gap-8">
-          <div className="md:col-span-7">
-            <h2 className="h2 text-4xl md:text-5xl">Who we are</h2>
-            <p className="lead mt-5">
-              <span className="font-extrabold text-[var(--fg)]">{site.orgName}</span> is a U.S.-based
-              nonprofit focused on building meaningful bridges between Indonesia and the United States—
-              through education pathways, cultural exchange, and community programs that people actually enjoy.
-            </p>
+      <section id="about" className="scroll-mt-28 mx-auto max-w-7xl px-6 py-28 md:py-32">
+        <Reveal>
+          <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+            <div className="space-y-8">
+              <h2 className="text-4xl font-black tracking-tight text-slate-900 dark:text-white md:text-5xl">
+                {about.title}
+              </h2>
 
-            <div className="mt-8 grid gap-3">
-              <div className="card p-5">
-                <div className="text-sm font-extrabold">Purpose</div>
-                <p className="mt-2 text-[15px] leading-7 text-[var(--muted)]">{site.purpose}</p>
-              </div>
+              <p className="text-base md:text-xl leading-relaxed text-slate-600 dark:text-slate-300">
+                {about.lead}
+              </p>
 
-              <div className="card p-5">
-                <div className="text-sm font-extrabold">Audience</div>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {site.audience.map((a) => (
-                    <span
-                      key={a}
-                      className="rounded-full border border-[var(--border)] bg-[var(--pill)] px-3 py-1.5 text-sm font-bold text-[var(--muted)]"
-                    >
-                      {a}
-                    </span>
-                  ))}
+              <div className="space-y-6">
+                <div className="flex gap-5">
+                  <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-red-100 text-red-700 dark:bg-red-900/25 dark:text-red-300">
+                    <Icon name="award" className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <div className="text-lg font-bold text-slate-900 dark:text-white">Our Purpose</div>
+                    <div className="mt-1 text-slate-600 dark:text-slate-300">{about.purpose}</div>
+                  </div>
+                </div>
+
+                <div className="flex gap-5">
+                  <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-blue-100 text-blue-700 dark:bg-blue-900/25 dark:text-blue-300">
+                    <Icon name="users" className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <div className="text-lg font-bold text-slate-900 dark:text-white">Primary Audience</div>
+                    <div className="mt-1 text-slate-600 dark:text-slate-300">{about.audience}</div>
+                  </div>
                 </div>
               </div>
             </div>
+
+            <GlassCard className="p-10 md:p-12">
+              <div className="mb-8 text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+                {about.atAGlance.title}
+              </div>
+
+              <div className="space-y-7">
+                {about.atAGlance.items.map((row, idx) => (
+                  <div
+                    key={row.k}
+                    className={idx < about.atAGlance.items.length - 1 ? "pb-7 border-b border-slate-100 dark:border-slate-800/70" : ""}
+                  >
+                    <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-red-600 dark:text-red-400">
+                      {row.k}
+                    </div>
+                    <div className="mt-2 text-lg md:text-xl font-semibold text-slate-900 dark:text-slate-50">{row.v}</div>
+                  </div>
+                ))}
+
+                <a
+                  href={about.atAGlance.cta.href}
+                  className="mt-2 inline-flex w-full items-center justify-center rounded-2xl bg-slate-900 px-6 py-4 text-lg font-bold text-white transition hover:opacity-95 dark:bg-white dark:text-slate-900"
+                >
+                  {about.atAGlance.cta.label}
+                </a>
+              </div>
+            </GlassCard>
           </div>
-
-          <aside className="md:col-span-5">
-            <div className="card p-6">
-              <div className="kicker">At a glance</div>
-
-              <div className="mt-4 divide-y divide-[var(--border)]">
-                <div className="flex items-center justify-between py-4">
-                  <div className="text-sm font-bold text-[var(--muted)]">Focus</div>
-                  <div className="text-sm font-extrabold">Education • Culture • Community</div>
-                </div>
-                <div className="flex items-center justify-between py-4">
-                  <div className="text-sm font-bold text-[var(--muted)]">Operating</div>
-                  <div className="text-sm font-extrabold">U.S.-based</div>
-                </div>
-                <div className="flex items-center justify-between py-4">
-                  <div className="text-sm font-bold text-[var(--muted)]">Contact</div>
-                  <div className="text-sm font-extrabold">{site.email}</div>
-                </div>
-              </div>
-
-              {/* FIX: no onClick in Server Component */}
-              <a className="btn mt-5 w-full" href="#contact">
-                Talk to us
-              </a>
-            </div>
-          </aside>
-        </div>
+        </Reveal>
       </section>
 
       {/* PROGRAMS */}
-<section id="programs" className="mt-16 md:mt-20">
-  <div className="kicker">Programs</div>
+      <section id="programs" className="scroll-mt-28 mx-auto max-w-7xl px-6 py-28 md:py-32">
+        <Reveal>
+          <SectionHeader title={programs.title} subtitle={programs.subtitle} />
+        </Reveal>
 
-  <div className="mt-3 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-    <div>
-      <h2 className="h2 text-4xl md:text-6xl">What we deliver</h2>
-      <p className="lead mt-3 max-w-3xl">
-        Simple, repeatable programs—built for clarity, credibility, and real partnership.
-      </p>
-    </div>
+        <div className="grid gap-7 md:grid-cols-2">
+          {programs.cards.map((prog, i) => (
+            <Reveal key={prog.title} delayMs={80 + i * 60}>
+              <GlassCard className="group p-10 hover:-translate-y-2 hover:shadow-[0_28px_90px_rgba(2,6,23,0.14)] dark:hover:shadow-[0_28px_90px_rgba(0,0,0,0.55)]">
+                <div className="mb-8 h-1.5 w-16 rounded-full bg-gradient-to-r from-red-600 to-blue-600 opacity-80 transition-all group-hover:w-24" />
 
-    <div className="flex flex-wrap gap-2">
-      {["Repeatable", "Partner-friendly", "Community-first", "Outcome-driven"].map((t) => (
-        <span
-          key={t}
-          className="rounded-full border border-[var(--border)] bg-[var(--pill)] px-3 py-1.5 text-sm font-extrabold text-[var(--muted)]"
-        >
-          {t}
-        </span>
-      ))}
-    </div>
-  </div>
-
-  {/* icons (no deps) */}
-  {(() => {
-    const IconCap = () => (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path
-          d="M12 3 2 8l10 5 10-5-10-5Zm0 10L2 8v8l10 5 10-5V8l-10 5Z"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinejoin="round"
-        />
-      </svg>
-    );
-    const IconCulture = () => (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path
-          d="M12 21s7-4.2 7-10a7 7 0 0 0-14 0c0 5.8 7 10 7 10Z"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M9.5 10.5c.7-1 1.7-1.5 2.5-1.5s1.8.5 2.5 1.5"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-        />
-      </svg>
-    );
-    const IconNetwork = () => (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path
-          d="M7 7a3 3 0 1 0 0 .01V7Zm10 0a3 3 0 1 0 0 .01V7ZM12 17a3 3 0 1 0 0 .01V17Z"
-          stroke="currentColor"
-          strokeWidth="1.8"
-        />
-        <path
-          d="M9.4 8.7 11 14.3m4-5.6L13 14.3"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-        />
-      </svg>
-    );
-    const IconCommunity = () => (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path
-          d="M16 11a3 3 0 1 0 0-.01V11ZM8 11a3 3 0 1 0 0-.01V11Z"
-          stroke="currentColor"
-          strokeWidth="1.8"
-        />
-        <path
-          d="M4 20c.6-3 3-5 6-5m4 0c3 0 5.4 2 6 5M10 20c.4-2 2-3.5 4-3.5"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-        />
-      </svg>
-    );
-
-    const META: Record<
-      string,
-      {
-        icon: React.ReactNode;
-        tags: string[];
-        accent: string;
-      }
-    > = {
-      "Educational Programs & Scholarships": {
-        icon: <IconCap />,
-        tags: ["Scholarship guidance", "Mentorship", "Campus pathway", "Internship"],
-        accent: "linear-gradient(180deg, var(--blue), rgba(255,255,255,0), var(--red))",
-      },
-      "Cultural Exchange & Awareness": {
-        icon: <IconCulture />,
-        tags: ["Events", "Workshops", "Storytelling", "Community-first"],
-        accent: "linear-gradient(180deg, var(--red), rgba(255,255,255,0), var(--blue))",
-      },
-      "Professional Networking": {
-        icon: <IconNetwork />,
-        tags: ["Alumni", "Matchmaking", "Leadership", "Cross-culture"],
-        accent: "linear-gradient(180deg, rgba(59,130,246,0.9), rgba(255,255,255,0), rgba(239,68,68,0.9))",
-      },
-      "Community Support": {
-        icon: <IconCommunity />,
-        tags: ["Volunteer", "Partnership", "Playbooks", "Scaling impact"],
-        accent: "linear-gradient(180deg, rgba(239,68,68,0.9), rgba(255,255,255,0), rgba(59,130,246,0.9))",
-      },
-    };
-
-    const DEFAULT = {
-      icon: <IconCap />,
-      tags: ["Repeatable", "Partner-friendly", "Outcome-driven"],
-      accent: "linear-gradient(180deg, var(--red), rgba(255,255,255,0), var(--blue))",
-    };
-
-    return (
-      <div className="mt-9 grid gap-5 md:grid-cols-2">
-        {programs.map((p, i) => {
-          const m = META[p.title] || DEFAULT;
-
-          return (
-            <div
-              key={p.title}
-              className={[
-                "group relative overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--card)] p-6 md:p-7",
-                "shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow",
-                i === 0 ? "md:col-span-2" : "",
-              ].join(" ")}
-            >
-              {/* accent bar */}
-              <div
-                className="pointer-events-none absolute left-0 top-0 h-full w-[4px] opacity-90"
-                style={{ background: m.accent }}
-                aria-hidden="true"
-              />
-
-              {/* soft glow on hover */}
-              <div
-                className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                style={{
-                  background:
-                    "radial-gradient(900px 220px at 15% 10%, rgba(59,130,246,0.20), transparent 60%), radial-gradient(800px 220px at 85% 15%, rgba(239,68,68,0.18), transparent 60%)",
-                }}
-                aria-hidden="true"
-              />
-
-              <div className="relative flex flex-col gap-4">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <h3 className="text-2xl font-extrabold tracking-tight md:text-3xl">{p.title}</h3>
-                    <p className="mt-2 text-[15px] font-bold text-[var(--muted)]">
-                      Designed to be practical, repeatable, and easy to partner with.
-                    </p>
+                <div className="mb-6 flex items-center gap-4">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-blue-700 dark:bg-slate-800/70 dark:text-blue-300">
+                    <Icon name={prog.icon as IconName} className="h-7 w-7" />
                   </div>
-
-                  <div
-                    className="grid h-12 w-12 place-items-center rounded-2xl border border-[var(--border)] text-[var(--fg)]"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, rgba(225,29,46,0.18), rgba(29,78,216,0.16))",
-                    }}
-                    aria-hidden="true"
-                  >
-                    {m.icon}
-                  </div>
+                  <h3 className="text-2xl md:text-3xl font-black tracking-tight text-slate-900 dark:text-white">
+                    {prog.title}
+                  </h3>
                 </div>
 
-                {/* tags */}
-                <div className="flex flex-wrap gap-2">
-                  {m.tags.slice(0, i === 0 ? 6 : 4).map((t) => (
-                    <span
-                      key={t}
-                      className="rounded-full border border-[var(--border)] bg-[var(--pill)] px-3 py-1.5 text-sm font-extrabold text-[var(--muted)]"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-
-                {/* bullets */}
-                <ul className="mt-1 grid gap-2 text-[15px] leading-7 text-[var(--muted)] sm:grid-cols-2">
-                  {p.bullets.map((b) => (
-                    <li key={b} className="flex gap-3">
-                      <span
-                        className="mt-2 h-2 w-2 shrink-0 rounded-full"
-                        style={{
-                          background:
-                            "linear-gradient(180deg, var(--blue), var(--red))",
-                        }}
-                      />
+                <ul className="space-y-3">
+                  {prog.bullets.map((b) => (
+                    <li key={b} className="flex items-start gap-3 text-base md:text-lg text-slate-600 dark:text-slate-300">
+                      <span className="mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-red-600" />
                       <span>{b}</span>
                     </li>
                   ))}
                 </ul>
 
-                {/* hero card extra */}
-                {i === 0 ? (
-                  <div className="mt-3 grid gap-3 rounded-2xl border border-[var(--border)] bg-[var(--pill)] p-4 md:grid-cols-4">
-                    {[
-                      ["Clarity", "Simple steps"],
-                      ["Trust", "Credible profile"],
-                      ["Scale", "Repeatable playbook"],
-                      ["Impact", "Community outcomes"],
-                    ].map(([k, v]) => (
-                      <div key={k} className="min-w-0">
-                        <div className="text-xs font-extrabold uppercase tracking-wider text-[var(--muted2)]">
-                          {k}
-                        </div>
-                        <div className="mt-1 text-sm font-extrabold text-[var(--fg)]">{v}</div>
-                      </div>
-                    ))}
-                  </div>
-                ) : null}
+                <div className="mt-8 flex flex-wrap gap-2.5">
+                  {prog.tags.map((t) => (
+                    <span
+                      key={t}
+                      className="rounded-full bg-slate-100/80 px-3.5 py-1.5 text-sm font-semibold text-slate-700 dark:bg-slate-800/70 dark:text-slate-200"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </GlassCard>
+            </Reveal>
+          ))}
+        </div>
+      </section>
 
-                <div className="mt-1 flex items-center justify-between">
-                  <div className="text-xs font-extrabold text-[var(--muted2)]">
-                    Built for partners • Designed for repeatability
-                  </div>
-                  <a
-                    href="#get-involved"
-                    className="text-sm font-extrabold"
-                    style={{ color: "var(--blue)" }}
-                  >
-                    Partner →
-                  </a>
+      {/* PORTFOLIO */}
+      <section id="portfolio" className="scroll-mt-28 mx-auto max-w-7xl px-6 py-28 md:py-32">
+        <Reveal>
+          <SectionHeader eyebrow={portfolio.eyebrow} title={portfolio.title} />
+        </Reveal>
+
+        <Reveal delayMs={140}>
+          <div className="grid gap-8 overflow-hidden rounded-[36px] border border-slate-200/70 bg-white/70 backdrop-blur-xl shadow-[0_22px_70px_rgba(2,6,23,0.10)] dark:border-slate-800/70 dark:bg-slate-900/45 dark:shadow-[0_22px_70px_rgba(0,0,0,0.45)] lg:grid-cols-12">
+            <div className="flex flex-col justify-between p-10 md:p-12 lg:col-span-5">
+              <div>
+                <div className="mb-6 flex flex-wrap gap-3">
+                  <span className="rounded-full bg-slate-900 px-4 py-2 text-sm font-bold text-white dark:bg-white dark:text-slate-900">
+                    {portfolio.featured.date}
+                  </span>
+                  <span className="rounded-full bg-slate-100 px-4 py-2 text-sm font-bold text-slate-800 dark:bg-slate-800/70 dark:text-slate-100">
+                    {portfolio.featured.location}
+                  </span>
+                </div>
+
+                <h3 className="mb-5 text-3xl md:text-5xl font-black tracking-tight text-slate-900 dark:text-white">
+                  {portfolio.featured.name}
+                </h3>
+
+                <p className="mb-7 text-base md:text-xl leading-relaxed text-slate-600 dark:text-slate-300">
+                  {portfolio.featured.summary}
+                </p>
+
+                <div className="mb-10 flex flex-wrap gap-2.5">
+                  {portfolio.featured.highlights.map((h) => (
+                    <span
+                      key={h}
+                      className="rounded-full bg-slate-100/80 px-3.5 py-2 text-sm font-semibold text-slate-700 dark:bg-slate-800/70 dark:text-slate-200"
+                    >
+                      {h}
+                    </span>
+                  ))}
                 </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
-    );
-  })()}
-</section>
 
+              <div className="flex flex-wrap gap-4">
+                <a
+                  href={portfolio.featured.ctaDownload.href}
+                  className="rounded-2xl bg-red-600 px-8 py-4 font-bold text-white transition hover:-translate-y-0.5 hover:bg-red-700"
+                >
+                  {portfolio.featured.ctaDownload.label}
+                </a>
+                <a
+                  href={portfolio.featured.ctaSecondary.href}
+                  className="rounded-2xl border border-slate-300/70 bg-white/40 px-8 py-4 font-bold backdrop-blur transition hover:bg-white/70
+                             dark:border-slate-700/70 dark:bg-slate-950/20 dark:text-slate-100 dark:hover:bg-slate-900/55"
+                >
+                  {portfolio.featured.ctaSecondary.label}
+                </a>
+              </div>
+            </div>
+
+            <div className="relative min-h-[340px] lg:col-span-7 lg:min-h-[560px]">
+              <div className="absolute inset-0 bg-gradient-to-tr from-slate-950/55 via-slate-950/10 to-transparent" />
+              <img
+                src={portfolio.featured.imageSrc}
+                alt={portfolio.featured.imageAlt}
+                className="h-full w-full object-cover"
+              />
+            </div>
+          </div>
+        </Reveal>
+      </section>
 
       {/* PARTNERS */}
-      <section id="partners" className="mt-16 md:mt-20">
-        <div className="kicker">Partners</div>
-        <h2 className="h2 mt-3 text-4xl md:text-5xl">Built for collaboration</h2>
-        <p className="lead mt-4 max-w-3xl">
-          We work with sponsors, donors, universities, schools, and community organizations—so every program is clear,
-          repeatable, and easy to scale.
-        </p>
+      <section id="partners" className="scroll-mt-28 mx-auto max-w-7xl px-6 py-28 md:py-32">
+        <Reveal>
+          <SectionHeader title={partners.title} subtitle={partners.subtitle} />
+        </Reveal>
 
-        <div className="mt-8 grid gap-5 md:grid-cols-3">
-          {partners.map((p) => (
-            <div key={p.name} className="card p-6">
-              <div className="text-xl font-extrabold">{p.name}</div>
-              <div className="mt-2 text-sm font-bold text-[var(--muted)]">{p.type}</div>
-              {p.website ? (
-                <a className="btn mt-5 w-full" href={p.website} target="_blank" rel="noreferrer">
-                  Visit website
-                </a>
-              ) : (
-                <a className="btn mt-5 w-full" href="#contact">
-                  Partner with us
-                </a>
-              )}
-            </div>
+        <div className="grid gap-7 lg:grid-cols-3">
+          {partners.cards.map((cat, i) => (
+            <Reveal key={cat.title} delayMs={80 + i * 60}>
+              <GlassCard className="p-10 hover:-translate-y-1.5">
+                <div className="mb-8 h-1.5 w-16 rounded-full bg-gradient-to-r from-red-600 to-blue-600 opacity-80" />
+                <div className="mb-4 flex items-center gap-4">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 dark:bg-slate-800/70 text-slate-900 dark:text-white">
+                    <Icon name={cat.icon as IconName} className="h-7 w-7" />
+                  </div>
+                  <h3 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">{cat.title}</h3>
+                </div>
+                <p className="text-base md:text-lg text-slate-600 dark:text-slate-300">{cat.desc}</p>
+              </GlassCard>
+            </Reveal>
           ))}
         </div>
       </section>
 
       {/* GET INVOLVED */}
-      <section id="get-involved" className="mt-16 md:mt-20">
-        <div className="kicker">Get involved</div>
-        <h2 className="h2 mt-3 text-4xl md:text-5xl">Let’s build the next program together</h2>
-        <p className="lead mt-4 max-w-3xl">
-          Sponsor an event, fund a scholarship pathway, or partner with us to run a repeatable program.
-        </p>
+      <section id="get-involved" className="scroll-mt-28 mx-auto max-w-7xl px-6 py-28 md:py-32">
+        <Reveal>
+          <SectionHeader title={getInvolved.title} subtitle={getInvolved.subtitle} />
+        </Reveal>
 
-        <div className="mt-8 grid gap-5 md:grid-cols-3">
-          {[
-            {
-              title: "Sponsor",
-              desc: "Help fund execution—venues, logistics, materials, and community outreach.",
-              cta: "Sponsor a program",
-            },
-            {
-              title: "Partner",
-              desc: "Universities, schools, and organizations—run a program together with clear outcomes.",
-              cta: "Become a partner",
-            },
-            {
-              title: "Volunteer",
-              desc: "Support community-first events and education pathways with a focused role.",
-              cta: "Join as volunteer",
-            },
-          ].map((x) => (
-            <div key={x.title} className="card p-6">
-              <div className="text-xl font-extrabold">{x.title}</div>
-              <div className="mt-2 text-[15px] leading-7 text-[var(--muted)]">{x.desc}</div>
-
-              {/* FIX: no onClick in Server Component */}
-              <a className="btn btn-primary mt-5 w-full" href="#contact">
-                {x.cta}
-              </a>
-            </div>
+        <div className="mb-12 grid gap-7 lg:grid-cols-3">
+          {getInvolved.cards.map((card, i) => (
+            <Reveal key={card.title} delayMs={80 + i * 60}>
+              <GlassCard className="p-10 hover:-translate-y-1.5">
+                <div className="mb-8 h-1.5 w-16 rounded-full bg-gradient-to-r from-red-600 to-blue-600 opacity-80" />
+                <div className="mb-6 flex items-center gap-4">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 dark:bg-slate-800/70 text-slate-900 dark:text-white">
+                    <Icon name={card.icon as IconName} className="h-7 w-7" />
+                  </div>
+                  <div>
+                    <div className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">{card.title}</div>
+                    <div className="mt-1 text-slate-600 dark:text-slate-300">{card.subtitle}</div>
+                  </div>
+                </div>
+                <a
+                  href={`mailto:${site.email}`}
+                  className="inline-flex items-center gap-2 font-bold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                >
+                  Start here <Icon name="arrow" className="h-5 w-5" />
+                </a>
+              </GlassCard>
+            </Reveal>
           ))}
         </div>
-      </section>
 
-      {/* CONTACT */}
-      <section id="contact" className="mt-16 md:mt-20">
-        <div className="card p-7 md:p-10">
-          <div className="grid gap-6 md:grid-cols-12 md:items-center">
-            <div className="md:col-span-7">
-              <div className="kicker">Contact</div>
-              <h2 className="h2 mt-3 text-3xl md:text-4xl">Ready to collaborate?</h2>
-              <p className="lead mt-3">
-                Email us and we’ll reply with a simple collaboration path (sponsor / partner / volunteer).
-              </p>
-            </div>
+        <Reveal delayMs={120}>
+          <div className="relative overflow-hidden rounded-[44px] bg-gradient-to-br from-red-600 to-blue-700 p-12 text-white shadow-[0_30px_120px_rgba(37,99,235,0.22)] md:p-20">
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 opacity-[0.12]"
+              style={{
+                backgroundImage: "url('/batik-pattern.svg')",
+                backgroundRepeat: "repeat",
+                backgroundPosition: "center",
+                backgroundSize: "700px 700px",
+              }}
+            />
+            <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/20" />
 
-            <div className="md:col-span-5 md:text-right">
-              <div className="text-sm font-bold text-[var(--muted)]">Email</div>
-              <div className="mt-1 text-lg font-extrabold">{site.email}</div>
+            <div className="relative z-10 text-center">
+              <h3 className="mb-6 text-4xl font-black tracking-tight md:text-6xl">{getInvolved.banner.title}</h3>
+              <p className="mx-auto mb-10 max-w-2xl text-base md:text-2xl opacity-95">{getInvolved.banner.desc}</p>
 
-              <a className="btn btn-primary mt-4 w-full md:w-auto" href={`mailto:${site.email}?subject=Partnership`}>
-                Email IDECN
-              </a>
-
-              <div className="mt-2 text-xs font-bold text-[var(--muted2)]">
-                Put “Partnership” in the subject line.
+              <div className="flex flex-col justify-center gap-5 sm:flex-row">
+                <a
+                  href={getInvolved.banner.primary.href}
+                  className="rounded-2xl bg-white px-12 py-5 text-xl font-black text-slate-900 transition hover:scale-[1.03]"
+                >
+                  {getInvolved.banner.primary.label}
+                </a>
+                <a
+                  href={getInvolved.banner.secondary.href}
+                  className="rounded-2xl border-2 border-white/80 bg-white/10 px-12 py-5 text-xl font-black text-white backdrop-blur transition hover:bg-white/15"
+                >
+                  {getInvolved.banner.secondary.label}
+                </a>
               </div>
             </div>
           </div>
-        </div>
-
-        <footer className="mt-10 pb-6 text-center text-sm font-bold text-[var(--muted2)]">
-          © {new Date().getFullYear()} IDECN. All rights reserved.
-        </footer>
+        </Reveal>
       </section>
+
+      {/* FOOTER */}
+      <footer className="border-t border-slate-200/70 bg-white/55 px-6 py-16 backdrop-blur dark:border-slate-800/70 dark:bg-slate-950/40">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid gap-12 md:grid-cols-4">
+            <div className="md:col-span-2">
+              <div className="mb-6 flex items-center gap-3">
+                <div className="grid h-9 w-9 place-items-center rounded-lg bg-red-600 text-lg font-black text-white">I</div>
+                <div className="text-xl font-black text-slate-900 dark:text-white">{site.orgShort}</div>
+              </div>
+              <p className="max-w-md text-base md:text-lg text-slate-600 dark:text-slate-300">{footer.blurb}</p>
+            </div>
+
+            <div>
+              <div className="mb-5 text-sm font-extrabold uppercase tracking-[0.18em] text-slate-900 dark:text-white">
+                Quick Links
+              </div>
+              <ul className="space-y-3 text-slate-600 dark:text-slate-300">
+                {footer.quickLinks.map((l) => (
+                  <li key={l.href}>
+                    <a className="transition hover:text-red-600 dark:hover:text-red-400" href={l.href}>
+                      {l.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <div className="mb-5 text-sm font-extrabold uppercase tracking-[0.18em] text-slate-900 dark:text-white">
+                Social
+              </div>
+              <ul className="space-y-3 text-slate-600 dark:text-slate-300">
+                <li><a className="transition hover:text-blue-600 dark:hover:text-blue-300" href={site.social.instagram}>Instagram</a></li>
+                <li><a className="transition hover:text-blue-600 dark:hover:text-blue-300" href={site.social.linkedin}>LinkedIn</a></li>
+                <li><a className="transition hover:text-blue-600 dark:hover:text-blue-300" href={site.social.x}>Twitter/X</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="mt-14 flex flex-col gap-4 border-t border-slate-200/60 pt-8 text-sm text-slate-500 dark:border-slate-800/60 dark:text-slate-400 md:flex-row md:items-center md:justify-between">
+            <p>© 2024 {site.orgShort} — {site.orgName}. All rights reserved.</p>
+            <div className="flex gap-8">
+              {footer.legal.map((t) => (
+                <span key={t} className="cursor-pointer transition hover:text-slate-700 dark:hover:text-slate-200">
+                  {t}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </footer>
     </main>
   );
 }

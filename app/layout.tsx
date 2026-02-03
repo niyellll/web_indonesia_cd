@@ -1,53 +1,114 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "../components/Navbar";
-import { Inter } from "next/font/google";
+import { navItems, site } from "../lib/cms";
 
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
+  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
-  title: "IDECN — Indonesia Education & Cultural Network",
-  description:
-    "A U.S.-based nonprofit dedicated to fostering cross-cultural understanding, educational opportunities, and community connections between Indonesia and the United States.",
+  title: `${site.orgShort} — ${site.orgName}`,
+  description: site.tagline,
 };
 
-function ThemeScript() {
-  // Set theme sebelum React hydrate (biar ga “kedip”)
-  const code = `
+const themeInitScript = `
 (function() {
   try {
-    var stored = localStorage.getItem("theme");
-    var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-    var isDark = stored ? stored === "dark" : prefersDark;
-    var root = document.documentElement;
-    if (isDark) root.classList.add("dark"); else root.classList.remove("dark");
+    var key = 'idecn-theme';
+    var stored = localStorage.getItem(key);
+    var mode = stored || 'system';
+    var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var resolved = (mode === 'system') ? (prefersDark ? 'dark' : 'light') : mode;
+    document.documentElement.dataset.theme = mode;
+    if (resolved === 'dark') document.documentElement.classList.add('dark');
+    else document.documentElement.classList.remove('dark');
   } catch (e) {}
 })();
-`.trim();
+`;
 
-  return <script dangerouslySetInnerHTML={{ __html: code }} />;
-}
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
-        <ThemeScript />
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body className={`${inter.className} body-root`}>
-        {/* Background layers */}
-        <div className="bg-wash" aria-hidden />
-        <div className="bg-batik" aria-hidden />
 
-        <Navbar />
-        {children}
+      <body className="min-h-screen bg-slate-50 text-slate-900 text-[16px] md:text-[17px] selection:bg-red-600 selection:text-white dark:bg-slate-950 dark:text-slate-100">
+        {/* Batik Light */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none fixed inset-0 z-0 dark:hidden"
+          style={{
+            backgroundImage: "url('/batik-pattern.svg')",
+            backgroundRepeat: "repeat",
+            backgroundPosition: "center",
+            backgroundSize: "640px 640px",
+            opacity: 0.18,
+            mixBlendMode: "multiply",
+            filter: "grayscale(1) contrast(1.55) brightness(1.02)",
+            WebkitMaskImage:
+              "radial-gradient(circle at 50% 28%, #000 0%, #000 75%, transparent 98%)",
+            maskImage:
+              "radial-gradient(circle at 50% 28%, #000 0%, #000 75%, transparent 98%)",
+          }}
+        />
+
+        {/* Batik Dark */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none fixed inset-0 z-0 hidden dark:block"
+          style={{
+            backgroundImage: "url('/batik-pattern.svg')",
+            backgroundRepeat: "repeat",
+            backgroundPosition: "center",
+            backgroundSize: "640px 640px",
+            opacity: 0.14,
+            filter: "grayscale(1) invert(1) contrast(1.15) brightness(0.9)",
+            WebkitMaskImage:
+              "radial-gradient(circle at 50% 28%, #000 0%, #000 75%, transparent 98%)",
+            maskImage:
+              "radial-gradient(circle at 50% 28%, #000 0%, #000 75%, transparent 98%)",
+          }}
+        />
+
+        {/* Readability wash */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none fixed inset-0 z-0
+                     bg-gradient-to-b from-white/70 via-white/40 to-white/18
+                     dark:from-slate-950/82 dark:via-slate-950/55 dark:to-slate-950/32"
+        />
+
+        {/* Premium glows */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none fixed inset-0 z-0
+                     [background:radial-gradient(1200px_700px_at_50%_18%,rgba(37,99,235,0.12),transparent_60%)]
+                     dark:[background:radial-gradient(1200px_700px_at_50%_18%,rgba(37,99,235,0.18),transparent_60%)]"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none fixed inset-0 z-0
+                     [background:radial-gradient(900px_520px_at_28%_30%,rgba(220,38,38,0.10),transparent_62%)]
+                     dark:[background:radial-gradient(900px_520px_at_28%_30%,rgba(220,38,38,0.16),transparent_62%)]"
+        />
+
+        {/* Vignette */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none fixed inset-0 z-0
+                     [background:radial-gradient(1400px_700px_at_50%_20%,transparent_55%,rgba(2,6,23,0.10)_100%)]
+                     dark:[background:radial-gradient(1400px_700px_at_50%_20%,transparent_55%,rgba(0,0,0,0.45)_100%)]"
+        />
+
+        <div className="relative z-10">
+          <Navbar brandShort={site.orgShort} items={navItems} contactHref={`mailto:${site.email}`} />
+          {children}
+        </div>
       </body>
     </html>
   );
