@@ -23,7 +23,7 @@ export const hero = {
     "A U.S.-based nonprofit dedicated to fostering cross-cultural understanding, educational opportunities, and community connections between Indonesia and the United States.",
   ctas: {
     primary: { label: "Get involved", href: "#get-involved" },
-    proposal: { label: "Download proposal (PDF)", href: "/proposal.pdf" },
+    proposal: { label: "Download proposal (PDF)", href: "/indonesia-on-the-creek-proposal.pdf" },
     portfolio: { label: "View portfolio event", href: "#portfolio" },
   },
 };
@@ -111,6 +111,6 @@ export const getInvolved = {
     title: "Ready to collaborate?",
     desc: "Reach out and we’ll propose the best partnership path—sponsor, institution, or community program.",
     primary: { label: "Contact IDECN", href: `mailto:${site.email}` },
-    secondary: { label: "Download proposal", href: "/proposal.pdf" },
+    secondary: { label: "Download proposal", href: "/indonesia-on-the-creek-proposal.pdf" },
   },
 };
