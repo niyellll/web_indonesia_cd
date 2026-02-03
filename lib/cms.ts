@@ -77,6 +77,7 @@ export const programs = {
 export const portfolio = {
   eyebrow: "Proof of execution",
   title: "Portfolio Event",
+  subtitle: "Ringkasan eksekusi yang jelas—hasil terukur, dokumentasi rapi, dan playbook siap dipakai untuk kolaborasi berikutnya.",
   featured: {
     name: "Indonesia Culinary Day on the Creek",
     date: "2024",
