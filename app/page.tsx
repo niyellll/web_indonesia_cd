@@ -1,5 +1,6 @@
 import Reveal from "../components/Reveal";
 import SpotlightCard from "../components/SpotlightCard";
+import PortfolioCarousel from "../components/PortfolioCarousel";
 import { site, hero, about, programs, portfolio, partners, getInvolved } from "../lib/cms";
 
 function SectionTitle({
@@ -21,11 +22,11 @@ function SectionTitle({
       <h2 className="mt-3 text-4xl font-black tracking-tight text-slate-900 dark:text-white md:text-5xl">
         {title}
       </h2>
-      {subtitle && (
+      {subtitle ? (
         <p className="mx-auto mt-4 max-w-2xl text-base md:text-lg text-slate-600 dark:text-slate-300">
           {subtitle}
         </p>
-      )}
+      ) : null}
     </div>
   );
 }
@@ -39,7 +40,48 @@ function Pill({ children }: { children: React.ReactNode }) {
 }
 
 export default function Page() {
-  // Carousel slides: tetap “isi sama”, tapi dibagi jadi 3 view premium (overview / snapshot / next steps)
+  // make cms shape safe (biar TS tidak nyangkut kalau ada properti yang belum ada)
+  const h = hero as any;
+  const a = about as any;
+  const pr = programs as any;
+  const pf = portfolio as any;
+  const pt = partners as any;
+  const gi = getInvolved as any;
+  const s = site as any;
+
+  const heroChips: string[] = h.chips ?? ["Nonprofit (U.S.-based)", "Established 2024", "Indonesia ↔ U.S."];
+  const heroHeadingTop: string = h.headingTop ?? "Indonesia Education &";
+  const heroHeadingGradient: string = h.headingGradient ?? "Cultural Network";
+  const heroSubtitle: string =
+    h.subtitle ??
+    "IDECN connects Indonesia and the U.S. through education, cultural exchange, and professional collaboration—designed for real-world execution, not just ideas.";
+
+  const heroCtas =
+    h.ctas ??
+    ({
+      primary: { label: "Get involved", href: "#get-involved" },
+      proposal: { label: "Download proposal (PDF)", href: "/indonesia-on-the-creek-proposal.pdf" },
+      portfolio: { label: "View portfolio event", href: "#portfolio" },
+    } as const);
+
+  const portfolioSubtitle: string =
+    pf.subtitle ??
+    "Ringkasan eksekusi yang jelas—hasil terukur, dokumentasi rapi, dan playbook siap dipakai untuk kolaborasi berikutnya.";
+
+  const featured =
+    pf.featured ??
+    ({
+      name: "Indonesia Culinary Day on the Creek",
+      date: "2024",
+      location: "Washington, D.C., USA",
+      summary:
+        "A community-based cultural event celebrating Indonesian cuisine and cross-cultural connection—executed with partners and volunteers on the ground.",
+      highlights: ["Community engagement", "Vendor collaboration", "Cultural showcase", "Partner-ready playbook"],
+      ctaDownload: { label: "Download report", href: "/indonesia-on-the-creek-proposal.pdf" },
+      ctaSecondary: { label: "Discuss next event", href: `mailto:${s.email ?? "hello@idecn.org"}` },
+    } as const);
+
+  // Carousel slides (3 slides)
   const portfolioSlides = [
     {
       key: "overview",
@@ -49,46 +91,45 @@ export default function Page() {
           <div className="lg:col-span-7">
             <div className="flex flex-wrap gap-3">
               <span className="rounded-full bg-slate-900 px-4 py-2 text-sm font-bold text-white dark:bg-white dark:text-slate-900">
-                {portfolio.featured.date}
+                {featured.date}
               </span>
               <span className="rounded-full bg-slate-100 px-4 py-2 text-sm font-bold text-slate-800 dark:bg-white/10 dark:text-slate-100">
-                {portfolio.featured.location}
+                {featured.location}
               </span>
             </div>
 
             <h3 className="mt-6 text-3xl md:text-4xl font-black tracking-tight text-slate-900 dark:text-white">
-              {portfolio.featured.name}
+              {featured.name}
             </h3>
 
             <p className="mt-5 text-base md:text-lg leading-relaxed text-slate-600 dark:text-slate-300">
-              {portfolio.featured.summary}
+              {featured.summary}
             </p>
 
             <div className="mt-7 flex flex-wrap gap-2.5">
-              {portfolio.featured.highlights.map((h: string) => (
+              {(featured.highlights ?? []).map((h: string) => (
                 <Pill key={h}>{h}</Pill>
               ))}
             </div>
 
             <div className="mt-9 flex flex-wrap gap-4">
               <a
-                href={portfolio.featured.ctaDownload.href}
+                href={featured.ctaDownload?.href}
                 className="btn-shine rounded-2xl bg-red-600 px-8 py-4 font-bold text-white transition hover:bg-red-700"
               >
-                {portfolio.featured.ctaDownload.label}
+                {featured.ctaDownload?.label ?? "Download report"}
               </a>
 
               <a
-                href={portfolio.featured.ctaSecondary.href}
+                href={featured.ctaSecondary?.href}
                 className="btn-shine rounded-2xl border border-slate-200/70 bg-white/70 px-8 py-4 font-bold text-slate-900 backdrop-blur transition hover:bg-white
                            dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
               >
-                {portfolio.featured.ctaSecondary.label}
+                {featured.ctaSecondary?.label ?? "Discuss next event"}
               </a>
             </div>
           </div>
 
-          {/* Right: Snapshot card */}
           <div className="lg:col-span-5">
             <div
               className="group relative overflow-hidden rounded-[24px] border border-slate-200/70 bg-white/70 p-7 backdrop-blur
@@ -96,7 +137,6 @@ export default function Page() {
                          transition hover:-translate-y-1 hover:shadow-[0_28px_90px_rgba(2,6,23,0.14)]
                          dark:border-white/10 dark:bg-white/5 dark:shadow-[0_22px_80px_rgba(0,0,0,0.45)]"
             >
-              {/* Batik texture (calmer) */}
               <div
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-0 opacity-[0.18] dark:opacity-[0.12]"
@@ -109,7 +149,6 @@ export default function Page() {
                 }}
               />
 
-              {/* Readability scrim */}
               <div
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-0
@@ -117,7 +156,6 @@ export default function Page() {
                            dark:from-slate-950/35 dark:via-slate-950/25 dark:to-slate-950/15"
               />
 
-              {/* Accent wash */}
               <div
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-0
@@ -125,7 +163,6 @@ export default function Page() {
                            dark:from-red-500/14 dark:to-blue-500/14"
               />
 
-              {/* Accent bar */}
               <div
                 aria-hidden="true"
                 className="absolute left-6 top-6 h-1 w-24 rounded-full bg-gradient-to-r from-red-600 to-blue-600"
@@ -141,11 +178,10 @@ export default function Page() {
                     className="rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-xs font-bold text-slate-800
                                shadow-sm dark:border-white/10 dark:bg-white/10 dark:text-slate-100"
                   >
-                    {portfolio.featured.date}
+                    {featured.date}
                   </span>
                 </div>
 
-                {/* Content panel */}
                 <div
                   className="mt-5 rounded-2xl border border-slate-200/70 bg-white/82 p-5 backdrop-blur
                              dark:border-white/10 dark:bg-slate-950/28"
@@ -191,7 +227,7 @@ export default function Page() {
 
     {
       key: "outputs",
-      title: "Outputs & Materials",
+      title: "Partner-ready assets",
       content: (
         <div className="grid gap-10 lg:grid-cols-12 lg:items-start">
           <div className="lg:col-span-7">
@@ -199,12 +235,11 @@ export default function Page() {
               What we deliver
             </div>
             <h3 className="mt-3 text-3xl md:text-4xl font-black tracking-tight text-slate-900 dark:text-white">
-              Partner-ready assets that make collaboration easy.
+              Materials that make collaboration easy.
             </h3>
 
             <p className="mt-5 text-base md:text-lg leading-relaxed text-slate-600 dark:text-slate-300">
-              Instead of “just an event”, we package outputs that can be reused and scaled: documentation, reporting, and a clean
-              playbook.
+              Bukan cuma event—kami rapikan output supaya gampang dipitch dan gampang direplikasi.
             </p>
 
             <div className="mt-7 grid gap-4 sm:grid-cols-2">
@@ -227,13 +262,13 @@ export default function Page() {
 
             <div className="mt-9 flex flex-wrap gap-4">
               <a
-                href={portfolio.featured.ctaDownload.href}
+                href={featured.ctaDownload?.href}
                 className="btn-shine rounded-2xl bg-red-600 px-8 py-4 font-bold text-white transition hover:bg-red-700"
               >
                 Download report
               </a>
               <a
-                href={`mailto:${site.email}`}
+                href={`mailto:${s.email ?? "hello@idecn.org"}`}
                 className="btn-shine rounded-2xl border border-slate-200/70 bg-white/70 px-8 py-4 font-bold text-slate-900 backdrop-blur transition hover:bg-white
                            dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
               >
@@ -249,10 +284,10 @@ export default function Page() {
               </div>
 
               <div className="mt-5 space-y-4">
-                {portfolio.featured.highlights.map((h: string) => (
-                  <div key={h} className="flex items-start gap-3">
+                {(featured.highlights ?? []).map((x: string) => (
+                  <div key={x} className="flex items-start gap-3">
                     <span className="mt-2 h-2 w-2 rounded-full bg-blue-600" />
-                    <div className="text-base md:text-lg font-semibold text-slate-800 dark:text-slate-100">{h}</div>
+                    <div className="text-base md:text-lg font-semibold text-slate-800 dark:text-slate-100">{x}</div>
                   </div>
                 ))}
               </div>
@@ -264,7 +299,7 @@ export default function Page() {
                   Notes
                 </div>
                 <div className="mt-2 text-slate-600 dark:text-slate-300">
-                  Built with volunteers + local partners, designed to be repeated in other locations with minimal overhead.
+                  Built with volunteers + local partners, designed to be repeated with minimal overhead.
                 </div>
               </div>
             </SpotlightCard>
@@ -275,7 +310,7 @@ export default function Page() {
 
     {
       key: "nextsteps",
-      title: "Next Steps",
+      title: "Next steps",
       content: (
         <div className="grid gap-10 lg:grid-cols-12 lg:items-start">
           <div className="lg:col-span-7">
@@ -287,16 +322,15 @@ export default function Page() {
             </h3>
 
             <p className="mt-5 text-base md:text-lg leading-relaxed text-slate-600 dark:text-slate-300">
-              We keep execution simple: clear roles, clear timeline, clear deliverables. The goal is to make partnership easy to
-              say “yes” to.
+              Alurnya dibuat simpel: tujuan jelas, format jelas, peran jelas, output jelas.
             </p>
 
             <div className="mt-7 space-y-4">
               {[
                 { step: "1", t: "Align objective", d: "Education / culture / community engagement target." },
-                { step: "2", t: "Pick format", d: "Community event, workshop, or campus activation." },
-                { step: "3", t: "Run playbook", d: "Repeatable plan with partners + volunteers." },
-                { step: "4", t: "Report & package", d: "Share outcomes, documentation, and media kit." },
+                { step: "2", t: "Pick format", d: "Community event, workshop, atau campus activation." },
+                { step: "3", t: "Run playbook", d: "Partner + volunteer workflow yang repeatable." },
+                { step: "4", t: "Report & package", d: "Outcome + dokumentasi + media kit." },
               ].map((x) => (
                 <div
                   key={x.step}
@@ -316,13 +350,13 @@ export default function Page() {
 
             <div className="mt-9 flex flex-wrap gap-4">
               <a
-                href={`mailto:${site.email}`}
+                href={`mailto:${s.email ?? "hello@idecn.org"}`}
                 className="btn-shine rounded-2xl bg-red-600 px-8 py-4 font-bold text-white transition hover:bg-red-700"
               >
                 Discuss next event
               </a>
               <a
-                href={portfolio.featured.ctaDownload.href}
+                href={featured.ctaDownload?.href}
                 className="btn-shine rounded-2xl border border-slate-200/70 bg-white/70 px-8 py-4 font-bold text-slate-900 backdrop-blur transition hover:bg-white
                            dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
               >
@@ -345,7 +379,9 @@ export default function Page() {
 
               <div className="mt-6 rounded-2xl border border-slate-200/70 bg-white/70 p-5 backdrop-blur dark:border-white/10 dark:bg-white/6">
                 <div className="text-sm font-bold text-slate-900 dark:text-white">Email</div>
-                <div className="mt-1 font-semibold text-slate-700 dark:text-slate-200">{site.email}</div>
+                <div className="mt-1 font-semibold text-slate-700 dark:text-slate-200">
+                  {s.email ?? "hello@idecn.org"}
+                </div>
               </div>
             </SpotlightCard>
           </div>
@@ -363,7 +399,7 @@ export default function Page() {
 
           <Reveal delayMs={40} variant="fade" staggerChildren>
             <div className="flex flex-wrap justify-center gap-3">
-              {hero.chips.map((t: string) => (
+              {heroChips.map((t: string) => (
                 <span
                   key={t}
                   className="inline-flex items-center gap-2 rounded-full border border-slate-300/70 bg-white/75 px-4 py-2 text-sm font-semibold text-slate-700 backdrop-blur
@@ -379,47 +415,47 @@ export default function Page() {
 
           <Reveal delayMs={120} variant="zoom">
             <h1 className="mt-8 text-center text-5xl font-black tracking-tight text-slate-900 dark:text-white md:text-7xl lg:text-8xl leading-[0.95]">
-              <span className="block">{hero.headingTop}</span>
+              <span className="block">{heroHeadingTop}</span>
               <span className="mt-1 block bg-gradient-to-r from-red-600 via-purple-500 to-blue-600 bg-clip-text text-transparent idecn-shimmer">
-                {hero.headingGradient}
+                {heroHeadingGradient}
               </span>
             </h1>
           </Reveal>
 
           <Reveal delayMs={200} variant="up">
             <p className="mx-auto mt-6 max-w-3xl text-center text-base md:text-xl leading-relaxed text-slate-600 dark:text-slate-300">
-              {hero.subtitle}
+              {heroSubtitle}
             </p>
           </Reveal>
 
           <Reveal delayMs={280} variant="up">
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <a
-                href={hero.ctas.primary.href}
+                href={heroCtas.primary?.href ?? "#get-involved"}
                 className="btn-shine inline-flex items-center justify-center rounded-2xl bg-red-600 px-10 py-4 text-lg font-bold text-white
                            shadow-[0_18px_50px_rgba(239,68,68,0.25)]
                            transition hover:-translate-y-1 hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-600/20"
               >
-                {hero.ctas.primary.label}
+                {heroCtas.primary?.label ?? "Get involved"}
               </a>
 
               <a
-                href={hero.ctas.proposal.href}
+                href={heroCtas.proposal?.href ?? "/indonesia-on-the-creek-proposal.pdf"}
                 className="btn-shine inline-flex items-center justify-center rounded-2xl border border-slate-200/80 bg-white/75 px-10 py-4 text-lg font-bold text-slate-900 backdrop-blur
                            shadow-[0_12px_40px_rgba(2,6,23,0.06)]
                            transition hover:-translate-y-1 hover:bg-white focus:outline-none focus:ring-4 focus:ring-slate-900/10
                            dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15 dark:focus:ring-white/10"
               >
-                {hero.ctas.proposal.label}
+                {heroCtas.proposal?.label ?? "Download proposal (PDF)"}
               </a>
 
               <a
-                href={hero.ctas.portfolio.href}
+                href={heroCtas.portfolio?.href ?? "#portfolio"}
                 className="btn-shine inline-flex items-center justify-center rounded-2xl bg-blue-600 px-10 py-4 text-lg font-bold text-white
                            shadow-[0_18px_50px_rgba(37,99,235,0.25)]
                            transition hover:-translate-y-1 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-600/20"
               >
-                {hero.ctas.portfolio.label}
+                {heroCtas.portfolio?.label ?? "View portfolio event"}
               </a>
             </div>
           </Reveal>
@@ -432,21 +468,21 @@ export default function Page() {
           <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
             <div>
               <h2 className="text-4xl font-black tracking-tight text-slate-900 dark:text-white md:text-5xl">
-                {about.title}
+                {a.title ?? "Who we are"}
               </h2>
               <p className="mt-6 text-base md:text-xl leading-relaxed text-slate-600 dark:text-slate-300">
-                {about.lead}
+                {a.lead ?? ""}
               </p>
 
               <div className="mt-10 space-y-6">
                 <div className="rounded-2xl border border-slate-200/70 bg-white/60 p-6 backdrop-blur dark:border-white/10 dark:bg-white/5">
                   <div className="text-lg font-bold text-slate-900 dark:text-white">Our Purpose</div>
-                  <p className="mt-2 text-slate-600 dark:text-slate-300">{about.purpose}</p>
+                  <p className="mt-2 text-slate-600 dark:text-slate-300">{a.purpose ?? ""}</p>
                 </div>
 
                 <div className="rounded-2xl border border-slate-200/70 bg-white/60 p-6 backdrop-blur dark:border-white/10 dark:bg-white/5">
                   <div className="text-lg font-bold text-slate-900 dark:text-white">Primary Audience</div>
-                  <p className="mt-2 text-slate-600 dark:text-slate-300">{about.audience}</p>
+                  <p className="mt-2 text-slate-600 dark:text-slate-300">{a.audience ?? ""}</p>
                 </div>
               </div>
             </div>
@@ -454,11 +490,11 @@ export default function Page() {
             <Reveal delayMs={120} variant="right">
               <SpotlightCard className="p-9 md:p-10">
                 <div className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
-                  {about.atAGlance.title}
+                  {a.atAGlance?.title ?? "At a glance"}
                 </div>
 
                 <div className="mt-7 space-y-6">
-                  {about.atAGlance.items.map((r: any) => (
+                  {(a.atAGlance?.items ?? []).map((r: any) => (
                     <div key={r.k} className="border-b border-slate-100 pb-5 last:border-0 last:pb-0 dark:border-white/10">
                       <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-red-600 dark:text-red-400">
                         {r.k}
@@ -468,10 +504,10 @@ export default function Page() {
                   ))}
 
                   <a
-                    href={about.atAGlance.cta.href}
+                    href={a.atAGlance?.cta?.href ?? `mailto:${s.email ?? "hello@idecn.org"}`}
                     className="btn-shine inline-flex w-full items-center justify-center rounded-2xl bg-slate-900 px-6 py-4 text-lg font-bold text-white transition hover:opacity-95 dark:bg-white dark:text-slate-900"
                   >
-                    {about.atAGlance.cta.label}
+                    {a.atAGlance?.cta?.label ?? "Talk to us"}
                   </a>
                 </div>
               </SpotlightCard>
@@ -483,12 +519,12 @@ export default function Page() {
       {/* PROGRAMS */}
       <section id="programs" className="scroll-mt-28 mx-auto max-w-7xl px-6 py-24 md:py-28">
         <Reveal>
-          <SectionTitle title={programs.title} subtitle={programs.subtitle} />
+          <SectionTitle title={pr.title ?? "Our Core Programs"} subtitle={pr.subtitle ?? ""} />
         </Reveal>
 
         <div className="mt-12 grid gap-7 md:grid-cols-2">
-          {programs.cards.map((c: any, i: number) => (
-            <Reveal key={c.title} delayMs={80 + i * 60} variant={i % 2 === 0 ? "left" : "right"}>
+          {(pr.cards ?? []).map((c: any, i: number) => (
+            <Reveal key={c.title ?? i} delayMs={80 + i * 60} variant={i % 2 === 0 ? "left" : "right"}>
               <SpotlightCard className="p-9 md:p-10">
                 <div className="flex items-start justify-between gap-6">
                   <div>
@@ -497,7 +533,7 @@ export default function Page() {
                     </div>
 
                     <ul className="mt-5 space-y-3 text-base md:text-lg text-slate-600 dark:text-slate-300">
-                      {c.bullets.map((b: string) => (
+                      {(c.bullets ?? []).map((b: string) => (
                         <li key={b} className="flex gap-3">
                           <span className="mt-2 h-2 w-2 rounded-full bg-red-600" />
                           <span>{b}</span>
@@ -510,7 +546,7 @@ export default function Page() {
                 </div>
 
                 <div className="mt-7 flex flex-wrap gap-2.5">
-                  {c.tags.map((t: string) => (
+                  {(c.tags ?? []).map((t: string) => (
                     <Pill key={t}>{t}</Pill>
                   ))}
                 </div>
@@ -520,10 +556,10 @@ export default function Page() {
         </div>
       </section>
 
-      {/* PORTFOLIO (Carousel) */}
+      {/* PORTFOLIO (Carousel + Arrows) */}
       <section id="portfolio" className="scroll-mt-28 mx-auto max-w-7xl px-6 py-24 md:py-28">
         <Reveal>
-          <SectionTitle eyebrow={portfolio.eyebrow} title={portfolio.title} subtitle={portfolio.subtitle} />
+          <SectionTitle eyebrow={pf.eyebrow ?? "Proof of execution"} title={pf.title ?? "Portfolio Event"} subtitle={portfolioSubtitle} />
         </Reveal>
 
         <Reveal delayMs={120} variant="fade">
@@ -538,56 +574,34 @@ export default function Page() {
               </div>
             </div>
 
-            <div className="relative mt-6">
-              {/* edge fades */}
-              <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r from-white/80 to-transparent dark:from-slate-950/40" />
-              <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-white/80 to-transparent dark:from-slate-950/40" />
-
-              {/* scroll-snap track */}
-              <div
-                className="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-6 pr-6
-                           [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-              >
-                {portfolioSlides.map((s, idx) => (
-                  <div
-                    key={s.key}
-                    className="snap-center shrink-0 w-[92%] md:w-[86%] lg:w-[78%]"
-                    aria-label={`Portfolio slide ${idx + 1}: ${s.title}`}
-                  >
-                    <Reveal delayMs={60 + idx * 90} variant="up">
-                      <SpotlightCard className="p-9 md:p-10">
-                        <div className="flex items-center justify-between gap-4">
-                          <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-red-600 dark:text-red-400">
-                            Slide {idx + 1} / {portfolioSlides.length}
-                          </div>
-                          <div className="rounded-full border border-slate-200/70 bg-white/70 px-3 py-1 text-xs font-bold text-slate-800 backdrop-blur
-                                          dark:border-white/10 dark:bg-white/10 dark:text-slate-100"
-                          >
-                            {s.title}
-                          </div>
+            <PortfolioCarousel count={portfolioSlides.length} className="mt-6" label="Portfolio carousel">
+              {portfolioSlides.map((sl, idx) => (
+                <div
+                  key={sl.key}
+                  data-slide
+                  className="snap-center shrink-0 w-[92%] md:w-[86%] lg:w-[78%]"
+                  aria-label={`Portfolio slide ${idx + 1}: ${sl.title}`}
+                >
+                  <Reveal delayMs={60 + idx * 90} variant="up">
+                    <SpotlightCard className="p-9 md:p-10">
+                      <div className="flex items-center justify-between gap-4">
+                        <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-red-600 dark:text-red-400">
+                          Slide {idx + 1} / {portfolioSlides.length}
                         </div>
+                        <div
+                          className="rounded-full border border-slate-200/70 bg-white/70 px-3 py-1 text-xs font-bold text-slate-800 backdrop-blur
+                                     dark:border-white/10 dark:bg-white/10 dark:text-slate-100"
+                        >
+                          {sl.title}
+                        </div>
+                      </div>
 
-                        <div className="mt-7">{s.content}</div>
-                      </SpotlightCard>
-                    </Reveal>
-                  </div>
-                ))}
-              </div>
-
-              {/* dots (visual) */}
-              <div className="mt-2 flex justify-center gap-2">
-                {portfolioSlides.map((s, i) => (
-                  <span
-                    key={s.key}
-                    className={[
-                      "h-2.5 w-2.5 rounded-full transition",
-                      i === 0 ? "bg-slate-900 dark:bg-white" : "bg-slate-300/80 dark:bg-white/20",
-                    ].join(" ")}
-                    aria-hidden="true"
-                  />
-                ))}
-              </div>
-            </div>
+                      <div className="mt-7">{sl.content}</div>
+                    </SpotlightCard>
+                  </Reveal>
+                </div>
+              ))}
+            </PortfolioCarousel>
           </div>
         </Reveal>
       </section>
@@ -595,12 +609,12 @@ export default function Page() {
       {/* PARTNERS */}
       <section id="partners" className="scroll-mt-28 mx-auto max-w-7xl px-6 py-24 md:py-28">
         <Reveal>
-          <SectionTitle title={partners.title} subtitle={partners.subtitle} />
+          <SectionTitle title={pt.title ?? "Partners"} subtitle={pt.subtitle ?? ""} />
         </Reveal>
 
         <div className="mt-12 grid gap-7 lg:grid-cols-3">
-          {partners.cards.map((c: any, i: number) => (
-            <Reveal key={c.title} delayMs={80 + i * 60} variant="up">
+          {(pt.cards ?? []).map((c: any, i: number) => (
+            <Reveal key={c.title ?? i} delayMs={80 + i * 60} variant="up">
               <SpotlightCard className="p-9 md:p-10">
                 <div className="text-xl md:text-2xl font-black tracking-tight text-slate-900 dark:text-white">
                   {c.title}
@@ -616,17 +630,17 @@ export default function Page() {
       {/* GET INVOLVED */}
       <section id="get-involved" className="scroll-mt-28 mx-auto max-w-7xl px-6 py-24 md:py-28">
         <Reveal>
-          <SectionTitle title={getInvolved.title} subtitle={getInvolved.subtitle} />
+          <SectionTitle title={gi.title ?? "Get involved"} subtitle={gi.subtitle ?? ""} />
         </Reveal>
 
         <div className="mt-12 grid gap-7 lg:grid-cols-3">
-          {getInvolved.cards.map((c: any, i: number) => (
-            <Reveal key={c.title} delayMs={80 + i * 60} variant="up">
+          {(gi.cards ?? []).map((c: any, i: number) => (
+            <Reveal key={c.title ?? i} delayMs={80 + i * 60} variant="up">
               <SpotlightCard className="p-9 md:p-10">
                 <div className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">{c.title}</div>
                 <p className="mt-3 text-base md:text-lg text-slate-600 dark:text-slate-300">{c.subtitle}</p>
                 <a
-                  href={`mailto:${site.email}`}
+                  href={`mailto:${s.email ?? "hello@idecn.org"}`}
                   className="mt-6 inline-flex font-bold text-blue-700 hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-200"
                 >
                   Start here →
@@ -641,25 +655,27 @@ export default function Page() {
             <div className="grid gap-10 lg:grid-cols-12 lg:items-center">
               <div className="lg:col-span-8">
                 <div className="text-3xl font-black tracking-tight text-slate-900 dark:text-white md:text-4xl">
-                  {getInvolved.banner.title}
+                  {gi.banner?.title ?? "Ready to collaborate?"}
                 </div>
-                <p className="mt-3 text-base md:text-lg text-slate-600 dark:text-slate-300">{getInvolved.banner.desc}</p>
+                <p className="mt-3 text-base md:text-lg text-slate-600 dark:text-slate-300">
+                  {gi.banner?.desc ?? "Tell us your goals—we’ll map a collaboration plan with clear deliverables."}
+                </p>
               </div>
 
               <div className="lg:col-span-4 flex flex-col gap-3 sm:flex-row lg:flex-col">
                 <a
-                  href={getInvolved.banner.primary.href}
+                  href={gi.banner?.primary?.href ?? `mailto:${s.email ?? "hello@idecn.org"}`}
                   className="btn-shine rounded-2xl bg-red-600 px-7 py-4 text-center font-bold text-white hover:bg-red-700 transition"
                 >
-                  {getInvolved.banner.primary.label}
+                  {gi.banner?.primary?.label ?? "Contact"}
                 </a>
 
                 <a
-                  href={getInvolved.banner.secondary.href}
+                  href={gi.banner?.secondary?.href ?? "#portfolio"}
                   className="btn-shine rounded-2xl border border-slate-200/70 bg-white/70 px-7 py-4 text-center font-bold text-slate-900 hover:bg-white transition
                              dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
                 >
-                  {getInvolved.banner.secondary.label}
+                  {gi.banner?.secondary?.label ?? "View portfolio"}
                 </a>
               </div>
             </div>
@@ -670,7 +686,7 @@ export default function Page() {
       {/* FOOTER */}
       <footer className="border-t border-slate-200/70 bg-white/55 px-6 py-14 backdrop-blur dark:border-white/10 dark:bg-slate-950/40">
         <div className="mx-auto max-w-7xl text-sm text-slate-600 dark:text-slate-300">
-          © 2024 {site.orgShort} — {site.orgName}. All rights reserved.
+          © 2024 {s.orgShort ?? "IDECN"} — {s.orgName ?? "Indonesia Education & Cultural Network"}. All rights reserved.
         </div>
       </footer>
     </main>
