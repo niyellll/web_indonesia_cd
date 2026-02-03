@@ -39,8 +39,14 @@ export default function PortfolioCarousel({
     [getSlides]
   );
 
-  const prev = React.useCallback(() => scrollToIndex(Math.max(0, active - 1)), [active, scrollToIndex]);
-  const next = React.useCallback(() => scrollToIndex(Math.min(count - 1, active + 1)), [active, count, scrollToIndex]);
+  const prev = React.useCallback(
+    () => scrollToIndex(Math.max(0, active - 1)),
+    [active, scrollToIndex]
+  );
+  const next = React.useCallback(
+    () => scrollToIndex(Math.min(count - 1, active + 1)),
+    [active, count, scrollToIndex]
+  );
 
   React.useEffect(() => {
     const el = scrollerRef.current;
@@ -94,6 +100,8 @@ export default function PortfolioCarousel({
     }
   };
 
+  const showControls = count > 1;
+
   const ArrowBtn = ({
     dir,
     onClick,
@@ -112,23 +120,42 @@ export default function PortfolioCarousel({
         "pointer-events-auto",
         "h-12 w-12 md:h-14 md:w-14 rounded-2xl",
         "grid place-items-center",
-        "bg-gradient-to-br from-red-600 via-purple-600 to-blue-600 text-white",
-        "shadow-[0_18px_55px_rgba(2,6,23,0.35)]",
-        "ring-1 ring-white/20",
-        "transition",
-        "hover:scale-[1.03] active:scale-[0.98]",
+        // solid BG biar kebaca (light & dark)
+        "bg-white text-slate-900",
+        "dark:bg-slate-950 dark:text-white",
+        // border jelas
+        "border border-slate-200/90 dark:border-white/18",
+        // shadow tebal biar premium
+        "shadow-[0_18px_60px_rgba(2,6,23,0.25)] dark:shadow-[0_22px_80px_rgba(0,0,0,0.65)]",
+        // hover ring gradient
+        "relative transition hover:scale-[1.03] active:scale-[0.98]",
         "disabled:opacity-30 disabled:cursor-not-allowed",
       ].join(" ")}
     >
+      {/* ring gradient tipis */}
+      <span
+        aria-hidden="true"
+        className="absolute inset-0 rounded-2xl opacity-0 transition-opacity hover:opacity-100"
+        style={{
+          padding: 1,
+          background:
+            "linear-gradient(90deg, rgba(239,68,68,0.85), rgba(59,130,246,0.85))",
+          WebkitMask:
+            "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
+          WebkitMaskComposite: "xor",
+          maskComposite: "exclude",
+        }}
+      />
+
       {dir === "left" ? (
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" className="relative">
           <path
             fill="currentColor"
             d="M15.5 19.5a1 1 0 0 1-.7-.3l-7-7a1 1 0 0 1 0-1.4l7-7a1 1 0 1 1 1.4 1.4L9.9 11.5l6.3 6.3a1 1 0 0 1-.7 1.7Z"
           />
         </svg>
       ) : (
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" className="relative">
           <path
             fill="currentColor"
             d="M8.5 19.5a1 1 0 0 1-.7-1.7l6.3-6.3l-6.3-6.3a1 1 0 1 1 1.4-1.4l7 7a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-.7.3Z"
@@ -138,8 +165,6 @@ export default function PortfolioCarousel({
     </button>
   );
 
-  const showControls = count > 1;
-
   return (
     <div
       className={["relative overflow-visible", className].join(" ")}
@@ -148,19 +173,7 @@ export default function PortfolioCarousel({
       tabIndex={0}
       onKeyDown={onKeyDown}
     >
-      {/* edge fades */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r from-white/85 to-transparent dark:from-slate-950/40" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-white/85 to-transparent dark:from-slate-950/40" />
-
-      {/* arrows layer (pasti kelihatan) */}
-      {showControls ? (
-        <div className="pointer-events-none absolute inset-y-0 left-0 right-0 z-30 flex items-center justify-between px-3 md:px-4">
-          <ArrowBtn dir="left" onClick={prev} disabled={active === 0} />
-          <ArrowBtn dir="right" onClick={next} disabled={active === count - 1} />
-        </div>
-      ) : null}
-
-      {/* track */}
+      {/* Track */}
       <div
         ref={scrollerRef}
         className="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-6 pr-6
@@ -169,7 +182,21 @@ export default function PortfolioCarousel({
         {children}
       </div>
 
-      {/* dots */}
+      {/* Controls OUTSIDE area (nggak nutup teks) */}
+      {showControls ? (
+        <div className="pointer-events-none absolute top-1/2 left-0 right-0 z-30 -translate-y-1/2">
+          {/* kiri */}
+          <div className="absolute left-[-22px] md:left-[-28px]">
+            <ArrowBtn dir="left" onClick={prev} disabled={active === 0} />
+          </div>
+          {/* kanan */}
+          <div className="absolute right-[-22px] md:right-[-28px]">
+            <ArrowBtn dir="right" onClick={next} disabled={active === count - 1} />
+          </div>
+        </div>
+      ) : null}
+
+      {/* Dots */}
       {showControls ? (
         <div className="mt-2 flex justify-center gap-2">
           {Array.from({ length: count }).map((_, i) => (
