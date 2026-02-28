@@ -55,10 +55,10 @@ export default function SpotlightCard({ children, className = "" }: SpotlightCar
       onPointerMove={onPointerMove}
       onPointerLeave={onPointerLeave}
       className={[
-        "spotlight rounded-[28px] border border-slate-200/70 bg-white/70 backdrop-blur-xl",
-        "shadow-[0_16px_60px_rgba(2,6,23,0.08)] transition-all duration-500",
-        "hover:-translate-y-1.5 hover:shadow-[0_28px_90px_rgba(2,6,23,0.14)]",
-        "dark:border-white/10 dark:bg-slate-900/45 dark:shadow-[0_18px_70px_rgba(0,0,0,0.45)]",
+        "spotlight rounded-[28px] border border-gray-200/70 bg-white/70 backdrop-blur-xl",
+        "shadow-[0_16px_60px_rgba(0,0,0,0.08)] transition-all duration-500",
+        "hover:-translate-y-1.5 hover:shadow-[0_28px_90px_rgba(0,0,0,0.14)]",
+        "dark:border-white/10 dark:bg-gray-900/45 dark:shadow-[0_18px_70px_rgba(0,0,0,0.45)]",
         "dark:hover:shadow-[0_28px_90px_rgba(0,0,0,0.55)]",
         className,
       ].join(" ")}
