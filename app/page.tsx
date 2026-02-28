@@ -219,7 +219,7 @@ export default function Page() {
         </Reveal>
 
         <Reveal delayMs={100}>
-          <h1 className="mt-7 text-center text-5xl font-black tracking-tight text-gray-900 dark:text-white md:text-7xl lg:text-8xl leading-[0.95]" data-text-reveal>
+          <h1 className="mt-7 text-center text-5xl font-black tracking-tight text-gray-900 dark:text-white md:text-7xl lg:text-8xl leading-[0.95]">
             <span className="block">{heroHeadingTop}</span>
             <span className="mt-1 block bg-gradient-to-r from-orange-500 via-orange-400 to-gray-500 bg-clip-text text-transparent idecn-shimmer">
               {heroHeadingGradient}
