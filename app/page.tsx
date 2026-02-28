@@ -339,10 +339,10 @@ export default function Page() {
           <SectionTitle title={pr.title ?? "Our Core Programs"} subtitle={pr.subtitle ?? ""} />
         </Reveal>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-2" data-stagger-container>
+        <div className="mt-12 grid gap-6 md:grid-cols-2">
           {(pr.cards ?? []).map((c: any, i: number) => (
             <Reveal key={c.title ?? i} delayMs={80 + i * 60}>
-              <div className="group relative overflow-hidden rounded-[28px] border border-gray-200/70 bg-white/60 backdrop-blur dark:border-white/10 dark:bg-white/5" data-stagger-card data-hover-card>
+              <div className="group relative overflow-hidden rounded-[28px] border border-gray-200/70 bg-white/60 backdrop-blur dark:border-white/10 dark:bg-white/5">
                 {/* Program photo */}
                 <div className="overflow-hidden h-48">
                   <img
@@ -444,7 +444,7 @@ export default function Page() {
           <SectionTitle title={pt.title ?? "Partners"} subtitle={pt.subtitle ?? ""} />
         </Reveal>
 
-        <div className="mt-12 grid gap-6 lg:grid-cols-3" data-stagger-container>
+        <div className="mt-12 grid gap-6 lg:grid-cols-3">
           {(pt.cards ?? []).map((c: any, i: number) => (
             <Reveal key={c.title ?? i} delayMs={80 + i * 60}>
               <SpotlightCard className="overflow-hidden p-0">
