@@ -517,7 +517,7 @@ export default function Page() {
       <footer className="border-t border-gray-200/70 bg-white/55 px-6 py-14 backdrop-blur dark:border-white/10 dark:bg-gray-950/40">
         <div className="mx-auto max-w-7xl flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
-            <img src="/IDECN_LOGO1.png" alt="IDECN" className="h-8 w-auto brightness-0 dark:brightness-100" />
+            <img src="/IDECN_LOGO1.svg" alt="IDECN" className="h-8 w-auto brightness-0 dark:brightness-100" />
             <span className="text-sm text-gray-600 dark:text-gray-300">© {new Date().getFullYear()} {orgShort} — {orgName}</span>
           </div>
           <a href={`mailto:${email}`} className="text-sm font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400">
