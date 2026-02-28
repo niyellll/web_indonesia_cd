@@ -35,7 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
 
-      <body className="min-h-screen bg-slate-50 text-slate-900 text-[16px] md:text-[17px] selection:bg-red-600 selection:text-white dark:bg-slate-950 dark:text-slate-100">
+      <body className="min-h-screen bg-gray-50 text-gray-900 text-[16px] md:text-[17px] selection:bg-orange-500 selection:text-white dark:bg-gray-950 dark:text-gray-100">
         {/* Batik layer (stronger but masked, still readable) */}
         <div
           aria-hidden="true"
@@ -79,21 +79,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           aria-hidden="true"
           className="pointer-events-none fixed inset-0 z-0
                      bg-gradient-to-b from-white/78 via-white/48 to-white/18
-                     dark:from-slate-950/88 dark:via-slate-950/60 dark:to-slate-950/30"
+                     dark:from-gray-950/88 dark:via-gray-950/60 dark:to-gray-950/30"
         />
 
-        {/* Premium glows (not like web2) */}
+        {/* Premium glows — orange & gray */}
         <div
           aria-hidden="true"
           className="pointer-events-none fixed inset-0 z-0
-                     [background:radial-gradient(900px_520px_at_18%_20%,rgba(239,68,68,0.12),transparent_60%)]
-                     dark:[background:radial-gradient(900px_520px_at_18%_20%,rgba(239,68,68,0.18),transparent_60%)]"
+                     [background:radial-gradient(900px_520px_at_18%_20%,rgba(249,115,22,0.13),transparent_60%)]
+                     dark:[background:radial-gradient(900px_520px_at_18%_20%,rgba(249,115,22,0.20),transparent_60%)]"
         />
         <div
           aria-hidden="true"
           className="pointer-events-none fixed inset-0 z-0
-                     [background:radial-gradient(980px_560px_at_78%_18%,rgba(59,130,246,0.12),transparent_60%)]
-                     dark:[background:radial-gradient(980px_560px_at_78%_18%,rgba(59,130,246,0.18),transparent_60%)]"
+                     [background:radial-gradient(980px_560px_at_78%_18%,rgba(107,114,128,0.10),transparent_60%)]
+                     dark:[background:radial-gradient(980px_560px_at_78%_18%,rgba(107,114,128,0.18),transparent_60%)]"
         />
 
         <div className="relative z-10">
