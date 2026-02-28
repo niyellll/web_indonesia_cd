@@ -41,7 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           aria-hidden="true"
           className="pointer-events-none fixed inset-0 z-0"
           style={{
-            backgroundImage: "url('/batik-pattern.svg')",
+            backgroundImage: "url('/Batik_Perca.jpg')",
             backgroundRepeat: "repeat",
             backgroundPosition: "center",
             backgroundSize: "760px 760px",
@@ -60,7 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           aria-hidden="true"
           className="pointer-events-none fixed inset-0 z-0 hidden dark:block"
           style={{
-            backgroundImage: "url('/batik-pattern.svg')",
+            backgroundImage: "url('/Batik_Perca.jpg')",
             backgroundRepeat: "repeat",
             backgroundPosition: "center",
             backgroundSize: "760px 760px",
