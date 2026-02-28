@@ -1,4 +1,5 @@
 import Reveal from "../components/Reveal";
+import AnimatedPageWrapper from "../components/AnimatedPageWrapper";
 import SpotlightCard from "../components/SpotlightCard";
 import PortfolioCarousel from "../components/PortfolioCarousel";
 import { site, hero, about, programs, portfolio, partners, getInvolved } from "../lib/cms";
@@ -24,7 +25,7 @@ function SectionTitle({
   eyebrow, title, subtitle, light,
 }: { eyebrow?: string; title: string; subtitle?: string; light?: boolean }) {
   return (
-    <div className="text-center">
+    <div className="text-center" data-scroll-reveal>
       {eyebrow && (
         <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-orange-500 dark:text-orange-400">
           {eyebrow}
@@ -201,6 +202,7 @@ export default function Page() {
   ];
 
   return (
+    <AnimatedPageWrapper>
     <main className="pt-24">
 
       {/* ═══════════════════════════════════════ HERO ══ */}
@@ -217,7 +219,7 @@ export default function Page() {
         </Reveal>
 
         <Reveal delayMs={100}>
-          <h1 className="mt-7 text-center text-5xl font-black tracking-tight text-gray-900 dark:text-white md:text-7xl lg:text-8xl leading-[0.95]">
+          <h1 className="mt-7 text-center text-5xl font-black tracking-tight text-gray-900 dark:text-white md:text-7xl lg:text-8xl leading-[0.95]" data-text-reveal>
             <span className="block">{heroHeadingTop}</span>
             <span className="mt-1 block bg-gradient-to-r from-orange-500 via-orange-400 to-gray-500 bg-clip-text text-transparent idecn-shimmer">
               {heroHeadingGradient}
@@ -249,7 +251,7 @@ export default function Page() {
           <div className="grid grid-cols-4 grid-rows-2 gap-3 rounded-[32px] overflow-hidden" style={{height: "520px"}}>
             {/* big left */}
             <div className="col-span-2 row-span-2 overflow-hidden">
-              <img src={PHOTOS.hero} alt="IDECN cultural event" className="h-full w-full object-cover transition duration-700 hover:scale-105" />
+              <img src={PHOTOS.hero} alt="IDECN cultural event" className="h-full w-full object-cover transition duration-700 hover:scale-105" data-parallax="0.15" />
             </div>
             {/* top right 2 */}
             <div className="col-span-1 overflow-hidden">
@@ -284,7 +286,7 @@ export default function Page() {
               {/* Floating card over photo */}
               <div className="absolute -bottom-6 -right-4 rounded-2xl border border-gray-200/70 bg-white/90 p-5 backdrop-blur shadow-xl dark:border-white/10 dark:bg-gray-950/90 max-w-[220px]">
                 <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-orange-500">Est.</div>
-                <div className="mt-1 text-3xl font-black text-gray-900 dark:text-white">2024</div>
+                <div className="mt-1 text-3xl font-black text-gray-900 dark:text-white" data-counter-target="2024">0</div>
                 <div className="mt-1 text-sm text-gray-600 dark:text-gray-300">U.S.-based nonprofit connecting Indonesia & the U.S.</div>
               </div>
             </div>
@@ -337,10 +339,10 @@ export default function Page() {
           <SectionTitle title={pr.title ?? "Our Core Programs"} subtitle={pr.subtitle ?? ""} />
         </Reveal>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
+        <div className="mt-12 grid gap-6 md:grid-cols-2" data-stagger-container>
           {(pr.cards ?? []).map((c: any, i: number) => (
             <Reveal key={c.title ?? i} delayMs={80 + i * 60}>
-              <div className="group relative overflow-hidden rounded-[28px] border border-gray-200/70 bg-white/60 backdrop-blur dark:border-white/10 dark:bg-white/5">
+              <div className="group relative overflow-hidden rounded-[28px] border border-gray-200/70 bg-white/60 backdrop-blur dark:border-white/10 dark:bg-white/5" data-stagger-card data-hover-card>
                 {/* Program photo */}
                 <div className="overflow-hidden h-48">
                   <img
@@ -442,7 +444,7 @@ export default function Page() {
           <SectionTitle title={pt.title ?? "Partners"} subtitle={pt.subtitle ?? ""} />
         </Reveal>
 
-        <div className="mt-12 grid gap-6 lg:grid-cols-3">
+        <div className="mt-12 grid gap-6 lg:grid-cols-3" data-stagger-container>
           {(pt.cards ?? []).map((c: any, i: number) => (
             <Reveal key={c.title ?? i} delayMs={80 + i * 60}>
               <SpotlightCard className="overflow-hidden p-0">
@@ -517,7 +519,7 @@ export default function Page() {
       <footer className="border-t border-gray-200/70 bg-white/55 px-6 py-14 backdrop-blur dark:border-white/10 dark:bg-gray-950/40">
         <div className="mx-auto max-w-7xl flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
-            <img src="/IDECN_LOGO1.svg" alt="IDECN" className="h-8 w-auto brightness-0 dark:brightness-100" />
+            <img src="/IDECN_LOGO1.png" alt="IDECN" className="h-8 w-auto brightness-0 dark:brightness-100" />
             <span className="text-sm text-gray-600 dark:text-gray-300">© {new Date().getFullYear()} {orgShort} — {orgName}</span>
           </div>
           <a href={`mailto:${email}`} className="text-sm font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400">
@@ -527,5 +529,6 @@ export default function Page() {
       </footer>
 
     </main>
+    </AnimatedPageWrapper>
   );
 }
