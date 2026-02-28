@@ -49,7 +49,7 @@ export default function Navbar({
           <img
             src="/IDECN_LOGO1.svg"
             alt="IDECN Logo"
-            className="h-12 w-auto dark:brightness-100 brightness-0"
+            className="h-12 w-auto "
           />
         </a>
 
