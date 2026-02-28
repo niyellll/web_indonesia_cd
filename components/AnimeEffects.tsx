@@ -7,7 +7,7 @@ export function useScrollReveal() {
   useEffect(() => {
     let anime: any;
     import("animejs").then((mod) => {
-      anime = mod.default ?? mod;
+      anime = (mod as any).default ?? mod;
 
       const observer = new IntersectionObserver(
         (entries) => {
@@ -43,7 +43,7 @@ export function useScrollReveal() {
 export function useStaggerCards() {
   useEffect(() => {
     import("animejs").then((mod) => {
-      const anime = mod.default ?? mod;
+      const anime = (mod as any).default ?? mod;
 
       const observer = new IntersectionObserver(
         (entries) => {
@@ -84,7 +84,7 @@ export function useStaggerCards() {
 export function useTextReveal() {
   useEffect(() => {
     import("animejs").then((mod) => {
-      const anime = mod.default ?? mod;
+      const anime = (mod as any).default ?? mod;
 
       document.querySelectorAll("[data-text-reveal]").forEach((el) => {
         const text = el.textContent ?? "";
@@ -114,7 +114,7 @@ export function useTextReveal() {
 export function useCounterAnimation() {
   useEffect(() => {
     import("animejs").then((mod) => {
-      const anime = mod.default ?? mod;
+      const anime = (mod as any).default ?? mod;
 
       const observer = new IntersectionObserver(
         (entries) => {
@@ -152,7 +152,7 @@ export function useCounterAnimation() {
 export function useParallax() {
   useEffect(() => {
     import("animejs").then((mod) => {
-      const anime = mod.default ?? mod;
+      const anime = (mod as any).default ?? mod;
       let ticking = false;
 
       const onScroll = () => {
@@ -186,7 +186,7 @@ export function useParallax() {
 export function useHoverCards() {
   useEffect(() => {
     import("animejs").then((mod) => {
-      const anime = mod.default ?? mod;
+      const anime = (mod as any).default ?? mod;
 
       document.querySelectorAll("[data-hover-card]").forEach((el) => {
         const enter = () =>
