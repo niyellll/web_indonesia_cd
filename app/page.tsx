@@ -2,46 +2,47 @@ import Reveal from "../components/Reveal";
 import AnimatedPageWrapper from "../components/AnimatedPageWrapper";
 import SpotlightCard from "../components/SpotlightCard";
 import PortfolioCarousel from "../components/PortfolioCarousel";
-import { site, hero, about, programs, portfolio, partners, getInvolved } from "../lib/cms";
+import { site, hero, about, portfolio, partners, getInvolved } from "../lib/cms";
 
-// ─── Photo bank – IDECN real event photos ────────────────────────────────────
 const PHOTOS = {
-  hero:     "/DSC09703.jpg",   // crowd overview – wide hero
-  about1:   "/DSC09762.jpg",   // satay skewers – food detail
-  about2:   "/DSC09790.jpg",   // Indonesian Culinary banner + crowd
-  event1:   "/DSC09704.jpg",   // dancer / performer
-  event2:   "/DSC09730.jpg",   // performers group
-  event3:   "/DSC09752.jpg",   // Pinky Rose stage
-  event4:   "/DSC09775.jpg",   // tents + crowd
-  event5:   "/DSC09779.jpg",   // ACNB stage
-  event6:   "/DSC09786.jpg",   // vendor booth
-  culture1: "/DSC09791.jpg",   // market crowd
-  culture2: "/DSC09796.jpg",   // tent fair wide
-  partner1: "/IMG_3677.jpg",   // crowd + sky
-  extra:    "/IMG_3704.jpg",   // Ondel-ondel mascot
+  hero:     "/DSC09703.jpg",
+  about1:   "/DSC09762.jpg",
+  about2:   "/DSC09790.jpg",
+  event1:   "/DSC09704.jpg",
+  event2:   "/DSC09730.jpg",
+  event3:   "/DSC09752.jpg",
+  event4:   "/DSC09775.jpg",
+  event5:   "/DSC09779.jpg",
+  event6:   "/DSC09786.jpg",
+  culture1: "/DSC09791.jpg",
+  culture2: "/DSC09796.jpg",
+  partner1: "/IMG_3677.jpg",
+  extra:    "/IMG_3704.jpg",
 };
 
-function SectionTitle({
-  eyebrow, title, subtitle, light,
-}: { eyebrow?: string; title: string; subtitle?: string; light?: boolean }) {
-  return (
-    <div className="text-center" data-scroll-reveal>
-      {eyebrow && (
-        <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-orange-500 dark:text-orange-400">
-          {eyebrow}
-        </div>
-      )}
-      <h2 className={`mt-3 text-4xl font-black tracking-tight md:text-5xl ${light ? "text-white" : "text-gray-900 dark:text-white"}`}>
-        {title}
-      </h2>
-      {subtitle && (
-        <p className={`mx-auto mt-4 max-w-2xl text-base md:text-lg ${light ? "text-white/70" : "text-gray-600 dark:text-gray-300"}`}>
-          {subtitle}
-        </p>
-      )}
-    </div>
-  );
-}
+const MEDIA = [
+  {
+    outlet: "The Frederick News-Post",
+    title: "Indonesia Culinary Day",
+    href: "https://www.fredericknewspost.com/calendar/community_and_festivals/indonesia-culinary-day/event_ab8c90ae-a9c2-4413-b545-b493b06d16a3.html",
+    flag: "🇺🇸",
+    photo: "/DSC09703.jpg",
+  },
+  {
+    outlet: "DC News Now",
+    title: "Frederick gears up for Indonesian Culinary Festival",
+    href: "https://www.dcnewsnow.com/news/local-news/maryland/frederick-county-md/frederick-gears-up-for-indonesian-culinary-festival/",
+    flag: "🇺🇸",
+    photo: "/DSC09775.jpg",
+  },
+  {
+    outlet: "CNA",
+    title: "Indonesia Culinary Day 2025 meriahkan Maryland, angkat kuliner dan budaya Nusantara ke panggung Amerika",
+    href: "https://www.cna.id/dunia/indonesia-culinary-day-2025-meriahkan-maryland-angkat-kuliner-dan-budaya-nusantara-ke-panggung-amerika-36091",
+    flag: "🌏",
+    photo: "/DSC09752.jpg",
+  },
+];
 
 function Pill({ children }: { children: React.ReactNode }) {
   return (
@@ -55,7 +56,6 @@ export default function Page() {
   const s = site as any;
   const h = hero as any;
   const a = about as any;
-  const pr = programs as any;
   const pf = portfolio as any;
   const pt = partners as any;
   const gi = getInvolved as any;
@@ -64,14 +64,13 @@ export default function Page() {
   const orgName  = s.orgName  ?? "Indonesia Education & Cultural Network";
   const email    = s.email    ?? "hello@idecn.org";
 
-  const heroChips: string[] = h.chips ?? ["Nonprofit (U.S.-based)", "Established 2024", "Indonesia → U.S."];
-  const heroHeadingTop: string      = h.headingTop      ?? "Indonesia Education &";
-  const heroHeadingGradient: string = h.headingGradient ?? "Cultural Network";
-  const heroSubtitle: string        = h.subtitle        ?? "";
-  const heroCtas                    = h.ctas            ?? {} as any;
-  const featured                    = pf.featured       ?? {} as any;
+  const heroChips: string[]          = h.chips          ?? ["Nonprofit (U.S.-based)", "Established 2024", "Indonesia → U.S."];
+  const heroHeadingTop: string       = h.headingTop      ?? "Indonesia Education &";
+  const heroHeadingGradient: string  = h.headingGradient ?? "Cultural Network";
+  const heroSubtitle: string         = h.subtitle        ?? "";
+  const heroCtas                     = h.ctas            ?? {} as any;
+  const featured                     = pf.featured       ?? {} as any;
 
-  // ─── Portfolio slides ──────────────────────────────────────────────────────
   const portfolioSlides = [
     {
       key: "overview",
@@ -80,32 +79,19 @@ export default function Page() {
         <div className="grid gap-8 lg:grid-cols-12 lg:items-start">
           <div className="lg:col-span-7">
             <div className="flex flex-wrap gap-3">
-              <span className="rounded-full bg-gray-900 px-4 py-2 text-sm font-bold text-white dark:bg-white dark:text-gray-900">
-                {featured.date}
-              </span>
-              <span className="rounded-full bg-gray-100 px-4 py-2 text-sm font-bold text-gray-800 dark:bg-white/10 dark:text-gray-100">
-                {featured.location}
-              </span>
+              <span className="rounded-full bg-gray-900 px-4 py-2 text-sm font-bold text-white dark:bg-white dark:text-gray-900">{featured.date}</span>
+              <span className="rounded-full bg-gray-100 px-4 py-2 text-sm font-bold text-gray-800 dark:bg-white/10 dark:text-gray-100">{featured.location}</span>
             </div>
-            <h3 className="mt-5 text-3xl md:text-4xl font-black tracking-tight text-gray-900 dark:text-white">
-              {featured.name}
-            </h3>
-            <p className="mt-4 text-base md:text-lg leading-relaxed text-gray-600 dark:text-gray-300">
-              {featured.summary}
-            </p>
+            <h3 className="mt-5 text-3xl md:text-4xl font-black tracking-tight text-gray-900 dark:text-white">{featured.name}</h3>
+            <p className="mt-4 text-base md:text-lg leading-relaxed text-gray-600 dark:text-gray-300">{featured.summary}</p>
             <div className="mt-6 flex flex-wrap gap-2.5">
               {(featured.highlights ?? []).map((x: string) => <Pill key={x}>{x}</Pill>)}
             </div>
             <div className="mt-8 flex flex-wrap gap-4">
-              <a href={featured.ctaDownload?.href} className="btn-shine rounded-2xl bg-orange-500 px-8 py-4 font-bold text-white transition hover:bg-orange-600">
-                {featured.ctaDownload?.label ?? "Download report"}
-              </a>
-              <a href={featured.ctaSecondary?.href} className="btn-shine rounded-2xl border border-gray-200/70 bg-white/70 px-8 py-4 font-bold text-gray-900 backdrop-blur transition hover:bg-white dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15">
-                {featured.ctaSecondary?.label ?? "Discuss next event"}
-              </a>
+              <a href={featured.ctaDownload?.href} className="btn-shine rounded-2xl bg-orange-500 px-8 py-4 font-bold text-white transition hover:bg-orange-600">{featured.ctaDownload?.label ?? "Download report"}</a>
+              <a href={featured.ctaSecondary?.href} className="btn-shine rounded-2xl border border-gray-200/70 bg-white/70 px-8 py-4 font-bold text-gray-900 backdrop-blur transition hover:bg-white dark:border-white/15 dark:bg-white/10 dark:text-white">{featured.ctaSecondary?.label ?? "Discuss next event"}</a>
             </div>
           </div>
-          {/* Photo grid in carousel */}
           <div className="lg:col-span-5 grid grid-cols-2 gap-3">
             {[PHOTOS.event1, PHOTOS.event2, PHOTOS.event3, PHOTOS.event4].map((src, i) => (
               <div key={i} className="overflow-hidden rounded-2xl aspect-square">
@@ -121,10 +107,7 @@ export default function Page() {
       title: "Event Gallery",
       content: (
         <div className="space-y-6">
-          <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-orange-500 dark:text-orange-400">
-            Indonesia Culinary Day on the Creek — 2024
-          </div>
-          {/* Masonry-style grid */}
+          <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-orange-500">Indonesia Culinary Day on the Creek — 2024</div>
           <div className="grid grid-cols-3 gap-3 lg:grid-cols-4">
             <div className="col-span-2 row-span-2 overflow-hidden rounded-2xl">
               <img src={PHOTOS.event5} alt="Main event" className="h-full w-full object-cover transition duration-500 hover:scale-105" style={{minHeight:'220px'}} />
@@ -136,12 +119,8 @@ export default function Page() {
             ))}
           </div>
           <div className="flex flex-wrap gap-4 pt-2">
-            <a href={featured.ctaDownload?.href} className="btn-shine rounded-2xl bg-orange-500 px-8 py-4 font-bold text-white transition hover:bg-orange-600">
-              Download full report
-            </a>
-            <a href={`mailto:${email}`} className="btn-shine rounded-2xl border border-gray-200/70 bg-white/70 px-8 py-4 font-bold text-gray-900 backdrop-blur transition hover:bg-white dark:border-white/15 dark:bg-white/10 dark:text-white">
-              Discuss next event
-            </a>
+            <a href={featured.ctaDownload?.href} className="btn-shine rounded-2xl bg-orange-500 px-8 py-4 font-bold text-white transition hover:bg-orange-600">Download full report</a>
+            <a href={`mailto:${email}`} className="btn-shine rounded-2xl border border-gray-200/70 bg-white/70 px-8 py-4 font-bold text-gray-900 backdrop-blur transition hover:bg-white dark:border-white/15 dark:bg-white/10 dark:text-white">Discuss next event</a>
           </div>
         </div>
       ),
@@ -153,12 +132,8 @@ export default function Page() {
         <div className="grid gap-8 lg:grid-cols-12 lg:items-start">
           <div className="lg:col-span-7">
             <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-orange-500">Scaling pathway</div>
-            <h3 className="mt-3 text-3xl md:text-4xl font-black tracking-tight text-gray-900 dark:text-white">
-              Make the next collaboration fast and predictable.
-            </h3>
-            <p className="mt-4 text-base md:text-lg leading-relaxed text-gray-600 dark:text-gray-300">
-              A simple structure: clear objective, clear format, clear roles, and clear outputs.
-            </p>
+            <h3 className="mt-3 text-3xl md:text-4xl font-black tracking-tight text-gray-900 dark:text-white">Make the next collaboration fast and predictable.</h3>
+            <p className="mt-4 text-base md:text-lg leading-relaxed text-gray-600 dark:text-gray-300">A simple structure: clear objective, clear format, clear roles, and clear outputs.</p>
             <div className="mt-6 space-y-4">
               {[
                 { step: "1", t: "Align objective", d: "Education / culture / community engagement target." },
@@ -167,9 +142,7 @@ export default function Page() {
                 { step: "4", t: "Report & package", d: "Outcome summary + documentation + media kit." },
               ].map((x) => (
                 <div key={x.step} className="flex gap-4 rounded-2xl border border-gray-200/70 bg-white/70 p-5 backdrop-blur dark:border-white/10 dark:bg-white/6">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-gray-600 text-white font-black">
-                    {x.step}
-                  </div>
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-gray-600 text-white font-black">{x.step}</div>
                   <div>
                     <div className="text-lg font-black text-gray-900 dark:text-white">{x.t}</div>
                     <div className="mt-1 text-gray-600 dark:text-gray-300">{x.d}</div>
@@ -205,7 +178,7 @@ export default function Page() {
     <AnimatedPageWrapper>
     <main className="pt-24">
 
-      {/* ═══════════════════════════════════════ HERO ══ */}
+      {/* ══════════════════════ HERO ══ */}
       <section className="relative mx-auto max-w-7xl px-6 py-10 md:py-14">
         <Reveal delayMs={40}>
           <div className="flex flex-wrap justify-center gap-3">
@@ -217,22 +190,15 @@ export default function Page() {
             ))}
           </div>
         </Reveal>
-
         <Reveal delayMs={100}>
-          <h1 className="mt-7 text-center text-5xl font-black tracking-tight text-gray-900 dark:text-white md:text-7xl lg:text-8xl leading-[0.95]" data-text-reveal>
+          <h1 className="mt-7 text-center text-5xl font-black tracking-tight text-gray-900 dark:text-white md:text-7xl lg:text-8xl leading-[0.95]">
             <span className="block">{heroHeadingTop}</span>
-            <span className="mt-1 block bg-gradient-to-r from-orange-500 via-orange-400 to-gray-500 bg-clip-text text-transparent idecn-shimmer">
-              {heroHeadingGradient}
-            </span>
+            <span className="mt-1 block bg-gradient-to-r from-orange-500 via-orange-400 to-gray-500 bg-clip-text text-transparent idecn-shimmer">{heroHeadingGradient}</span>
           </h1>
         </Reveal>
-
         <Reveal delayMs={170}>
-          <p className="mx-auto mt-5 max-w-2xl text-center text-base md:text-xl leading-relaxed text-gray-600 dark:text-gray-300">
-            {heroSubtitle}
-          </p>
+          <p className="mx-auto mt-5 max-w-2xl text-center text-base md:text-xl leading-relaxed text-gray-600 dark:text-gray-300">{heroSubtitle}</p>
         </Reveal>
-
         <Reveal delayMs={240}>
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <a href={heroCtas.primary?.href ?? "#get-involved"} className="btn-shine inline-flex items-center justify-center rounded-2xl bg-orange-500 px-10 py-4 text-lg font-bold text-white shadow-[0_18px_50px_rgba(249,115,22,0.25)] transition hover:-translate-y-1 hover:bg-orange-600">
@@ -245,22 +211,19 @@ export default function Page() {
         </Reveal>
       </section>
 
-      {/* ─── Hero photo mosaic ─────────────────────────── */}
+      {/* ── Hero photo mosaic ── */}
       <section className="mx-auto max-w-7xl px-6 pb-20">
         <Reveal delayMs={60}>
-          <div className="grid grid-cols-4 grid-rows-2 gap-3 rounded-[32px] overflow-hidden" style={{height: "520px"}}>
-            {/* big left */}
+          <div className="grid grid-cols-4 grid-rows-2 gap-3 rounded-[32px] overflow-hidden" style={{height:"520px"}}>
             <div className="col-span-2 row-span-2 overflow-hidden">
               <img src={PHOTOS.hero} alt="IDECN cultural event" className="h-full w-full object-cover transition duration-700 hover:scale-105" data-parallax="0.15" />
             </div>
-            {/* top right 2 */}
             <div className="col-span-1 overflow-hidden">
               <img src={PHOTOS.event1} alt="Culinary event" className="h-full w-full object-cover transition duration-700 hover:scale-105" />
             </div>
             <div className="col-span-1 overflow-hidden">
-              <img src={PHOTOS.culture1} alt="Batik culture" className="h-full w-full object-cover transition duration-700 hover:scale-105" />
+              <img src={PHOTOS.culture1} alt="Culture" className="h-full w-full object-cover transition duration-700 hover:scale-105" />
             </div>
-            {/* bottom right 2 */}
             <div className="col-span-1 overflow-hidden">
               <img src={PHOTOS.about1} alt="Indonesian food" className="h-full w-full object-cover transition duration-700 hover:scale-105" />
             </div>
@@ -274,35 +237,29 @@ export default function Page() {
         </Reveal>
       </section>
 
-      {/* ═══════════════════════════════════════ ABOUT ══ */}
+      {/* ══════════════════════ ABOUT ══ */}
       <section id="about" className="scroll-mt-28 mx-auto max-w-7xl px-6 py-20 md:py-24">
         <Reveal delayMs={60}>
-          <div className="grid gap-10 lg:grid-cols-2 lg:gap-14">
-            {/* Left: photo stack */}
+          <div className="grid gap-14 lg:grid-cols-2 lg:items-center">
+            {/* Foto besar kiri */}
             <div className="relative">
-              <div className="overflow-hidden rounded-[28px] aspect-[4/3]">
+              <div className="overflow-hidden rounded-[28px] aspect-[4/3] shadow-2xl">
                 <img src={PHOTOS.about2} alt="Community gathering" className="h-full w-full object-cover transition duration-700 hover:scale-105" />
               </div>
-              {/* Floating card over photo */}
-              <div className="absolute -bottom-6 -right-4 rounded-2xl border border-gray-200/70 bg-white/90 p-5 backdrop-blur shadow-xl dark:border-white/10 dark:bg-gray-950/90 max-w-[220px]">
+              <div className="absolute -bottom-5 -right-4 rounded-2xl border border-gray-200/70 bg-white/95 p-5 backdrop-blur shadow-xl dark:border-white/10 dark:bg-gray-950/95 max-w-[200px]">
                 <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-orange-500">Est.</div>
                 <div className="mt-1 text-3xl font-black text-gray-900 dark:text-white" data-counter-target="2024">0</div>
-                <div className="mt-1 text-sm text-gray-600 dark:text-gray-300">U.S.-based nonprofit connecting Indonesia & the U.S.</div>
+                <div className="mt-1 text-xs text-gray-600 dark:text-gray-300">U.S.-based nonprofit connecting Indonesia & the U.S.</div>
               </div>
             </div>
 
-            {/* Right: text */}
+            {/* Teks kanan */}
             <Reveal delayMs={140}>
-              <div className="pt-4">
+              <div>
                 <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-orange-500">Who we are</div>
-                <h2 className="mt-3 text-4xl font-black tracking-tight text-gray-900 dark:text-white md:text-5xl">
-                  {a.title ?? "Who we are"}
-                </h2>
-                <p className="mt-5 text-base md:text-lg leading-relaxed text-gray-600 dark:text-gray-300">
-                  {a.lead ?? ""}
-                </p>
-
-                <div className="mt-8 space-y-4">
+                <h2 className="mt-3 text-4xl font-black tracking-tight text-gray-900 dark:text-white md:text-5xl">{a.title ?? "Who we are"}</h2>
+                <p className="mt-5 text-base md:text-lg leading-relaxed text-gray-600 dark:text-gray-300">{a.lead ?? ""}</p>
+                <div className="mt-7 space-y-4">
                   <div className="flex gap-4 rounded-2xl border border-gray-200/70 bg-white/60 p-5 backdrop-blur dark:border-white/10 dark:bg-white/5">
                     <div className="h-10 w-10 shrink-0 rounded-2xl bg-gradient-to-br from-orange-500 to-gray-600" />
                     <div>
@@ -318,14 +275,9 @@ export default function Page() {
                     </div>
                   </div>
                 </div>
-
                 <div className="mt-8 flex flex-wrap gap-4">
-                  <a href={`mailto:${email}`} className="btn-shine rounded-2xl bg-gray-900 px-7 py-3.5 font-bold text-white transition hover:-translate-y-0.5 dark:bg-white dark:text-gray-900">
-                    Talk to us
-                  </a>
-                  <a href="#programs" className="btn-shine rounded-2xl border border-gray-200/70 bg-white/70 px-7 py-3.5 font-bold text-gray-900 backdrop-blur transition hover:bg-white dark:border-white/15 dark:bg-white/10 dark:text-white">
-                    Our programs
-                  </a>
+                  <a href={`mailto:${email}`} className="btn-shine rounded-2xl bg-gray-900 px-7 py-3.5 font-bold text-white transition hover:-translate-y-0.5 dark:bg-white dark:text-gray-900">Talk to us</a>
+                  <a href="#programs" className="btn-shine rounded-2xl border border-gray-200/70 bg-white/70 px-7 py-3.5 font-bold text-gray-900 backdrop-blur transition hover:bg-white dark:border-white/15 dark:bg-white/10 dark:text-white">Our mission</a>
                 </div>
               </div>
             </Reveal>
@@ -333,55 +285,57 @@ export default function Page() {
         </Reveal>
       </section>
 
-      {/* ═══════════════════════════════════════ PROGRAMS ══ */}
+      {/* ══════════════════════ PROGRAMS (1 CARD SLOGAN) ══ */}
       <section id="programs" className="scroll-mt-28 mx-auto max-w-7xl px-6 py-20 md:py-24">
         <Reveal>
-          <SectionTitle eyebrow="Our Mission" title="Connecting Cultures, Building Futures" />
+          <div className="text-center" data-scroll-reveal>
+            <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-orange-500">Our Mission</div>
+            <h2 className="mt-3 text-4xl font-black tracking-tight text-gray-900 dark:text-white md:text-5xl">What We Stand For</h2>
+          </div>
         </Reveal>
 
         <Reveal delayMs={120}>
-          <div className="mt-12 overflow-hidden rounded-[34px] border border-gray-200/70 bg-white/60 backdrop-blur dark:border-white/10 dark:bg-white/5">
+          <div className="mt-12 overflow-hidden rounded-[36px] border border-gray-200/70 shadow-2xl dark:border-white/10">
             <div className="grid lg:grid-cols-2">
-              {/* Left: foto besar */}
-              <div className="relative overflow-hidden" style={{minHeight: "420px"}}>
-                <img
-                  src={PHOTOS.partner1}
-                  alt="IDECN community"
-                  className="absolute inset-0 h-full w-full object-cover transition duration-700 hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/20 dark:to-gray-950/30" />
-                {/* Jigsaw overlay icon */}
-                <div className="absolute bottom-6 left-6">
-                  <div className="rounded-2xl bg-white/90 p-4 backdrop-blur shadow-lg dark:bg-gray-950/90">
-                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M20 8C20 6 18 4 16 4C14 4 12 6 12 8V12H8C6 12 4 14 4 16C4 18 6 20 8 20H12V28H8C6 28 4 30 4 32C4 34 6 36 8 36H12V40C12 42 14 44 16 44C18 44 20 42 20 40H28C28 42 30 44 32 44C34 44 36 42 36 40V36H40C42 36 44 34 44 32C44 30 42 28 40 28H36V20H40C42 20 44 18 44 16C44 14 42 12 40 12H36V8C36 6 34 4 32 4C30 4 28 6 28 8H20Z" fill="#f97316" opacity="0.9"/>
+              {/* Foto kiri */}
+              <div className="relative overflow-hidden" style={{minHeight:"460px"}}>
+                <img src={PHOTOS.partner1} alt="IDECN community" className="absolute inset-0 h-full w-full object-cover transition duration-700 hover:scale-105" />
+                {/* gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-900/60 via-gray-900/20 to-transparent" />
+                {/* Jigsaw badge */}
+                <div className="absolute bottom-8 left-8">
+                  <div className="rounded-2xl bg-white/95 p-5 backdrop-blur shadow-xl dark:bg-gray-950/95">
+                    <svg width="44" height="44" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M20 8C20 6 18 4 16 4C14 4 12 6 12 8V12H8C6 12 4 14 4 16C4 18 6 20 8 20H12V28H8C6 28 4 30 4 32C4 34 6 36 8 36H12V40C12 42 14 44 16 44C18 44 20 42 20 40H28C28 42 30 44 32 44C34 44 36 42 36 40V36H40C42 36 44 34 44 32C44 30 42 28 40 28H36V20H40C42 20 44 18 44 16C44 14 42 12 40 12H36V8C36 6 34 4 32 4C30 4 28 6 28 8H20Z" fill="#f97316"/>
                     </svg>
-                    <div className="mt-2 text-xs font-extrabold uppercase tracking-wider text-gray-700 dark:text-gray-200">Together We Connect</div>
+                    <div className="mt-2 text-xs font-extrabold uppercase tracking-wider text-gray-800 dark:text-gray-100">Connecting Pieces</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">of Two Nations</div>
                   </div>
                 </div>
               </div>
 
-              {/* Right: slogan + deskripsi */}
-              <div className="flex flex-col justify-center p-10 md:p-14">
-                <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-orange-500">Our Mission</div>
+              {/* Konten kanan */}
+              <div className="flex flex-col justify-center bg-white/60 p-10 backdrop-blur md:p-14 dark:bg-gray-950/40">
+                <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-orange-500">Our Slogan</div>
                 <h3 className="mt-4 text-4xl md:text-5xl font-black tracking-tight text-gray-900 dark:text-white leading-tight">
-                  "Bridging Nations,<br/>
-                  <span className="bg-gradient-to-r from-orange-500 to-gray-500 bg-clip-text text-transparent">
+                  "Bridging Nations,
+                  <br />
+                  <span className="bg-gradient-to-r from-orange-500 to-gray-600 bg-clip-text text-transparent">
                     Empowering People."
                   </span>
                 </h3>
                 <p className="mt-6 text-base md:text-lg leading-relaxed text-gray-600 dark:text-gray-300">
-                  IDECN connects Indonesia and the United States through education, culture, and community—building lasting partnerships that create real impact across borders.
+                  IDECN connects Indonesia and the United States through education, culture, and community — building lasting partnerships that create real impact across borders.
                 </p>
 
-                <div className="mt-8 grid grid-cols-2 gap-4">
+                <div className="mt-8 grid grid-cols-2 gap-3">
                   {[
                     { icon: "🎓", label: "Education" },
                     { icon: "🎨", label: "Culture" },
                     { icon: "🤝", label: "Partnership" },
                     { icon: "💡", label: "Innovation" },
                   ].map((x) => (
-                    <div key={x.label} className="flex items-center gap-3 rounded-2xl border border-gray-200/70 bg-white/70 px-4 py-3 backdrop-blur dark:border-white/10 dark:bg-white/5">
+                    <div key={x.label} className="flex items-center gap-3 rounded-2xl border border-gray-200/70 bg-white/80 px-4 py-3 backdrop-blur dark:border-white/10 dark:bg-white/5">
                       <span className="text-2xl">{x.icon}</span>
                       <span className="font-bold text-gray-800 dark:text-white">{x.label}</span>
                     </div>
@@ -389,12 +343,8 @@ export default function Page() {
                 </div>
 
                 <div className="mt-8 flex flex-wrap gap-4">
-                  <a href="#get-involved" className="btn-shine rounded-2xl bg-orange-500 px-8 py-4 font-bold text-white transition hover:bg-orange-600">
-                    Get involved
-                  </a>
-                  <a href="#portfolio" className="btn-shine rounded-2xl border border-gray-200/70 bg-white/70 px-8 py-4 font-bold text-gray-900 backdrop-blur transition hover:bg-white dark:border-white/15 dark:bg-white/10 dark:text-white">
-                    See our work
-                  </a>
+                  <a href="#get-involved" className="btn-shine rounded-2xl bg-orange-500 px-8 py-4 font-bold text-white transition hover:bg-orange-600">Get involved</a>
+                  <a href="#portfolio" className="btn-shine rounded-2xl border border-gray-200/70 bg-white/70 px-8 py-4 font-bold text-gray-900 backdrop-blur transition hover:bg-white dark:border-white/15 dark:bg-white/10 dark:text-white">See our work</a>
                 </div>
               </div>
             </div>
@@ -402,10 +352,9 @@ export default function Page() {
         </Reveal>
       </section>
 
-      {/* ═══════════════════════════════════════ PHOTO STRIP ══ */}
-      <section className="mx-auto max-w-7xl px-6 py-12 space-y-3">
+      {/* ── Photo strip ── */}
+      <section className="mx-auto max-w-7xl px-6 py-10 space-y-3">
         <Reveal>
-          {/* Row 1 – 7 photos */}
           <div className="grid grid-cols-4 gap-3 sm:grid-cols-7 rounded-[28px] overflow-hidden h-36 sm:h-44">
             {[PHOTOS.hero, PHOTOS.event1, PHOTOS.event2, PHOTOS.event3, PHOTOS.event4, PHOTOS.event5, PHOTOS.event6].map((src, i) => (
               <div key={i} className="overflow-hidden">
@@ -413,7 +362,6 @@ export default function Page() {
               </div>
             ))}
           </div>
-          {/* Row 2 – 6 photos */}
           <div className="grid grid-cols-3 gap-3 sm:grid-cols-6 rounded-[28px] overflow-hidden h-36 sm:h-44">
             {[PHOTOS.about1, PHOTOS.about2, PHOTOS.culture1, PHOTOS.culture2, PHOTOS.partner1, PHOTOS.extra].map((src, i) => (
               <div key={i} className="overflow-hidden">
@@ -424,19 +372,21 @@ export default function Page() {
         </Reveal>
       </section>
 
-      {/* ═══════════════════════════════════════ PORTFOLIO ══ */}
+      {/* ══════════════════════ PORTFOLIO ══ */}
       <section id="portfolio" className="scroll-mt-28 mx-auto max-w-7xl px-6 py-20 md:py-24">
         <Reveal>
-          <SectionTitle eyebrow={pf.eyebrow ?? "Proof of execution"} title={pf.title ?? "Portfolio Event"} />
-          <div className="mx-auto mt-4 max-w-3xl text-center">
-            <div className="inline-block rounded-2xl border border-gray-200/70 bg-white/75 px-5 py-3 text-base md:text-lg font-semibold leading-relaxed text-gray-700 shadow-[0_10px_45px_rgba(0,0,0,0.08)] backdrop-blur dark:border-white/12 dark:bg-white/10 dark:text-gray-200">
-              Clear execution summary—measurable outcomes, organized documentation, and a partner-ready playbook for the next collaboration.
+          <div className="text-center" data-scroll-reveal>
+            <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-orange-500">{pf.eyebrow ?? "Proof of execution"}</div>
+            <h2 className="mt-3 text-4xl font-black tracking-tight text-gray-900 dark:text-white md:text-5xl">{pf.title ?? "Portfolio Event"}</h2>
+            <div className="mx-auto mt-4 max-w-3xl">
+              <div className="inline-block rounded-2xl border border-gray-200/70 bg-white/75 px-5 py-3 text-base font-semibold text-gray-700 shadow-[0_10px_45px_rgba(0,0,0,0.08)] backdrop-blur dark:border-white/12 dark:bg-white/10 dark:text-gray-200">
+                Clear execution summary — measurable outcomes, organized documentation, and a partner-ready playbook.
+              </div>
             </div>
           </div>
         </Reveal>
-
         <Reveal delayMs={120}>
-          <div className="mt-10 rounded-[34px] border border-gray-200/70 bg-white/55 p-6 backdrop-blur dark:border-white/10 dark:bg-white/5 md:p-8 overflow-visible">
+          <div className="mt-10 rounded-[34px] border border-gray-200/70 bg-white/55 p-6 backdrop-blur dark:border-white/10 dark:bg-white/5 md:p-8">
             <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
               <div className="text-sm font-semibold text-gray-600 dark:text-gray-300">Swipe / scroll to view slides</div>
               <div className="flex items-center gap-2">
@@ -444,19 +394,14 @@ export default function Page() {
                 <span className="text-sm font-semibold text-gray-600 dark:text-gray-300">Portfolio carousel</span>
               </div>
             </div>
-
             <PortfolioCarousel count={portfolioSlides.length} className="mt-6" label="Portfolio carousel">
               {portfolioSlides.map((sl, idx) => (
-                <div key={sl.key} data-slide className="snap-center shrink-0 w-[92%] md:w-[86%] lg:w-[78%]" aria-label={`Portfolio slide ${idx + 1}: ${sl.title}`}>
+                <div key={sl.key} data-slide className="snap-center shrink-0 w-[92%] md:w-[86%] lg:w-[78%]" aria-label={`Slide ${idx+1}: ${sl.title}`}>
                   <Reveal delayMs={60 + idx * 90}>
                     <SpotlightCard className="p-9 md:p-10">
                       <div className="flex items-center justify-between gap-4">
-                        <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-orange-500 dark:text-orange-400">
-                          Slide {idx + 1} / {portfolioSlides.length}
-                        </div>
-                        <div className="rounded-full border border-gray-200/70 bg-white/70 px-3 py-1 text-xs font-bold text-gray-800 backdrop-blur dark:border-white/10 dark:bg-white/10 dark:text-gray-100">
-                          {sl.title}
-                        </div>
+                        <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-orange-500">Slide {idx+1} / {portfolioSlides.length}</div>
+                        <div className="rounded-full border border-gray-200/70 bg-white/70 px-3 py-1 text-xs font-bold text-gray-800 backdrop-blur dark:border-white/10 dark:bg-white/10 dark:text-gray-100">{sl.title}</div>
                       </div>
                       <div className="mt-7">{sl.content}</div>
                     </SpotlightCard>
@@ -468,22 +413,65 @@ export default function Page() {
         </Reveal>
       </section>
 
-      {/* ═══════════════════════════════════════ PARTNERS ══ */}
+      {/* ══════════════════════ CHECK OUR ACTIVITY (MEDIA) ══ */}
+      <section className="mx-auto max-w-7xl px-6 py-16 md:py-20">
+        <Reveal>
+          <div className="text-center" data-scroll-reveal>
+            <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-orange-500">In the News</div>
+            <h2 className="mt-3 text-4xl font-black tracking-tight text-gray-900 dark:text-white md:text-5xl">Check Our Activity</h2>
+            <p className="mx-auto mt-4 max-w-xl text-base text-gray-600 dark:text-gray-300">Our events have been recognized by major media — here's proof.</p>
+          </div>
+        </Reveal>
+        <Reveal delayMs={100}>
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {MEDIA.map((item) => (
+              <a
+                key={item.outlet}
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative overflow-hidden rounded-[28px] border border-gray-200/70 bg-white/70 backdrop-blur transition hover:-translate-y-2 hover:shadow-2xl dark:border-white/10 dark:bg-white/5"
+              >
+                {/* Photo top */}
+                <div className="overflow-hidden h-44">
+                  <img src={item.photo} alt={item.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-110" />
+                  <div className="absolute inset-0 h-44 bg-gradient-to-b from-black/30 to-transparent" />
+                  <div className="absolute top-4 left-4 flex items-center gap-2 rounded-full bg-white/90 px-3 py-1.5 backdrop-blur">
+                    <span className="text-sm">{item.flag}</span>
+                    <span className="text-xs font-extrabold uppercase tracking-wider text-gray-800">{item.outlet}</span>
+                  </div>
+                </div>
+                {/* Content */}
+                <div className="p-6">
+                  <p className="text-base font-bold leading-snug text-gray-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition line-clamp-3">
+                    {item.title}
+                  </p>
+                  <div className="mt-5 flex items-center gap-2 text-sm font-bold text-orange-600 dark:text-orange-400">
+                    Read article
+                    <span className="transition-transform group-hover:translate-x-1">→</span>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </Reveal>
+      </section>
+
+      {/* ══════════════════════ PARTNERS ══ */}
       <section id="partners" className="scroll-mt-28 mx-auto max-w-7xl px-6 py-20 md:py-24">
         <Reveal>
-          <SectionTitle title={pt.title ?? "Partners"} subtitle={pt.subtitle ?? ""} />
+          <div className="text-center" data-scroll-reveal>
+            <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-orange-500">Collaboration</div>
+            <h2 className="mt-3 text-4xl font-black tracking-tight text-gray-900 dark:text-white md:text-5xl">{pt.title ?? "Partners"}</h2>
+            <p className="mx-auto mt-4 max-w-2xl text-base md:text-lg text-gray-600 dark:text-gray-300">{pt.subtitle ?? ""}</p>
+          </div>
         </Reveal>
-
-        <div className="mt-12 grid gap-6 lg:grid-cols-3" data-stagger-container>
+        <div className="mt-12 grid gap-6 lg:grid-cols-3">
           {(pt.cards ?? []).map((c: any, i: number) => (
             <Reveal key={c.title ?? i} delayMs={80 + i * 60}>
               <SpotlightCard className="overflow-hidden p-0">
                 <div className="h-40 overflow-hidden">
-                  <img
-                    src={[PHOTOS.partner1, PHOTOS.about2, PHOTOS.culture2][i % 3]}
-                    alt={c.title}
-                    className="h-full w-full object-cover transition duration-700 hover:scale-105"
-                  />
+                  <img src={[PHOTOS.partner1, PHOTOS.about2, PHOTOS.culture2][i % 3]} alt={c.title} className="h-full w-full object-cover transition duration-700 hover:scale-105" />
                 </div>
                 <div className="p-7">
                   <div className="text-xl font-black tracking-tight text-gray-900 dark:text-white">{c.title}</div>
@@ -496,48 +484,39 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════ GET INVOLVED ══ */}
+      {/* ══════════════════════ GET INVOLVED ══ */}
       <section id="get-involved" className="scroll-mt-28 mx-auto max-w-7xl px-6 py-20 md:py-24">
         <Reveal>
-          <SectionTitle title={gi.title ?? "Get involved"} subtitle={gi.subtitle ?? ""} />
+          <div className="text-center" data-scroll-reveal>
+            <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-orange-500">Join Us</div>
+            <h2 className="mt-3 text-4xl font-black tracking-tight text-gray-900 dark:text-white md:text-5xl">{gi.title ?? "Get involved"}</h2>
+            <p className="mx-auto mt-4 max-w-2xl text-base md:text-lg text-gray-600 dark:text-gray-300">{gi.subtitle ?? ""}</p>
+          </div>
         </Reveal>
-
         <div className="mt-12 grid gap-6 lg:grid-cols-3">
           {(gi.cards ?? []).map((c: any, i: number) => (
             <Reveal key={c.title ?? i} delayMs={80 + i * 60}>
               <SpotlightCard className="p-9 md:p-10">
                 <div className="text-2xl font-black tracking-tight text-gray-900 dark:text-white">{c.title}</div>
                 <p className="mt-3 text-base md:text-lg text-gray-600 dark:text-gray-300">{c.subtitle}</p>
-                <a href={`mailto:${email}`} className="mt-6 inline-flex font-bold text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300">
-                  Start here →
-                </a>
+                <a href={`mailto:${email}`} className="mt-6 inline-flex font-bold text-orange-600 hover:text-orange-700 dark:text-orange-400">Start here →</a>
               </SpotlightCard>
             </Reveal>
           ))}
         </div>
-
-        {/* CTA Banner with background photo */}
         <Reveal delayMs={140}>
           <div className="mt-12 relative overflow-hidden rounded-[34px]">
             <img src={PHOTOS.about2} alt="Collaborate" className="absolute inset-0 h-full w-full object-cover" />
-            <div className="absolute inset-0 bg-gray-900/70 backdrop-blur-sm" />
+            <div className="absolute inset-0 bg-gray-900/72 backdrop-blur-sm" />
             <div className="relative p-10 md:p-14">
               <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
                 <div className="lg:col-span-8">
-                  <div className="text-3xl font-black tracking-tight text-white md:text-4xl">
-                    {gi.banner?.title ?? "Ready to collaborate?"}
-                  </div>
-                  <p className="mt-3 text-base md:text-lg text-white/75">
-                    {gi.banner?.desc ?? "Tell us your goals—we'll map a collaboration plan with clear deliverables."}
-                  </p>
+                  <div className="text-3xl font-black tracking-tight text-white md:text-4xl">{gi.banner?.title ?? "Ready to collaborate?"}</div>
+                  <p className="mt-3 text-base md:text-lg text-white/75">{gi.banner?.desc ?? "Tell us your goals—we'll map a collaboration plan with clear deliverables."}</p>
                 </div>
                 <div className="lg:col-span-4 flex flex-col gap-3 sm:flex-row lg:flex-col">
-                  <a href={gi.banner?.primary?.href ?? `mailto:${email}`} className="btn-shine rounded-2xl bg-orange-500 px-7 py-4 text-center font-bold text-white hover:bg-orange-600 transition">
-                    {gi.banner?.primary?.label ?? "Contact IDECN"}
-                  </a>
-                  <a href={gi.banner?.secondary?.href ?? "#portfolio"} className="btn-shine rounded-2xl border border-white/30 bg-white/15 px-7 py-4 text-center font-bold text-white hover:bg-white/25 transition backdrop-blur">
-                    {gi.banner?.secondary?.label ?? "Download proposal"}
-                  </a>
+                  <a href={gi.banner?.primary?.href ?? `mailto:${email}`} className="btn-shine rounded-2xl bg-orange-500 px-7 py-4 text-center font-bold text-white hover:bg-orange-600 transition">{gi.banner?.primary?.label ?? "Contact IDECN"}</a>
+                  <a href={gi.banner?.secondary?.href ?? "#portfolio"} className="btn-shine rounded-2xl border border-white/30 bg-white/15 px-7 py-4 text-center font-bold text-white hover:bg-white/25 transition backdrop-blur">{gi.banner?.secondary?.label ?? "Download proposal"}</a>
                 </div>
               </div>
             </div>
@@ -545,73 +524,23 @@ export default function Page() {
         </Reveal>
       </section>
 
-      {/* ═══════════════════════════════════════ MEDIA COVERAGE ══ */}
-      <section className="mx-auto max-w-7xl px-6 py-16 md:py-20">
-        <Reveal>
-          <SectionTitle eyebrow="In the News" title="Check Our Activity" subtitle="See how IDECN's events have been covered by major media outlets." />
-        </Reveal>
-        <Reveal delayMs={100}>
-          <div className="mt-10 grid gap-5 md:grid-cols-3">
-            {[
-              { outlet: "The Frederick News-Post", title: "Indonesia Culinary Day", href: "https://www.fredericknewspost.com", flag: "🇺🇸" },
-              { outlet: "DC News Now", title: "Frederick gears up for Indonesian Culinary Festival", href: "https://dcnewsnow.com", flag: "🇺🇸" },
-              { outlet: "CNA", title: "Indonesia Culinary Day 2025 meriahkan Maryland, angkat kuliner dan budaya Nusantara ke panggung Amerika", href: "https://www.channelnewsasia.com", flag: "🌏" },
-            ].map((item) => (
-              <a
-                key={item.outlet}
-                href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex flex-col justify-between rounded-[24px] border border-gray-200/70 bg-white/70 p-7 backdrop-blur transition hover:-translate-y-1 hover:shadow-xl dark:border-white/10 dark:bg-white/5"
-              >
-                <div>
-                  <div className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.18em] text-orange-500">
-                    <span>{item.flag}</span>
-                    <span>{item.outlet}</span>
-                  </div>
-                  <p className="mt-3 text-base font-bold leading-snug text-gray-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition">
-                    {item.title}
-                  </p>
-                </div>
-                <div className="mt-6 flex items-center gap-2 text-sm font-semibold text-orange-600 dark:text-orange-400">
-                  Read article <span>→</span>
-                </div>
-              </a>
-            ))}
-          </div>
-        </Reveal>
-      </section>
-
-      {/* ═══════════════════════════════════════ FOOTER ══ */}
-      <footer className="border-t border-gray-200/70 bg-white/80 px-6 py-16 backdrop-blur dark:border-white/10 dark:bg-gray-950/60">
+      {/* ══════════════════════ FOOTER ══ */}
+      <footer className="border-t border-gray-200/70 bg-white/80 px-6 py-16 backdrop-blur dark:border-white/10 dark:bg-gray-950/70">
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-10 md:grid-cols-3">
-            {/* Brand */}
             <div>
               <img src="/IDECN_LOGO1.svg" alt="IDECN" className="h-10 w-auto" />
               <p className="mt-4 text-sm leading-relaxed text-gray-600 dark:text-gray-300">
                 Indonesia Education & Cultural Network — fostering education, culture, and community connections between Indonesia and the United States.
               </p>
-              <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">
-                8415 Oak Bush Terrace, Columbia, MD 21045
-              </p>
-              <a href="https://www.idecn.org" className="mt-1 inline-block text-sm font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400">
-                www.idecn.org
-              </a>
+              <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">8415 Oak Bush Terrace, Columbia, MD 21045</p>
+              <a href="https://www.idecn.org" className="mt-1 inline-block text-sm font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400">www.idecn.org</a>
             </div>
-
-            {/* Contact */}
             <div>
               <div className="text-sm font-extrabold uppercase tracking-[0.18em] text-gray-900 dark:text-white">Contact</div>
               <div className="mt-4 space-y-3 text-sm text-gray-600 dark:text-gray-300">
-                <div>
-                  <span className="font-semibold text-gray-800 dark:text-gray-100">Organization:</span>
-                  <a href="mailto:indoecnetwork@gmail.com" className="ml-1 text-orange-600 hover:underline dark:text-orange-400">indoecnetwork@gmail.com</a>
-                </div>
-                <div>
-                  <span className="font-semibold text-gray-800 dark:text-gray-100">Event:</span>
-                  <a href="mailto:indonesiaday@gmail.com" className="ml-1 text-orange-600 hover:underline dark:text-orange-400">indonesiaday@gmail.com</a>
-                </div>
+                <div><span className="font-semibold text-gray-800 dark:text-gray-100">Organization:</span> <a href="mailto:indoecnetwork@gmail.com" className="text-orange-600 hover:underline dark:text-orange-400">indoecnetwork@gmail.com</a></div>
+                <div><span className="font-semibold text-gray-800 dark:text-gray-100">Event:</span> <a href="mailto:indonesiaday@gmail.com" className="text-orange-600 hover:underline dark:text-orange-400">indonesiaday@gmail.com</a></div>
               </div>
               <div className="mt-5 text-sm font-extrabold uppercase tracking-[0.18em] text-gray-900 dark:text-white">Key Contacts</div>
               <div className="mt-3 space-y-2 text-sm text-gray-600 dark:text-gray-300">
@@ -619,26 +548,18 @@ export default function Page() {
                 <div><span className="font-semibold text-gray-800 dark:text-gray-100">Endang Setyowati</span> — <a href="tel:+12404836113" className="hover:text-orange-600">(240) 483-6113</a></div>
               </div>
             </div>
-
-            {/* Media */}
             <div>
               <div className="text-sm font-extrabold uppercase tracking-[0.18em] text-gray-900 dark:text-white">Media Coverage</div>
               <div className="mt-4 space-y-3">
-                {[
-                  { outlet: "The Frederick News-Post", href: "https://www.fredericknewspost.com" },
-                  { outlet: "DC News Now", href: "https://dcnewsnow.com" },
-                  { outlet: "CNA", href: "https://www.channelnewsasia.com" },
-                ].map((m) => (
-                  <a key={m.outlet} href={m.href} target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm text-gray-600 hover:text-orange-600 dark:text-gray-300 dark:hover:text-orange-400 transition">
-                    <span className="h-1.5 w-1.5 rounded-full bg-orange-500" />
+                {MEDIA.map((m) => (
+                  <a key={m.outlet} href={m.href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-gray-600 hover:text-orange-600 dark:text-gray-300 dark:hover:text-orange-400 transition">
+                    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-orange-500" />
                     {m.outlet}
                   </a>
                 ))}
               </div>
             </div>
           </div>
-
           <div className="mt-12 border-t border-gray-200/70 pt-6 dark:border-white/10 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <span className="text-xs text-gray-500 dark:text-gray-400">© {new Date().getFullYear()} {orgShort} — {orgName}. All rights reserved.</span>
             <span className="text-xs text-gray-400 dark:text-gray-500">Established 2024 · Columbia, MD, USA</span>
