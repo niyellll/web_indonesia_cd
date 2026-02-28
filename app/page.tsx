@@ -336,40 +336,70 @@ export default function Page() {
       {/* ═══════════════════════════════════════ PROGRAMS ══ */}
       <section id="programs" className="scroll-mt-28 mx-auto max-w-7xl px-6 py-20 md:py-24">
         <Reveal>
-          <SectionTitle title={pr.title ?? "Our Core Programs"} subtitle={pr.subtitle ?? ""} />
+          <SectionTitle eyebrow="Our Mission" title="Connecting Cultures, Building Futures" />
         </Reveal>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
-          {(pr.cards ?? []).map((c: any, i: number) => (
-            <Reveal key={c.title ?? i} delayMs={80 + i * 60}>
-              <div className="group relative overflow-hidden rounded-[28px] border border-gray-200/70 bg-white/60 backdrop-blur dark:border-white/10 dark:bg-white/5">
-                {/* Program photo */}
-                <div className="overflow-hidden h-48">
-                  <img
-                    src={[PHOTOS.culture2, PHOTOS.about2, PHOTOS.partner1, PHOTOS.culture1][i % 4]}
-                    alt={c.title}
-                    className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 h-48 bg-gradient-to-b from-transparent to-white/80 dark:to-gray-950/80" />
-                </div>
-                <div className="p-7">
-                  <div className="text-2xl font-black tracking-tight text-gray-900 dark:text-white">{c.title}</div>
-                  <ul className="mt-4 space-y-2 text-gray-600 dark:text-gray-300">
-                    {(c.bullets ?? []).map((b: string) => (
-                      <li key={b} className="flex gap-3">
-                        <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-orange-500" />
-                        <span>{b}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="mt-5 flex flex-wrap gap-2">
-                    {(c.tags ?? []).map((t: string) => <Pill key={t}>{t}</Pill>)}
+        <Reveal delayMs={120}>
+          <div className="mt-12 overflow-hidden rounded-[34px] border border-gray-200/70 bg-white/60 backdrop-blur dark:border-white/10 dark:bg-white/5">
+            <div className="grid lg:grid-cols-2">
+              {/* Left: foto besar */}
+              <div className="relative overflow-hidden" style={{minHeight: "420px"}}>
+                <img
+                  src={PHOTOS.partner1}
+                  alt="IDECN community"
+                  className="absolute inset-0 h-full w-full object-cover transition duration-700 hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/20 dark:to-gray-950/30" />
+                {/* Jigsaw overlay icon */}
+                <div className="absolute bottom-6 left-6">
+                  <div className="rounded-2xl bg-white/90 p-4 backdrop-blur shadow-lg dark:bg-gray-950/90">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M20 8C20 6 18 4 16 4C14 4 12 6 12 8V12H8C6 12 4 14 4 16C4 18 6 20 8 20H12V28H8C6 28 4 30 4 32C4 34 6 36 8 36H12V40C12 42 14 44 16 44C18 44 20 42 20 40H28C28 42 30 44 32 44C34 44 36 42 36 40V36H40C42 36 44 34 44 32C44 30 42 28 40 28H36V20H40C42 20 44 18 44 16C44 14 42 12 40 12H36V8C36 6 34 4 32 4C30 4 28 6 28 8H20Z" fill="#f97316" opacity="0.9"/>
+                    </svg>
+                    <div className="mt-2 text-xs font-extrabold uppercase tracking-wider text-gray-700 dark:text-gray-200">Together We Connect</div>
                   </div>
                 </div>
               </div>
-            </Reveal>
-          ))}
-        </div>
+
+              {/* Right: slogan + deskripsi */}
+              <div className="flex flex-col justify-center p-10 md:p-14">
+                <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-orange-500">Our Mission</div>
+                <h3 className="mt-4 text-4xl md:text-5xl font-black tracking-tight text-gray-900 dark:text-white leading-tight">
+                  "Bridging Nations,<br/>
+                  <span className="bg-gradient-to-r from-orange-500 to-gray-500 bg-clip-text text-transparent">
+                    Empowering People."
+                  </span>
+                </h3>
+                <p className="mt-6 text-base md:text-lg leading-relaxed text-gray-600 dark:text-gray-300">
+                  IDECN connects Indonesia and the United States through education, culture, and community—building lasting partnerships that create real impact across borders.
+                </p>
+
+                <div className="mt-8 grid grid-cols-2 gap-4">
+                  {[
+                    { icon: "🎓", label: "Education" },
+                    { icon: "🎨", label: "Culture" },
+                    { icon: "🤝", label: "Partnership" },
+                    { icon: "💡", label: "Innovation" },
+                  ].map((x) => (
+                    <div key={x.label} className="flex items-center gap-3 rounded-2xl border border-gray-200/70 bg-white/70 px-4 py-3 backdrop-blur dark:border-white/10 dark:bg-white/5">
+                      <span className="text-2xl">{x.icon}</span>
+                      <span className="font-bold text-gray-800 dark:text-white">{x.label}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-8 flex flex-wrap gap-4">
+                  <a href="#get-involved" className="btn-shine rounded-2xl bg-orange-500 px-8 py-4 font-bold text-white transition hover:bg-orange-600">
+                    Get involved
+                  </a>
+                  <a href="#portfolio" className="btn-shine rounded-2xl border border-gray-200/70 bg-white/70 px-8 py-4 font-bold text-gray-900 backdrop-blur transition hover:bg-white dark:border-white/15 dark:bg-white/10 dark:text-white">
+                    See our work
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Reveal>
       </section>
 
       {/* ═══════════════════════════════════════ PHOTO STRIP ══ */}
@@ -444,7 +474,7 @@ export default function Page() {
           <SectionTitle title={pt.title ?? "Partners"} subtitle={pt.subtitle ?? ""} />
         </Reveal>
 
-        <div className="mt-12 grid gap-6 lg:grid-cols-3">
+        <div className="mt-12 grid gap-6 lg:grid-cols-3" data-stagger-container>
           {(pt.cards ?? []).map((c: any, i: number) => (
             <Reveal key={c.title ?? i} delayMs={80 + i * 60}>
               <SpotlightCard className="overflow-hidden p-0">
@@ -515,16 +545,104 @@ export default function Page() {
         </Reveal>
       </section>
 
-      {/* ═══════════════════════════════════════ FOOTER ══ */}
-      <footer className="border-t border-gray-200/70 bg-white/55 px-6 py-14 backdrop-blur dark:border-white/10 dark:bg-gray-950/40">
-        <div className="mx-auto max-w-7xl flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-4">
-            <img src="/IDECN_LOGO1.png" alt="IDECN" className="h-8 w-auto brightness-0 dark:brightness-100" />
-            <span className="text-sm text-gray-600 dark:text-gray-300">© {new Date().getFullYear()} {orgShort} — {orgName}</span>
+      {/* ═══════════════════════════════════════ MEDIA COVERAGE ══ */}
+      <section className="mx-auto max-w-7xl px-6 py-16 md:py-20">
+        <Reveal>
+          <SectionTitle eyebrow="In the News" title="Check Our Activity" subtitle="See how IDECN's events have been covered by major media outlets." />
+        </Reveal>
+        <Reveal delayMs={100}>
+          <div className="mt-10 grid gap-5 md:grid-cols-3">
+            {[
+              { outlet: "The Frederick News-Post", title: "Indonesia Culinary Day", href: "https://www.fredericknewspost.com", flag: "🇺🇸" },
+              { outlet: "DC News Now", title: "Frederick gears up for Indonesian Culinary Festival", href: "https://dcnewsnow.com", flag: "🇺🇸" },
+              { outlet: "CNA", title: "Indonesia Culinary Day 2025 meriahkan Maryland, angkat kuliner dan budaya Nusantara ke panggung Amerika", href: "https://www.channelnewsasia.com", flag: "🌏" },
+            ].map((item) => (
+              <a
+                key={item.outlet}
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex flex-col justify-between rounded-[24px] border border-gray-200/70 bg-white/70 p-7 backdrop-blur transition hover:-translate-y-1 hover:shadow-xl dark:border-white/10 dark:bg-white/5"
+              >
+                <div>
+                  <div className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.18em] text-orange-500">
+                    <span>{item.flag}</span>
+                    <span>{item.outlet}</span>
+                  </div>
+                  <p className="mt-3 text-base font-bold leading-snug text-gray-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition">
+                    {item.title}
+                  </p>
+                </div>
+                <div className="mt-6 flex items-center gap-2 text-sm font-semibold text-orange-600 dark:text-orange-400">
+                  Read article <span>→</span>
+                </div>
+              </a>
+            ))}
           </div>
-          <a href={`mailto:${email}`} className="text-sm font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400">
-            {email}
-          </a>
+        </Reveal>
+      </section>
+
+      {/* ═══════════════════════════════════════ FOOTER ══ */}
+      <footer className="border-t border-gray-200/70 bg-white/80 px-6 py-16 backdrop-blur dark:border-white/10 dark:bg-gray-950/60">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid gap-10 md:grid-cols-3">
+            {/* Brand */}
+            <div>
+              <img src="/IDECN_LOGO1.svg" alt="IDECN" className="h-10 w-auto" />
+              <p className="mt-4 text-sm leading-relaxed text-gray-600 dark:text-gray-300">
+                Indonesia Education & Cultural Network — fostering education, culture, and community connections between Indonesia and the United States.
+              </p>
+              <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">
+                8415 Oak Bush Terrace, Columbia, MD 21045
+              </p>
+              <a href="https://www.idecn.org" className="mt-1 inline-block text-sm font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400">
+                www.idecn.org
+              </a>
+            </div>
+
+            {/* Contact */}
+            <div>
+              <div className="text-sm font-extrabold uppercase tracking-[0.18em] text-gray-900 dark:text-white">Contact</div>
+              <div className="mt-4 space-y-3 text-sm text-gray-600 dark:text-gray-300">
+                <div>
+                  <span className="font-semibold text-gray-800 dark:text-gray-100">Organization:</span>
+                  <a href="mailto:indoecnetwork@gmail.com" className="ml-1 text-orange-600 hover:underline dark:text-orange-400">indoecnetwork@gmail.com</a>
+                </div>
+                <div>
+                  <span className="font-semibold text-gray-800 dark:text-gray-100">Event:</span>
+                  <a href="mailto:indonesiaday@gmail.com" className="ml-1 text-orange-600 hover:underline dark:text-orange-400">indonesiaday@gmail.com</a>
+                </div>
+              </div>
+              <div className="mt-5 text-sm font-extrabold uppercase tracking-[0.18em] text-gray-900 dark:text-white">Key Contacts</div>
+              <div className="mt-3 space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                <div><span className="font-semibold text-gray-800 dark:text-gray-100">Haris Koentjoro</span> — <a href="tel:+14435709509" className="hover:text-orange-600">(443) 570-9509</a></div>
+                <div><span className="font-semibold text-gray-800 dark:text-gray-100">Endang Setyowati</span> — <a href="tel:+12404836113" className="hover:text-orange-600">(240) 483-6113</a></div>
+              </div>
+            </div>
+
+            {/* Media */}
+            <div>
+              <div className="text-sm font-extrabold uppercase tracking-[0.18em] text-gray-900 dark:text-white">Media Coverage</div>
+              <div className="mt-4 space-y-3">
+                {[
+                  { outlet: "The Frederick News-Post", href: "https://www.fredericknewspost.com" },
+                  { outlet: "DC News Now", href: "https://dcnewsnow.com" },
+                  { outlet: "CNA", href: "https://www.channelnewsasia.com" },
+                ].map((m) => (
+                  <a key={m.outlet} href={m.href} target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-sm text-gray-600 hover:text-orange-600 dark:text-gray-300 dark:hover:text-orange-400 transition">
+                    <span className="h-1.5 w-1.5 rounded-full bg-orange-500" />
+                    {m.outlet}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-12 border-t border-gray-200/70 pt-6 dark:border-white/10 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <span className="text-xs text-gray-500 dark:text-gray-400">© {new Date().getFullYear()} {orgShort} — {orgName}. All rights reserved.</span>
+            <span className="text-xs text-gray-400 dark:text-gray-500">Established 2024 · Columbia, MD, USA</span>
+          </div>
         </div>
       </footer>
 
