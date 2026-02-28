@@ -45,7 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             backgroundRepeat: "repeat",
             backgroundPosition: "center",
             backgroundSize: "760px 760px",
-            opacity: 0.22,
+            opacity: 0.55,
             filter: "grayscale(1) contrast(1.55) brightness(1.02)",
             mixBlendMode: "multiply",
             WebkitMaskImage:
@@ -64,7 +64,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             backgroundRepeat: "repeat",
             backgroundPosition: "center",
             backgroundSize: "760px 760px",
-            opacity: 0.16,
+            opacity: 0.40,
             filter: "grayscale(1) invert(1) contrast(1.15) brightness(0.9)",
             mixBlendMode: "screen",
             WebkitMaskImage:
