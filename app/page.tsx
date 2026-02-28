@@ -3,20 +3,21 @@ import SpotlightCard from "../components/SpotlightCard";
 import PortfolioCarousel from "../components/PortfolioCarousel";
 import { site, hero, about, programs, portfolio, partners, getInvolved } from "../lib/cms";
 
-// ─── Photo bank (Unsplash – replace with real event photos) ──────────────────
+// ─── Photo bank – IDECN real event photos ────────────────────────────────────
 const PHOTOS = {
-  hero:      "https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=1600&q=80", // batik craft
-  about1:    "https://images.unsplash.com/photo-1604999333679-b86d54738315?w=900&q=80",  // Indonesian food spread
-  about2:    "https://images.unsplash.com/photo-1527838832700-5059252407fa?w=900&q=80",  // community event
-  event1:    "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80",   // culinary
-  event2:    "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80", // food table
-  event3:    "https://images.unsplash.com/photo-1529543544282-ea669407fca3?w=800&q=80", // community
-  event4:    "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80", // food
-  event5:    "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80",   // restaurant crowd
-  event6:    "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=800&q=80", // food detail
-  culture1:  "https://images.unsplash.com/photo-1596422846543-75c6fc197f11?w=800&q=80", // batik fabric
-  culture2:  "https://images.unsplash.com/photo-1570632267783-18e1a28eb3e2?w=800&q=80", // dance
-  partner1:  "https://images.unsplash.com/photo-1560439514-4e9645039924?w=800&q=80",   // handshake
+  hero:     "/DSC09703.jpg",   // crowd overview – wide hero
+  about1:   "/DSC09762.jpg",   // satay skewers – food detail
+  about2:   "/DSC09790.jpg",   // Indonesian Culinary banner + crowd
+  event1:   "/DSC09704.jpg",   // dancer / performer
+  event2:   "/DSC09730.jpg",   // performers group
+  event3:   "/DSC09752.jpg",   // Pinky Rose stage
+  event4:   "/DSC09775.jpg",   // tents + crowd
+  event5:   "/DSC09779.jpg",   // ACNB stage
+  event6:   "/DSC09786.jpg",   // vendor booth
+  culture1: "/DSC09791.jpg",   // market crowd
+  culture2: "/DSC09796.jpg",   // tent fair wide
+  partner1: "/IMG_3677.jpg",   // crowd + sky
+  extra:    "/IMG_3704.jpg",   // Ondel-ondel mascot
 };
 
 function SectionTitle({
@@ -370,12 +371,21 @@ export default function Page() {
       </section>
 
       {/* ═══════════════════════════════════════ PHOTO STRIP ══ */}
-      <section className="mx-auto max-w-7xl px-6 py-12">
+      <section className="mx-auto max-w-7xl px-6 py-12 space-y-3">
         <Reveal>
-          <div className="grid grid-cols-3 gap-3 sm:grid-cols-6 rounded-[28px] overflow-hidden h-36 sm:h-48">
-            {[PHOTOS.event1, PHOTOS.event2, PHOTOS.event3, PHOTOS.event4, PHOTOS.event5, PHOTOS.event6].map((src, i) => (
+          {/* Row 1 – 7 photos */}
+          <div className="grid grid-cols-4 gap-3 sm:grid-cols-7 rounded-[28px] overflow-hidden h-36 sm:h-44">
+            {[PHOTOS.hero, PHOTOS.event1, PHOTOS.event2, PHOTOS.event3, PHOTOS.event4, PHOTOS.event5, PHOTOS.event6].map((src, i) => (
               <div key={i} className="overflow-hidden">
                 <img src={src} alt={`Event photo ${i+1}`} className="h-full w-full object-cover transition duration-700 hover:scale-110" />
+              </div>
+            ))}
+          </div>
+          {/* Row 2 – 6 photos */}
+          <div className="grid grid-cols-3 gap-3 sm:grid-cols-6 rounded-[28px] overflow-hidden h-36 sm:h-44">
+            {[PHOTOS.about1, PHOTOS.about2, PHOTOS.culture1, PHOTOS.culture2, PHOTOS.partner1, PHOTOS.extra].map((src, i) => (
+              <div key={i} className="overflow-hidden">
+                <img src={src} alt={`Event photo ${i+8}`} className="h-full w-full object-cover transition duration-700 hover:scale-110" />
               </div>
             ))}
           </div>
