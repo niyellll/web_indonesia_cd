@@ -43,13 +43,13 @@ export default function Navbar({
   }, [items]);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[80] border-b border-slate-200/70 bg-white/82 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/62">
+    <header className="fixed top-0 left-0 right-0 z-[80] border-b border-gray-200/70 bg-white/82 backdrop-blur-xl dark:border-white/10 dark:bg-gray-950/62">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
         <a href="#" className="inline-flex items-center gap-3">
-          <span className="grid h-10 w-10 place-items-center rounded-xl bg-red-600 text-xl font-black text-white shadow-sm shadow-red-600/20">
+          <span className="grid h-10 w-10 place-items-center rounded-xl bg-orange-500 text-xl font-black text-white shadow-sm shadow-orange-500/20">
             I
           </span>
-          <span className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">{brandShort}</span>
+          <span className="text-2xl font-black tracking-tight text-gray-900 dark:text-white">{brandShort}</span>
         </a>
 
         <nav className="hidden md:flex items-center gap-9" aria-label="Primary">
@@ -67,12 +67,12 @@ export default function Navbar({
                 }}
                 className={[
                   "relative text-[16px] font-semibold tracking-tight transition-colors",
-                  isActive ? "text-slate-900 dark:text-white" : "text-slate-600 hover:text-blue-700 dark:text-white/70 dark:hover:text-blue-300",
+                  isActive ? "text-gray-900 dark:text-white" : "text-gray-600 hover:text-orange-600 dark:text-white/70 dark:hover:text-orange-400",
                 ].join(" ")}
               >
                 {it.label}
                 {isActive && (
-                  <span className="absolute -bottom-3 left-0 h-0.5 w-full rounded-full bg-gradient-to-r from-red-600 to-blue-600" />
+                  <span className="absolute -bottom-3 left-0 h-0.5 w-full rounded-full bg-gradient-to-r from-orange-500 to-gray-500" />
                 )}
               </a>
             );
@@ -84,14 +84,14 @@ export default function Navbar({
 
           <a
             href={contactHref}
-            className="hidden md:inline-flex rounded-full bg-slate-900 px-6 py-2.5 text-[14px] font-bold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:bg-white dark:text-slate-900"
+            className="hidden md:inline-flex rounded-full bg-gray-900 px-6 py-2.5 text-[14px] font-bold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:bg-white dark:text-gray-900"
           >
             Contact
           </a>
 
           <button
             type="button"
-            className="md:hidden inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white/82 text-slate-900 backdrop-blur hover:bg-white transition dark:border-white/15 dark:bg-white/10 dark:text-white"
+            className="md:hidden inline-flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white/82 text-slate-900 backdrop-blur hover:bg-white transition dark:border-white/15 dark:bg-white/10 dark:text-white"
             onClick={() => setOpen((v) => !v)}
             aria-label="Toggle menu"
           >
@@ -101,7 +101,7 @@ export default function Navbar({
       </div>
 
       {open && (
-        <div className="md:hidden border-t border-slate-200/70 bg-white/88 px-6 py-6 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/72">
+        <div className="md:hidden border-t border-gray-200/70 bg-white/88 px-6 py-6 backdrop-blur-xl dark:border-white/10 dark:bg-gray-950/72">
           <div className="flex flex-col gap-4">
             {items.map((it) => (
               <a
@@ -114,14 +114,14 @@ export default function Navbar({
                     setOpen(false);
                   }
                 }}
-                className="text-lg font-semibold text-slate-900 dark:text-white/90"
+                className="text-lg font-semibold text-gray-900 dark:text-white/90"
               >
                 {it.label}
               </a>
             ))}
             <a
               href={contactHref}
-              className="mt-2 inline-flex justify-center rounded-2xl bg-slate-900 px-6 py-3 text-base font-bold text-white dark:bg-white dark:text-slate-900"
+              className="mt-2 inline-flex justify-center rounded-2xl bg-gray-900 px-6 py-3 text-base font-bold text-white dark:bg-white dark:text-gray-900"
             >
               Contact
             </a>
