@@ -45,11 +45,12 @@ export default function Navbar({
   return (
     <header className="fixed top-0 left-0 right-0 z-[80] border-b border-gray-200/70 bg-white/82 backdrop-blur-xl dark:border-white/10 dark:bg-gray-950/62">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-        <a href="#" className="inline-flex items-center gap-3">
-          <span className="grid h-10 w-10 place-items-center rounded-xl bg-orange-500 text-xl font-black text-white shadow-sm shadow-orange-500/20">
-            I
-          </span>
-          <span className="text-2xl font-black tracking-tight text-gray-900 dark:text-white">{brandShort}</span>
+        <a href="#" className="inline-flex items-center">
+          <img
+            src="/IDECN_LOGO1.png"
+            alt="IDECN Logo"
+            className="h-12 w-auto dark:brightness-100 brightness-0"
+          />
         </a>
 
         <nav className="hidden md:flex items-center gap-9" aria-label="Primary">
