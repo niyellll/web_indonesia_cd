@@ -47,7 +47,7 @@ export default function Navbar({
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
         <a href="#" className="inline-flex items-center">
           <img
-            src="/IDECN_LOGO1.png"
+            src="/IDECN_LOGO1.svg"
             alt="IDECN Logo"
             className="h-12 w-auto dark:brightness-100 brightness-0"
           />
