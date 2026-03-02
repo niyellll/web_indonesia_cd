@@ -15,6 +15,7 @@ export default function Navbar({
 }) {
   const [active, setActive] = React.useState(items[0]?.id ?? "");
   const [open, setOpen] = React.useState(false);
+  const [scrolled, setScrolled] = React.useState(false);
 
   const scrollToId = React.useCallback((id: string) => {
     const el = document.getElementById(id);
@@ -24,36 +25,51 @@ export default function Navbar({
     window.scrollTo({ top, behavior: "smooth" });
   }, []);
 
+  // Scroll shadow
   React.useEffect(() => {
-    const els = items.map((x) => document.getElementById(x.id)).filter(Boolean) as HTMLElement[];
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Active section detection — more forgiving rootMargin
+  React.useEffect(() => {
+    const ids = items.map((x) => x.id);
+    const els = ids.map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
     if (!els.length) return;
 
     const io = new IntersectionObserver(
       (entries) => {
-        const v = entries
+        // Pick the topmost intersecting entry
+        const visible = entries
           .filter((e) => e.isIntersecting)
           .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-        if (v[0]?.target?.id) setActive(v[0].target.id);
+        if (visible[0]?.target?.id) setActive(visible[0].target.id);
       },
-      { rootMargin: "-25% 0px -65% 0px", threshold: [0.12, 0.2, 0.35] }
+      { rootMargin: "-10% 0px -55% 0px", threshold: 0 }
     );
 
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
   }, [items]);
 
+  const ORANGE = "#C84B2F";
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-[80] border-b border-gray-200/70 bg-white/82 backdrop-blur-xl dark:border-white/10 dark:bg-gray-950/62">
+    <header
+      className={[
+        "fixed top-0 left-0 right-0 z-[80] border-b border-gray-200/70 bg-white/90 backdrop-blur-xl transition-shadow dark:border-white/10 dark:bg-gray-950/80",
+        scrolled ? "shadow-md" : "",
+      ].join(" ")}
+    >
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-        <a href="#" className="inline-flex items-center">
-          <img
-            src="/IDECN_LOGO1.svg"
-            alt="IDECN Logo"
-            className="h-12 w-auto "
-          />
+        {/* Logo */}
+        <a href="#" className="inline-flex items-center" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }}>
+          <img src="/IDECN_LOGO1.svg" alt="IDECN Logo" className="h-12 w-auto" />
         </a>
 
-        <nav className="hidden md:flex items-center gap-9" aria-label="Primary">
+        {/* Desktop nav */}
+        <nav className="hidden md:flex items-center gap-8" aria-label="Primary">
           {items.map((it) => {
             const isActive = active === it.id;
             return (
@@ -66,15 +82,20 @@ export default function Navbar({
                     scrollToId(it.id);
                   }
                 }}
-                className={[
-                  "relative text-[16px] font-semibold tracking-tight transition-colors",
-                  isActive ? "text-gray-900 dark:text-white" : "text-gray-600 hover:text-orange-600 dark:text-white/70 dark:hover:text-orange-400",
-                ].join(" ")}
+                className="relative text-[15px] font-semibold tracking-tight transition-colors pb-1"
+                style={{ color: isActive ? ORANGE : undefined }}
               >
-                {it.label}
-                {isActive && (
-                  <span className="absolute -bottom-3 left-0 h-0.5 w-full rounded-full bg-gradient-to-r from-orange-500 to-gray-500" />
-                )}
+                <span className={isActive ? "" : "text-gray-600 hover:text-gray-900 dark:text-white/70 dark:hover:text-white transition-colors"}>
+                  {it.label}
+                </span>
+                {/* Underline */}
+                <span
+                  className="absolute bottom-0 left-0 h-[2.5px] rounded-full transition-all duration-300"
+                  style={{
+                    background: ORANGE,
+                    width: isActive ? "100%" : "0%",
+                  }}
+                />
               </a>
             );
           })}
@@ -82,47 +103,56 @@ export default function Navbar({
 
         <div className="flex items-center gap-3">
           <ThemeToggle />
-
           <a
             href={contactHref}
-            className="hidden md:inline-flex rounded-full bg-gray-900 px-6 py-2.5 text-[14px] font-bold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:bg-white dark:text-gray-900"
+            className="hidden md:inline-flex rounded-full px-6 py-2.5 text-[14px] font-bold text-white shadow-sm transition hover:-translate-y-0.5 hover:opacity-90"
+            style={{ background: "#C84B2F" }}
           >
             Contact
           </a>
-
           <button
             type="button"
             className="md:hidden inline-flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white/82 text-slate-900 backdrop-blur hover:bg-white transition dark:border-white/15 dark:bg-white/10 dark:text-white"
             onClick={() => setOpen((v) => !v)}
             aria-label="Toggle menu"
           >
-            {open ? "✕" : "≡"}
+            {open ? "✕" : "☰"}
           </button>
         </div>
       </div>
 
+      {/* Mobile menu */}
       {open && (
-        <div className="md:hidden border-t border-gray-200/70 bg-white/88 px-6 py-6 backdrop-blur-xl dark:border-white/10 dark:bg-gray-950/72">
-          <div className="flex flex-col gap-4">
-            {items.map((it) => (
-              <a
-                key={it.id}
-                href={it.href}
-                onClick={(e) => {
-                  if (it.href.startsWith("#")) {
-                    e.preventDefault();
-                    scrollToId(it.id);
-                    setOpen(false);
-                  }
-                }}
-                className="text-lg font-semibold text-gray-900 dark:text-white/90"
-              >
-                {it.label}
-              </a>
-            ))}
+        <div className="md:hidden border-t border-gray-200/70 bg-white/95 px-6 py-6 backdrop-blur-xl dark:border-white/10 dark:bg-gray-950/90">
+          <div className="flex flex-col gap-1">
+            {items.map((it) => {
+              const isActive = active === it.id;
+              return (
+                <a
+                  key={it.id}
+                  href={it.href}
+                  onClick={(e) => {
+                    if (it.href.startsWith("#")) {
+                      e.preventDefault();
+                      scrollToId(it.id);
+                      setOpen(false);
+                    }
+                  }}
+                  className="flex items-center gap-3 rounded-xl px-4 py-3 text-base font-semibold transition"
+                  style={{
+                    background: isActive ? "rgba(200,75,47,0.08)" : undefined,
+                    color: isActive ? ORANGE : undefined,
+                  }}
+                >
+                  {isActive && <span className="h-1.5 w-1.5 rounded-full" style={{ background: ORANGE }} />}
+                  {it.label}
+                </a>
+              );
+            })}
             <a
               href={contactHref}
-              className="mt-2 inline-flex justify-center rounded-2xl bg-gray-900 px-6 py-3 text-base font-bold text-white dark:bg-white dark:text-gray-900"
+              className="mt-3 inline-flex justify-center rounded-2xl px-6 py-3 text-base font-bold text-white"
+              style={{ background: "#C84B2F" }}
             >
               Contact
             </a>
