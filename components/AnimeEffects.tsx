@@ -1,14 +1,13 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
-// ─── 1. Scroll-triggered animations ──────────────────────────────────────────
-export function useScrollReveal() {
+// ─── 1. SCROLL REVEAL (fade + slide up) ──────────────────────────────────────
+function useScrollReveal() {
   useEffect(() => {
     let anime: any;
     import("animejs").then((mod) => {
       anime = (mod as any).default ?? mod;
-
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
@@ -24,32 +23,28 @@ export function useScrollReveal() {
             }
           });
         },
-        { threshold: 0.12 }
+        { rootMargin: "0px 0px -80px 0px", threshold: 0.05 }
       );
-
-      document
-        .querySelectorAll("[data-scroll-reveal]")
-        .forEach((el) => {
-          (el as HTMLElement).style.opacity = "0";
-          observer.observe(el);
-        });
-
+      document.querySelectorAll("[data-scroll-reveal]").forEach((el) => {
+        (el as HTMLElement).style.opacity = "0";
+        observer.observe(el);
+      });
       return () => observer.disconnect();
     });
   }, []);
 }
 
-// ─── 2. Staggered entrance ────────────────────────────────────────────────────
-export function useStaggerCards() {
+// ─── 2. STAGGER CARDS ────────────────────────────────────────────────────────
+function useStaggerCards() {
   useEffect(() => {
     import("animejs").then((mod) => {
       const anime = (mod as any).default ?? mod;
-
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
               const cards = entry.target.querySelectorAll("[data-stagger-card]");
+              cards.forEach((c) => ((c as HTMLElement).style.opacity = "0"));
               anime({
                 targets: cards,
                 opacity: [0, 1],
@@ -63,59 +58,19 @@ export function useStaggerCards() {
             }
           });
         },
-        { threshold: 0.08 }
+        { rootMargin: "0px 0px -60px 0px", threshold: 0.05 }
       );
-
-      document
-        .querySelectorAll("[data-stagger-container]")
-        .forEach((el) => {
-          el.querySelectorAll("[data-stagger-card]").forEach((card) => {
-            (card as HTMLElement).style.opacity = "0";
-          });
-          observer.observe(el);
-        });
-
+      document.querySelectorAll("[data-stagger-container]").forEach((el) => observer.observe(el));
       return () => observer.disconnect();
     });
   }, []);
 }
 
-// ─── 3. Text reveal (hero heading) ───────────────────────────────────────────
-export function useTextReveal() {
+// ─── 3. COUNT UP ─────────────────────────────────────────────────────────────
+function useCounterAnimation() {
   useEffect(() => {
     import("animejs").then((mod) => {
       const anime = (mod as any).default ?? mod;
-
-      document.querySelectorAll("[data-text-reveal]").forEach((el) => {
-        const text = el.textContent ?? "";
-        el.innerHTML = text
-          .split(" ")
-          .map(
-            (word) =>
-              `<span class="inline-block overflow-hidden"><span class="inline-block translate-y-full" data-word>${word}</span></span>&nbsp;`
-          )
-          .join("");
-
-        const words = el.querySelectorAll("[data-word]");
-        anime({
-          targets: words,
-          translateY: ["100%", "0%"],
-          opacity: [0, 1],
-          delay: anime.stagger(80, { start: 200 }),
-          duration: 800,
-          easing: "easeOutExpo",
-        });
-      });
-    });
-  }, []);
-}
-
-// ─── 4. Counter animation ─────────────────────────────────────────────────────
-export function useCounterAnimation() {
-  useEffect(() => {
-    import("animejs").then((mod) => {
-      const anime = (mod as any).default ?? mod;
-
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
@@ -126,11 +81,10 @@ export function useCounterAnimation() {
               anime({
                 targets: obj,
                 val: target,
-                duration: 1800,
+                round: 1,
+                duration: 2000,
                 easing: "easeOutExpo",
-                update: () => {
-                  el.textContent = Math.round(obj.val).toLocaleString();
-                },
+                update: () => { el.textContent = obj.val.toLocaleString(); },
               });
               observer.unobserve(el);
             }
@@ -138,90 +92,173 @@ export function useCounterAnimation() {
         },
         { threshold: 0.5 }
       );
-
-      document
-        .querySelectorAll("[data-counter-target]")
-        .forEach((el) => observer.observe(el));
-
+      document.querySelectorAll("[data-counter-target]").forEach((el) => observer.observe(el));
       return () => observer.disconnect();
     });
   }, []);
 }
 
-// ─── 5. Parallax effect ───────────────────────────────────────────────────────
-export function useParallax() {
+// ─── 4. PARALLAX SCROLL ──────────────────────────────────────────────────────
+function useParallax() {
   useEffect(() => {
     import("animejs").then((mod) => {
       const anime = (mod as any).default ?? mod;
-      let ticking = false;
+      const els = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-parallax]")
+      );
+      if (!els.length) return;
 
       const onScroll = () => {
-        if (!ticking) {
-          requestAnimationFrame(() => {
-            const scrollY = window.scrollY;
-            document.querySelectorAll("[data-parallax]").forEach((el) => {
-              const speed = parseFloat(
-                (el as HTMLElement).dataset.parallax ?? "0.3"
-              );
-              anime({
-                targets: el,
-                translateY: scrollY * speed,
-                duration: 0,
-                easing: "linear",
-              });
-            });
-            ticking = false;
+        els.forEach((el) => {
+          const rect = el.getBoundingClientRect();
+          const speed = parseFloat(el.dataset.parallax ?? "0.15");
+          const offset = (window.innerHeight / 2 - rect.top - rect.height / 2) * speed;
+          anime({
+            targets: el,
+            translateY: offset,
+            duration: 0,
+            easing: "linear",
           });
-          ticking = true;
-        }
+        });
       };
-
       window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
       return () => window.removeEventListener("scroll", onScroll);
     });
   }, []);
 }
 
-// ─── 6. Hover micro-interactions ─────────────────────────────────────────────
-export function useHoverCards() {
+// ─── 5. MORPHING TEXT ────────────────────────────────────────────────────────
+function useMorphingText() {
   useEffect(() => {
     import("animejs").then((mod) => {
       const anime = (mod as any).default ?? mod;
+      const els = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-morph-text]")
+      );
+      if (!els.length) return;
 
-      document.querySelectorAll("[data-hover-card]").forEach((el) => {
-        const enter = () =>
+      els.forEach((el) => {
+        const words = (el.dataset.morphText ?? "").split("|").map((w) => w.trim()).filter(Boolean);
+        if (words.length < 2) return;
+        let idx = 0;
+
+        const morphTo = (word: string) => {
+          // fade out + slide up
           anime({
             targets: el,
-            translateY: -8,
-            scale: 1.02,
-            boxShadow: "0 24px 60px rgba(0,0,0,0.18)",
+            opacity: [1, 0],
+            translateY: [0, -18],
             duration: 350,
-            easing: "spring(1, 80, 10, 0)",
+            easing: "easeInCubic",
+            complete: () => {
+              el.textContent = word;
+              // fade in + slide up from below
+              anime({
+                targets: el,
+                opacity: [0, 1],
+                translateY: [18, 0],
+                duration: 400,
+                easing: "easeOutCubic",
+              });
+            },
           });
+        };
 
-        const leave = () =>
-          anime({
-            targets: el,
-            translateY: 0,
-            scale: 1,
-            boxShadow: "0 4px 20px rgba(0,0,0,0.06)",
-            duration: 400,
-            easing: "spring(1, 80, 10, 0)",
-          });
+        // initial text
+        el.textContent = words[0];
+        el.style.display = "inline-block";
+        el.style.minWidth = "1px";
 
-        el.addEventListener("mouseenter", enter);
-        el.addEventListener("mouseleave", leave);
+        const interval = setInterval(() => {
+          idx = (idx + 1) % words.length;
+          morphTo(words[idx]);
+        }, 2400);
+
+        return () => clearInterval(interval);
       });
     });
   }, []);
 }
 
-// ─── Master hook – use this one in page.tsx ───────────────────────────────────
+// ─── 6. FLOATING ELEMENTS ────────────────────────────────────────────────────
+function useFloatingElements() {
+  useEffect(() => {
+    import("animejs").then((mod) => {
+      const anime = (mod as any).default ?? mod;
+      const els = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-float]")
+      );
+      if (!els.length) return;
+
+      els.forEach((el, i) => {
+        const amplitude = parseFloat(el.dataset.float ?? "12");
+        const duration  = 2800 + i * 400;
+        const delay     = i * 300;
+
+        anime({
+          targets: el,
+          translateY: [`-${amplitude}px`, `${amplitude}px`],
+          rotate:  [-1.5, 1.5],
+          duration,
+          delay,
+          direction: "alternate",
+          loop: true,
+          easing: "easeInOutSine",
+        });
+      });
+    });
+  }, []);
+}
+
+// ─── 7. HOVER LIFT (spring) ───────────────────────────────────────────────────
+function useHoverLift() {
+  useEffect(() => {
+    import("animejs").then((mod) => {
+      const anime = (mod as any).default ?? mod;
+      const cards = document.querySelectorAll<HTMLElement>("[data-hover-lift]");
+
+      cards.forEach((card) => {
+        card.addEventListener("mouseenter", () => {
+          anime({ targets: card, translateY: -8, scale: 1.02, duration: 300, easing: "easeOutExpo" });
+        });
+        card.addEventListener("mouseleave", () => {
+          anime({ targets: card, translateY: 0, scale: 1, duration: 400, easing: "spring(1,80,10,0)" });
+        });
+      });
+    });
+  }, []);
+}
+
+// ─── 8. HERO ENTRANCE ────────────────────────────────────────────────────────
+function useHeroEntrance() {
+  useEffect(() => {
+    import("animejs").then((mod) => {
+      const anime = (mod as any).default ?? mod;
+      const els = document.querySelectorAll("[data-hero-entrance]");
+      if (!els.length) return;
+
+      anime({
+        targets: els,
+        opacity:    [0, 1],
+        translateY: [30, 0],
+        scale:      [0.97, 1],
+        delay: anime.stagger(120, { start: 200 }),
+        duration: 900,
+        easing: "easeOutExpo",
+      });
+    });
+  }, []);
+}
+
+// ─── MASTER HOOK ─────────────────────────────────────────────────────────────
 export function useAnimeEffects() {
   useScrollReveal();
   useStaggerCards();
-  useTextReveal();
   useCounterAnimation();
   useParallax();
-  useHoverCards();
+  useMorphingText();
+  useFloatingElements();
+  useHoverLift();
+  useHeroEntrance();
 }

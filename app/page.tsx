@@ -152,7 +152,7 @@ export default function Page() {
             </div>
           </div>
           <div className="lg:col-span-5">
-            <SpotlightCard className="overflow-hidden p-0">
+            <SpotlightCard className="overflow-hidden p-0" data-hover-lift>
               <img src={PHOTOS.partner1} alt="Collaboration" className="h-52 w-full object-cover" />
               <div className="p-7">
                 <div className="text-xs font-extrabold uppercase tracking-[0.18em]" style={{color:"#C84B2F"}}>Contact</div>
@@ -177,7 +177,7 @@ export default function Page() {
       {/* ══════════════ HERO ══ */}
       <section className="relative mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-14">
         <Reveal delayMs={40}>
-          <div className="flex flex-wrap justify-center gap-3">
+          <div className="flex flex-wrap justify-center gap-3" data-hero-entrance>
             {heroChips.map((t: string) => (
               <span key={t} className="inline-flex items-center gap-2 rounded-full border border-gray-300/60 bg-white/80 px-4 py-2 text-sm font-semibold text-gray-700 backdrop-blur shadow-sm dark:border-white/15 dark:bg-white/10 dark:text-white/90">
                 <span className="h-2 w-2 rounded-full" style={{background:"#C84B2F"}} />
@@ -187,16 +187,16 @@ export default function Page() {
           </div>
         </Reveal>
         <Reveal delayMs={100}>
-          <h1 className="mt-7 text-center text-4xl font-black tracking-tight text-gray-900 dark:text-white sm:text-5xl md:text-7xl lg:text-8xl leading-[0.95]">
+          <h1 className="mt-7 text-center text-4xl font-black tracking-tight text-gray-900 dark:text-white sm:text-5xl md:text-7xl lg:text-8xl leading-[0.95]" data-hero-entrance>
             <span className="block">{heroHeadingTop}</span>
-            <span className="mt-2 block" style={{color:"#C84B2F"}}>{heroHeadingGradient}</span>
+            <span className="mt-2 block" style={{color:"#C84B2F"}} data-morph-text="Cultural Network|Education Bridge|Community Network|Indonesia ↔ U.S.">{heroHeadingGradient}</span>
           </h1>
         </Reveal>
         <Reveal delayMs={170}>
-          <p className="mx-auto mt-6 max-w-2xl text-center text-base md:text-xl leading-relaxed text-gray-600 dark:text-gray-300">{heroSubtitle}</p>
+          <p className="mx-auto mt-6 max-w-2xl text-center text-base md:text-xl leading-relaxed text-gray-600 dark:text-gray-300" data-hero-entrance>{heroSubtitle}</p>
         </Reveal>
         <Reveal delayMs={240}>
-          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row" data-hero-entrance>
             <a href={heroCtas.primary?.href ?? "#get-involved"} className="inline-flex items-center justify-center rounded-2xl px-10 py-4 text-lg font-bold text-white shadow-lg transition hover:-translate-y-1" style={{background:"#C84B2F"}}>
               {heroCtas.primary?.label ?? "Get involved"}
             </a>
@@ -212,7 +212,7 @@ export default function Page() {
         <Reveal delayMs={60}>
           <div className="grid grid-cols-4 grid-rows-2 gap-3 rounded-[32px] overflow-hidden" style={{height:"280px"}} className="sm:!h-[380px] md:!h-[520px]">
             <div className="col-span-2 row-span-2 overflow-hidden">
-              <img src={PHOTOS.hero} alt="IDECN event" className="h-full w-full object-cover transition duration-700 hover:scale-105" />
+              <img src={PHOTOS.hero} alt="IDECN event" className="h-full w-full object-cover transition duration-700 hover:scale-105" data-parallax="0.12" />
             </div>
             <div className="col-span-1 overflow-hidden">
               <img src={PHOTOS.event1} alt="Cultural performance" className="h-full w-full object-cover transition duration-700 hover:scale-105" />
@@ -296,9 +296,9 @@ export default function Page() {
                 {/* Batik texture strip top */}
                 <div className="absolute top-0 left-0 right-0 h-2" style={{background:"#C84B2F"}} />
                 {/* Jigsaw badge */}
-                <div className="absolute bottom-8 left-8">
+                <div className="absolute bottom-8 left-8" data-float="8">
                   <div className="rounded-2xl bg-white/95 p-5 backdrop-blur shadow-xl dark:bg-gray-950/95">
-                    <svg width="44" height="44" viewBox="0 0 48 48" fill="none">
+                    <svg width="44" height="44" viewBox="0 0 48 48" fill="none" data-float="10">
                       <path d="M20 8C20 6 18 4 16 4C14 4 12 6 12 8V12H8C6 12 4 14 4 16C4 18 6 20 8 20H12V28H8C6 28 4 30 4 32C4 34 6 36 8 36H12V40C12 42 14 44 16 44C18 44 20 42 20 40H28C28 42 30 44 32 44C34 44 36 42 36 40V36H40C42 36 44 34 44 32C44 30 42 28 40 28H36V20H40C42 20 44 18 44 16C44 14 42 12 40 12H36V8C36 6 34 4 32 4C30 4 28 6 28 8H20Z" fill="#C84B2F"/>
                     </svg>
                     <div className="mt-2 text-xs font-extrabold uppercase tracking-wider" style={{color:"#4A4A4A"}}>Connecting Pieces</div>
@@ -396,10 +396,10 @@ export default function Page() {
           </div>
         </Reveal>
         <Reveal delayMs={100}>
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
+          <div className="mt-10 grid gap-6 md:grid-cols-3" data-stagger-container>
             {MEDIA.map((item) => (
               <a key={item.outlet} href={item.href} target="_blank" rel="noopener noreferrer"
-                className="group relative overflow-hidden rounded-[28px] border border-gray-200/60 bg-white/80 backdrop-blur transition hover:-translate-y-2 hover:shadow-2xl dark:border-white/10 dark:bg-white/5">
+                className="group relative overflow-hidden rounded-[28px] border border-gray-200/60 bg-white/80 backdrop-blur transition hover:shadow-2xl dark:border-white/10 dark:bg-white/5" data-stagger-card data-hover-lift>
                 {/* Orange top bar */}
                 <div className="h-1.5 w-full" style={{background:"#C84B2F"}} />
                 <div className="overflow-hidden h-36 sm:h-44 relative">
@@ -431,10 +431,10 @@ export default function Page() {
             <p className="mx-auto mt-4 max-w-2xl text-base md:text-lg text-gray-600 dark:text-gray-300">{pt.subtitle ?? ""}</p>
           </div>
         </Reveal>
-        <div className="mt-12 grid gap-6 lg:grid-cols-3">
+        <div className="mt-12 grid gap-6 lg:grid-cols-3" data-stagger-container>
           {(pt.cards ?? []).map((c: any, i: number) => (
             <Reveal key={c.title ?? i} delayMs={80 + i * 60}>
-              <SpotlightCard className="overflow-hidden p-0">
+              <SpotlightCard className="overflow-hidden p-0" data-hover-lift>
                 <div className="h-2 w-full" style={{background:"#C84B2F"}} />
                 <div className="h-40 overflow-hidden">
                   <img src={[PHOTOS.partner1,PHOTOS.about2,PHOTOS.culture2][i%3]} alt={c.title} className="h-full w-full object-cover transition duration-700 hover:scale-105" />
@@ -466,7 +466,7 @@ export default function Page() {
               {/* Batik texture hint */}
               <img src="/Batik_Perca.jpg" alt="" className="absolute inset-0 h-full w-full object-cover opacity-10" />
               <div className="relative px-6 py-8 sm:px-10 sm:py-12 md:px-14">
-                <div className="inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-sm font-bold text-white backdrop-blur">
+                <div className="inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-sm font-bold text-white backdrop-blur" data-float="6">
                   <span className="h-2 w-2 animate-pulse rounded-full bg-white" />
                   Upcoming Event 2025
                 </div>
@@ -541,7 +541,7 @@ export default function Page() {
             <p className="mx-auto mt-4 max-w-2xl text-base md:text-lg text-gray-600 dark:text-gray-300">{gi.subtitle ?? ""}</p>
           </div>
         </Reveal>
-        <div className="mt-12 grid gap-6 lg:grid-cols-3">
+        <div className="mt-12 grid gap-6 lg:grid-cols-3" data-stagger-container>
           {(gi.cards ?? []).map((c: any, i: number) => (
             <Reveal key={c.title ?? i} delayMs={80 + i * 60}>
               <SpotlightCard className="p-5 sm:p-7 md:p-10">
