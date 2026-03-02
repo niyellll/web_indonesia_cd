@@ -175,7 +175,7 @@ export default function Page() {
     <main className="pt-24">
 
       {/* ══════════════ HERO ══ */}
-      <section className="relative mx-auto max-w-7xl px-6 py-10 md:py-14">
+      <section className="relative mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-14">
         <Reveal delayMs={40}>
           <div className="flex flex-wrap justify-center gap-3">
             {heroChips.map((t: string) => (
@@ -187,7 +187,7 @@ export default function Page() {
           </div>
         </Reveal>
         <Reveal delayMs={100}>
-          <h1 className="mt-7 text-center text-5xl font-black tracking-tight text-gray-900 dark:text-white md:text-7xl lg:text-8xl leading-[0.95]">
+          <h1 className="mt-7 text-center text-4xl font-black tracking-tight text-gray-900 dark:text-white sm:text-5xl md:text-7xl lg:text-8xl leading-[0.95]">
             <span className="block">{heroHeadingTop}</span>
             <span className="mt-2 block" style={{color:"#C84B2F"}}>{heroHeadingGradient}</span>
           </h1>
@@ -210,7 +210,7 @@ export default function Page() {
       {/* ── Hero photo mosaic ── */}
       <section className="mx-auto max-w-7xl px-6 pb-20">
         <Reveal delayMs={60}>
-          <div className="grid grid-cols-4 grid-rows-2 gap-3 rounded-[32px] overflow-hidden" style={{height:"520px"}}>
+          <div className="grid grid-cols-4 grid-rows-2 gap-3 rounded-[32px] overflow-hidden" style={{height:"280px"}} className="sm:!h-[380px] md:!h-[520px]">
             <div className="col-span-2 row-span-2 overflow-hidden">
               <img src={PHOTOS.hero} alt="IDECN event" className="h-full w-full object-cover transition duration-700 hover:scale-105" />
             </div>
@@ -234,14 +234,14 @@ export default function Page() {
       </section>
 
       {/* ══════════════ ABOUT ══ */}
-      <section id="about" className="scroll-mt-28 mx-auto max-w-7xl px-6 py-20 md:py-24">
+      <section id="about" className="scroll-mt-28 mx-auto max-w-7xl px-4 sm:px-6 py-12 md:py-24">
         <Reveal delayMs={60}>
           <div className="grid gap-14 lg:grid-cols-2 lg:items-center">
             <div className="relative">
               <div className="overflow-hidden rounded-[28px] aspect-[4/3] shadow-2xl">
                 <img src={PHOTOS.about2} alt="Community gathering" className="h-full w-full object-cover transition duration-700 hover:scale-105" />
               </div>
-              <div className="absolute -bottom-5 -right-4 rounded-2xl border border-gray-200/70 bg-white/95 p-5 backdrop-blur shadow-xl dark:border-white/10 dark:bg-gray-950/95 max-w-[200px]">
+              <div className="absolute -bottom-4 -right-2 sm:-bottom-5 sm:-right-4 rounded-2xl border border-gray-200/70 bg-white/95 p-3 sm:p-5 backdrop-blur shadow-xl dark:border-white/10 dark:bg-gray-950/95 max-w-[160px] sm:max-w-[200px]">
                 <div className="text-xs font-extrabold uppercase tracking-[0.18em]" style={{color:"#C84B2F"}}>Est.</div>
                 <div className="mt-1 text-3xl font-black text-gray-900 dark:text-white" data-counter-target="2024">0</div>
                 <div className="mt-1 text-xs text-gray-600 dark:text-gray-300">U.S.-based nonprofit connecting Indonesia & the U.S.</div>
@@ -279,7 +279,7 @@ export default function Page() {
       </section>
 
       {/* ══════════════ PROGRAMS — 1 CARD SLOGAN ══ */}
-      <section id="programs" className="scroll-mt-28 mx-auto max-w-7xl px-6 py-20 md:py-24">
+      <section id="programs" className="scroll-mt-28 mx-auto max-w-7xl px-4 sm:px-6 py-12 md:py-24">
         <Reveal>
           <div className="text-center">
             <div className="text-xs font-extrabold uppercase tracking-[0.18em]" style={{color:"#C84B2F"}}>Our Mission</div>
@@ -290,7 +290,7 @@ export default function Page() {
           <div className="mt-12 overflow-hidden rounded-[36px] border border-gray-200/60 shadow-2xl dark:border-white/10">
             <div className="grid lg:grid-cols-2">
               {/* Foto kiri dengan batik accent */}
-              <div className="relative overflow-hidden" style={{minHeight:"460px"}}>
+              <div className="relative overflow-hidden" style={{minHeight:"260px"}}>
                 <img src={PHOTOS.partner1} alt="IDECN community" className="absolute inset-0 h-full w-full object-cover transition duration-700 hover:scale-105" />
                 <div className="absolute inset-0" style={{background:"linear-gradient(to right, rgba(74,74,74,0.65) 0%, rgba(74,74,74,0.1) 70%, transparent 100%)"}} />
                 {/* Batik texture strip top */}
@@ -357,7 +357,7 @@ export default function Page() {
       </section>
 
       {/* ══════════════ PORTFOLIO ══ */}
-      <section id="portfolio" className="scroll-mt-28 mx-auto max-w-7xl px-6 py-20 md:py-24">
+      <section id="portfolio" className="scroll-mt-28 mx-auto max-w-7xl px-4 sm:px-6 py-12 md:py-24">
         <Reveal>
           <div className="text-center">
             <div className="text-xs font-extrabold uppercase tracking-[0.18em]" style={{color:"#C84B2F"}}>{pf.eyebrow ?? "Proof of execution"}</div>
@@ -366,12 +366,12 @@ export default function Page() {
           </div>
         </Reveal>
         <Reveal delayMs={120}>
-          <div className="mt-10 rounded-[34px] border border-gray-200/70 bg-white/55 p-6 backdrop-blur dark:border-white/10 dark:bg-white/5 md:p-8">
+          <div className="mt-8 rounded-[24px] sm:rounded-[34px] border border-gray-200/70 bg-white/55 p-4 sm:p-6 backdrop-blur dark:border-white/10 dark:bg-white/5 md:p-8">
             <PortfolioCarousel count={portfolioSlides.length} className="mt-2" label="Portfolio carousel">
               {portfolioSlides.map((sl, idx) => (
-                <div key={sl.key} data-slide className="snap-center shrink-0 w-[92%] md:w-[86%] lg:w-[78%]">
+                <div key={sl.key} data-slide className="snap-center shrink-0 w-[85vw] sm:w-[80%] md:w-[82%] lg:w-[74%]">
                   <Reveal delayMs={60 + idx * 90}>
-                    <SpotlightCard className="p-9 md:p-10">
+                    <SpotlightCard className="p-5 sm:p-7 md:p-10">
                       <div className="flex items-center justify-between gap-4 mb-7">
                         <div className="text-xs font-extrabold uppercase tracking-[0.18em]" style={{color:"#C84B2F"}}>Slide {idx+1} / {portfolioSlides.length}</div>
                         <div className="rounded-full border border-gray-200/70 bg-white/70 px-3 py-1 text-xs font-bold text-gray-800 backdrop-blur dark:border-white/10 dark:bg-white/10 dark:text-gray-100">{sl.title}</div>
@@ -387,7 +387,7 @@ export default function Page() {
       </section>
 
       {/* ══════════════ CHECK OUR ACTIVITY ══ */}
-      <section className="mx-auto max-w-7xl px-6 py-16 md:py-20">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-12 md:py-20">
         <Reveal>
           <div className="text-center">
             <div className="text-xs font-extrabold uppercase tracking-[0.18em]" style={{color:"#C84B2F"}}>In the News</div>
@@ -402,7 +402,7 @@ export default function Page() {
                 className="group relative overflow-hidden rounded-[28px] border border-gray-200/60 bg-white/80 backdrop-blur transition hover:-translate-y-2 hover:shadow-2xl dark:border-white/10 dark:bg-white/5">
                 {/* Orange top bar */}
                 <div className="h-1.5 w-full" style={{background:"#C84B2F"}} />
-                <div className="overflow-hidden h-44 relative">
+                <div className="overflow-hidden h-36 sm:h-44 relative">
                   <img src={item.photo} alt={item.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-110" />
                   <div className="absolute inset-0 bg-black/30" />
                   <div className="absolute top-4 left-4 flex items-center gap-2 rounded-full bg-white/95 px-3 py-1.5 backdrop-blur shadow">
@@ -423,7 +423,7 @@ export default function Page() {
       </section>
 
       {/* ══════════════ PARTNERS ══ */}
-      <section id="partners" className="scroll-mt-28 mx-auto max-w-7xl px-6 py-20 md:py-24">
+      <section id="partners" className="scroll-mt-28 mx-auto max-w-7xl px-4 sm:px-6 py-12 md:py-24">
         <Reveal>
           <div className="text-center">
             <div className="text-xs font-extrabold uppercase tracking-[0.18em]" style={{color:"#C84B2F"}}>Collaboration</div>
@@ -451,7 +451,7 @@ export default function Page() {
       </section>
 
       {/* ══════════════ INCOMING EVENT ══ */}
-      <section className="mx-auto max-w-7xl px-6 py-16 md:py-20">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-12 md:py-20">
         <Reveal>
           <div className="text-center">
             <div className="text-xs font-extrabold uppercase tracking-[0.18em]" style={{color:"#C84B2F"}}>Mark Your Calendar</div>
@@ -465,7 +465,7 @@ export default function Page() {
               <img src={PHOTOS.hero} alt="Event" className="absolute inset-0 h-full w-full object-cover opacity-30 mix-blend-multiply" />
               {/* Batik texture hint */}
               <img src="/Batik_Perca.jpg" alt="" className="absolute inset-0 h-full w-full object-cover opacity-10" />
-              <div className="relative px-10 py-12 md:px-14">
+              <div className="relative px-6 py-8 sm:px-10 sm:py-12 md:px-14">
                 <div className="inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-sm font-bold text-white backdrop-blur">
                   <span className="h-2 w-2 animate-pulse rounded-full bg-white" />
                   Upcoming Event 2025
@@ -481,7 +481,7 @@ export default function Page() {
 
             {/* Detail bar */}
             <div className="bg-white/90 backdrop-blur dark:bg-gray-950/80">
-              <div className="grid grid-cols-2 divide-x divide-gray-200/70 dark:divide-white/10 md:grid-cols-4">
+              <div className="grid grid-cols-2 divide-x divide-y divide-gray-200/70 dark:divide-white/10 md:grid-cols-4 md:divide-y-0">
                 {[
                   {icon:"📅", label:"Date", value:"Saturday, August 2, 2025"},
                   {icon:"⏰", label:"Time", value:"11 AM – 4 PM"},
@@ -502,7 +502,7 @@ export default function Page() {
               <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
                 <div>
                   <div className="text-sm font-extrabold uppercase tracking-[0.18em]" style={{color:"#C84B2F"}}>Event Highlights</div>
-                  <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                  <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
                     {["Food Bazaar","Marketplace","Cultural Performances","Art & Craft","Exhibition","Open to Public"].map((h) => (
                       <div key={h} className="flex items-center gap-2 rounded-xl border border-gray-200/60 bg-white/80 px-3 py-2.5 text-sm font-semibold text-gray-700 dark:border-white/10 dark:bg-white/5 dark:text-gray-200">
                         <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{background:"#C84B2F"}} />
@@ -533,7 +533,7 @@ export default function Page() {
       </section>
 
       {/* ══════════════ GET INVOLVED ══ */}
-      <section id="get-involved" className="scroll-mt-28 mx-auto max-w-7xl px-6 py-20 md:py-24">
+      <section id="get-involved" className="scroll-mt-28 mx-auto max-w-7xl px-4 sm:px-6 py-12 md:py-24">
         <Reveal>
           <div className="text-center">
             <div className="text-xs font-extrabold uppercase tracking-[0.18em]" style={{color:"#C84B2F"}}>Join Us</div>
@@ -544,7 +544,7 @@ export default function Page() {
         <div className="mt-12 grid gap-6 lg:grid-cols-3">
           {(gi.cards ?? []).map((c: any, i: number) => (
             <Reveal key={c.title ?? i} delayMs={80 + i * 60}>
-              <SpotlightCard className="p-9 md:p-10">
+              <SpotlightCard className="p-5 sm:p-7 md:p-10">
                 <div className="h-1 w-12 rounded-full mb-5" style={{background:"#C84B2F"}} />
                 <div className="text-2xl font-black tracking-tight text-gray-900 dark:text-white">{c.title}</div>
                 <p className="mt-3 text-base md:text-lg text-gray-600 dark:text-gray-300">{c.subtitle}</p>
