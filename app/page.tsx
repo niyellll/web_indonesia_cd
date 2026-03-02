@@ -574,35 +574,35 @@ export default function Page() {
       </section>
 
       {/* ══════════════ FOOTER ══ */}
-      <footer className="border-t border-gray-200/70 px-6 py-16 backdrop-blur dark:border-white/10" style={{background:"rgba(245,240,235,0.85)"}}>
+      <footer className="border-t border-gray-200/70 px-6 py-16 dark:border-white/10 dark:bg-gray-900" style={{background:"rgba(245,240,235,0.92)"}}>
         <div className="mx-auto max-w-7xl dark:text-white">
           <div className="grid gap-10 md:grid-cols-3">
             <div>
               <img src="/IDECN_LOGO1.svg" alt="IDECN" className="h-10 w-auto" />
-              <p className="mt-4 text-sm leading-relaxed text-gray-600 dark:text-gray-300">
+              <p className="mt-4 text-sm leading-relaxed text-gray-600 dark:text-gray-200">
                 Indonesia Education & Cultural Network — fostering education, culture, and community connections between Indonesia and the United States.
               </p>
-              <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">8415 Oak Bush Terrace, Columbia, MD 21045</p>
+              <p className="mt-3 text-sm text-gray-500 dark:text-gray-300">8415 Oak Bush Terrace, Columbia, MD 21045</p>
               <a href="https://www.idecn.org" className="mt-1 inline-block text-sm font-semibold hover:opacity-70 transition" style={{color:"#C84B2F"}}>www.idecn.org</a>
             </div>
             <div>
-              <div className="text-sm font-extrabold uppercase tracking-[0.18em]" style={{color:"#4A4A4A"}}>Contact</div>
-              <div className="mt-4 space-y-3 text-sm text-gray-600 dark:text-gray-300">
-                <div><span className="font-semibold text-gray-800 dark:text-gray-100">Organization:</span> <a href="mailto:indoecnetwork@gmail.com" className="hover:underline" style={{color:"#C84B2F"}}>indoecnetwork@gmail.com</a></div>
-                <div><span className="font-semibold text-gray-800 dark:text-gray-100">Event:</span> <a href="mailto:indonesiaday@gmail.com" className="hover:underline" style={{color:"#C84B2F"}}>indonesiaday@gmail.com</a></div>
+              <div className="text-sm font-extrabold uppercase tracking-[0.18em] dark:text-white" style={{color:"#4A4A4A"}}>Contact</div>
+              <div className="mt-4 space-y-3 text-sm text-gray-600 dark:text-gray-200">
+                <div><span className="font-semibold text-gray-800 dark:text-white">Organization:</span> <a href="mailto:indoecnetwork@gmail.com" className="hover:underline" style={{color:"#C84B2F"}}>indoecnetwork@gmail.com</a></div>
+                <div><span className="font-semibold text-gray-800 dark:text-white">Event:</span> <a href="mailto:indonesiaday@gmail.com" className="hover:underline" style={{color:"#C84B2F"}}>indonesiaday@gmail.com</a></div>
               </div>
               <div className="mt-5 text-sm font-extrabold uppercase tracking-[0.18em]" style={{color:"#4A4A4A"}}>Key Contacts</div>
-              <div className="mt-3 space-y-2 text-sm text-gray-600 dark:text-gray-300">
-                <div><span className="font-semibold text-gray-800 dark:text-gray-100">Haris Koentjoro</span> — <a href="tel:+14435709509" className="hover:opacity-70">(443) 570-9509</a></div>
-                <div><span className="font-semibold text-gray-800 dark:text-gray-100">Endang Setyowati</span> — <a href="tel:+12404836113" className="hover:opacity-70">(240) 483-6113</a></div>
+              <div className="mt-3 space-y-2 text-sm text-gray-600 dark:text-gray-200">
+                <div><span className="font-semibold text-gray-800 dark:text-white">Haris Koentjoro</span> — <a href="tel:+14435709509" className="hover:opacity-70">(443) 570-9509</a></div>
+                <div><span className="font-semibold text-gray-800 dark:text-white">Endang Setyowati</span> — <a href="tel:+12404836113" className="hover:opacity-70">(240) 483-6113</a></div>
               </div>
             </div>
             <div>
-              <div className="text-sm font-extrabold uppercase tracking-[0.18em]" style={{color:"#4A4A4A"}}>Media Coverage</div>
+              <div className="text-sm font-extrabold uppercase tracking-[0.18em] dark:text-white" style={{color:"#4A4A4A"}}>Media Coverage</div>
               <div className="mt-4 space-y-3">
                 {MEDIA.map((m) => (
                   <a key={m.outlet} href={m.href} target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm text-gray-600 hover:opacity-70 dark:text-gray-300 transition">
+                    className="flex items-center gap-2 text-sm text-gray-600 hover:opacity-70 dark:text-gray-100 transition">
                     <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{background:"#C84B2F"}} />
                     {m.outlet}
                   </a>
@@ -610,9 +610,9 @@ export default function Page() {
               </div>
             </div>
           </div>
-          <div className="mt-12 border-t border-gray-300/50 pt-6 dark:border-white/10 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <span className="text-xs text-gray-500 dark:text-gray-400">© {new Date().getFullYear()} {orgShort} — {orgName}. All rights reserved.</span>
-            <span className="text-xs text-gray-400 dark:text-gray-500">Established 2024 · Columbia, MD, USA</span>
+          <div className="mt-12 border-t border-gray-300/50 pt-6 dark:border-white/20 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <span className="text-xs text-gray-500 dark:text-gray-300">© {new Date().getFullYear()} {orgShort} — {orgName}. All rights reserved.</span>
+            <span className="text-xs text-gray-400 dark:text-gray-300">Established 2024 · Columbia, MD, USA</span>
           </div>
         </div>
       </footer>
