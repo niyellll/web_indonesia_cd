@@ -210,7 +210,7 @@ export default function Page() {
       {/* ── Hero photo mosaic ── */}
       <section className="mx-auto max-w-7xl px-6 pb-20">
         <Reveal delayMs={60}>
-          <div className="grid grid-cols-4 grid-rows-2 gap-3 rounded-[32px] overflow-hidden" style={{height:"280px"}} className="sm:!h-[380px] md:!h-[520px]">
+          <div className="grid grid-cols-4 grid-rows-2 gap-3 rounded-[32px] overflow-hidden" style={{height:"280px"}}>
             <div className="col-span-2 row-span-2 overflow-hidden">
               <img src={PHOTOS.hero} alt="IDECN event" className="h-full w-full object-cover transition duration-700 hover:scale-105" data-parallax="0.12" />
             </div>
